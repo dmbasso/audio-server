@@ -10,7 +10,7 @@ namespace output {
 
 File::File()
 {
-	ofs.open("../output/output.wav", std::ofstream::out);
+	ofs.open("output/output.wav", std::ofstream::out);
 	writeHeader();
 }
 
