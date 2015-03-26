@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 2.8.12.2)
+project(audio-server)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+set(SOURCE_FILES
+    source/core.cpp
+    source/core.h
+    source/generator.cpp
+    source/generator.h
+    source/main.cpp
+    source/output.cpp
+    source/output.h
+    source/processor.cpp
+    source/processor.h)
+
+add_executable(audio-server ${SOURCE_FILES})
