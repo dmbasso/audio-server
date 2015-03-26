@@ -62,6 +62,8 @@ void Primitive::render()
 
     for (int i = 0; i < this->buffer->getPeriodSize(); i++) {
         int16_t sam = amplitude * cos(2. * M_PI * frequency * T * (time_index + i) + phase);
+        // square wavform
+        //int16_t sam = (int16_t) amplitude * tanh( sin((time_index + i) * M_PI * frequency * T) * squareFactor);
         this->buffer->data[i*2] = sam;
         this->buffer->data[i*2 + 1] = sam;
         //cout << "data[" << (i*2)+time_index << "] = " << this->buffer->data[i*2] << " - data[" << (i*2+1) + time_index << "] = " << this->buffer->data[i*2+1] << endl;
