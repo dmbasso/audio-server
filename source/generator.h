@@ -28,8 +28,7 @@ class SoundBuffer {
         SoundBuffer(unsigned period_size);
         unsigned getDataSize() {return frame_size * period_size;}
         unsigned getPeriodSize () {return period_size;}
-        void addData(int16_t *data);
-        int16_t* getData() {return data;}
+        int16_t*  getData() {return data;}
         void reset();
 };
 
@@ -38,9 +37,8 @@ class SoundBuffer {
  */
 
 class Location {
-    private:
-        float x, y, z;
     public:
+        float x, y, z;
         Location() : x(0.), y(0.), z(0.) {}
         Location(float x, float y, float z) : x(x), y(y), z(z) {}
 };
@@ -70,7 +68,9 @@ class PrimitiveConfigData :public ConfigData {
         int frequency;
         int squareFactor;
 
-        PrimitiveConfigData();
+        Location location;
+
+        PrimitiveConfigData(int a, int p, int f, int s, Location loc) : amplitude(a), phase(p), frequency(f), squareFactor(s), location(loc) {};
 };
 
 /** \brief Keyframe and other information for scripting sound files.
@@ -95,10 +95,8 @@ class TestConfigData : ConfigData {
 
 class Generator {
 
-    private:
+public:
         Location location; // the start position for the generator.
-
-    public:
         SoundBuffer *buffer;
 
         Generator(unsigned period_size);
@@ -123,9 +121,9 @@ class Primitive :public Generator {
 
     public:
         Primitive(unsigned period_size);
-        virtual ~Primitive() override;
-        virtual void config(const ConfigData *configdata) override;
-        virtual void render() override;
+        ~Primitive() {};
+        void config(const ConfigData *configdata) override;
+        void render() override;
 
         int getTimeIndex() {return this->time_index;}
 };

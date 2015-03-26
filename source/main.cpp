@@ -8,30 +8,35 @@
 
 #include "generator.h"
 #include "core.h"
-#include "output.h"
-
-#include <iostream>
 
 using namespace aserver;
 using namespace std;
 
 int main () {
 
-    unsigned period_size = 2048;
     unsigned write_periods = 100;
     Core core;
 
-    //TODO core.setSamplingRate(sr);
+    core.setProcessor(processorType::DISTANCEATTENUATION);
 
-    core.setPeriodSize(period_size);
-
-    core.setProcessor(processorType::NOOPERATION);
     core.setOutput(outputType::FILE);
 
-    core.addGenerator(generatorType::PRIMITIVE);
+    // generate an A2 minor chord with diferent note intensities due to their distance from the origin (0,0,0).
+
+    generator::ConfigData *cfgdata1 = new generator::PrimitiveConfigData(32767, 0, 220, 2, Location(0., 10., 0.));
+    generator::ConfigData *cfgdata2 = new generator::PrimitiveConfigData(32767, 0, 262, 2, Location(0., 5., 0.));
+    generator::ConfigData *cfgdata3 = new generator::PrimitiveConfigData(32767, 0, 330, 2, Location(0., 15., 0.));
+
+    core.addGenerator(generatorType::PRIMITIVE, cfgdata1);
     core.addSource();
 
-    core.render(write_periods);
+    core.addGenerator(generatorType::PRIMITIVE, cfgdata2);
+    core.addSource();
+
+    core.addGenerator(generatorType::PRIMITIVE, cfgdata3);
+    core.addSource();
+
+    core.renderFile(write_periods);
 
     return 1;
 }

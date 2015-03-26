@@ -37,8 +37,6 @@ class Output {
         virtual void close() =0;
 };
 
-//\TODO File just needs the period to be set in initialization.
-
 class File :public Output {
     public:
         unsigned current_size;

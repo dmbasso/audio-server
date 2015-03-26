@@ -1,8 +1,6 @@
 #include "generator.h"
 
-#include "stdio.h"
 #include <cmath>
-#include <iostream>
 
 using namespace std;
 
@@ -15,16 +13,7 @@ SoundBuffer::SoundBuffer(unsigned period_size)
     this->data = new int16_t[period_size * frame_size];
 
     for (int i = 0; i < frame_size * period_size; i++)
-        data[i] = (int16_t) 0;
-}
-
-void SoundBuffer::addData(int16_t *indata)
-{
-    cout << "Mixing processor data\n";
-    for (int i = 0; i < frame_size*period_size; i++) {
-        //cout << "it = " << i << endl;
-        this->data[i] += indata[i];
-    }
+        data[i] = 0;
 }
 
 void SoundBuffer::reset()
@@ -38,12 +27,7 @@ namespace generator {
 Generator::Generator(unsigned period_size)
 {
     this->buffer = new SoundBuffer(period_size);
-    this->location = Location();
-}
-
-PrimitiveConfigData::PrimitiveConfigData()
-{
-
+    this->location = Location(0., 10., 0.);
 }
 
 Primitive::Primitive(unsigned period_size) : Generator(period_size)
@@ -55,11 +39,6 @@ Primitive::Primitive(unsigned period_size) : Generator(period_size)
     this->time_index = 0;
 }
 
-Primitive::~Primitive()
-{
-
-}
-
 void Primitive::config(const ConfigData *configdata)
 {
     PrimitiveConfigData* pcd = (PrimitiveConfigData*) configdata;
@@ -68,6 +47,8 @@ void Primitive::config(const ConfigData *configdata)
     this->phase = pcd->phase;
     this->frequency = pcd->frequency;
     this->squareFactor = pcd->squareFactor;
+
+    this->location = pcd->location; //use copy contructor for Location?
 }
 
 void Primitive::render()
@@ -79,17 +60,13 @@ void Primitive::render()
     unsigned fs = 44100;
     float T = 1./fs;
 
-    std::cout << "Rendering " << this->buffer->getDataSize() << " samples...\n";
     for (int i = 0; i < this->buffer->getPeriodSize(); i++) {
         int16_t sam = amplitude * cos(2. * M_PI * frequency * T * (time_index + i) + phase);
         this->buffer->data[i*2] = sam;
         this->buffer->data[i*2 + 1] = sam;
-        //printf("data[%d] = %d - data[%d]= %d\n",(i*2)+time_index, this->buffer->data[i*2], (i*2+1) + time_index, this->buffer->data[i*2+1]);
+        //cout << "data[" << (i*2)+time_index << "] = " << this->buffer->data[i*2] << " - data[" << (i*2+1) + time_index << "] = " << this->buffer->data[i*2+1] << endl;
     }
-
     time_index += this->buffer->getPeriodSize();
-
-    std::cout <<"finished rendering\n";
 }
 
 void Test::render()

@@ -42,7 +42,7 @@ class Source {
         void setLocation(aserver::Location loc) {this->location = loc;}
 };
 
-/** \brief Contains extra info needed by the Acousticave processor.
+/** \brief Contains extra info needed by the Acousticave processor to manage sources.
  *
  */
 
@@ -71,6 +71,8 @@ class Processor {
         virtual void config(ConfigData *configdata)=0; // the class is abstract
         virtual void addSource(generator::Generator *gen)=0;
         virtual void render()=0;
+
+        void addBufferData(SoundBuffer *buffer);
 };
 
 /** \brief A processor that perfoms no processing on the sources.
@@ -101,12 +103,16 @@ class Acousticave :public Processor {
  *
  */
 
-class Distance :public Processor {
+class DistanceAttenuation :public Processor {
     public:
-        Distance(unsigned period_size) : Processor(period_size) {};
+        DistanceAttenuation(unsigned period_size) : Processor(period_size) {};
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen) override;
         void render() override;
+
+        float distanceBetween2Points(Location x, Location y);
+        float distanceToOrigin(Location x);
+        void process(generator::Generator *gen);
 };
 
 } //end namespace processor
