@@ -6,53 +6,54 @@ namespace aserver {
 *
 */
 
-int Core::addGenerator(generatorType genType, generator::ConfigData *cfgdata)
+int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
 {
     switch (genType) {
-        case generatorType::PRIMITIVE: {
+        case generator::types::PRIMITIVE: {
             generator::Generator* prim = new generator::Primitive(getPeriodSize());
-            if (cfgdata)
+            if (cfgdata) {
                 prim->config(cfgdata);
-            generators.insert(std::pair<int, generator::Generator*>(generator_counter++,prim));
+            }
+            gens.insert(std::pair<int, generator::Generator*>(generatorCounter++,prim));
             break;
         }
-        case generatorType::WAVE:
+        case generator::types::WAVE:
             break;
-        case generatorType::TEST:
+        case generator::types::TEST:
             break;
-        case generatorType::SCRIPT:
+        case generator::types::SCRIPT:
             break;
     }
     return 1;
 }
 
-int Core::setProcessor(processorType procType)
+int Core::setProcessor(processor::types procType)
 {
     switch (procType) {
-        case processorType::NOOPERATION:
-            processor = new processor::NoOperation(this->period_size);
+        case processor::types::NO_OPERATION:
+            proc = new processor::NoOperation(this->periodSize);
             break;
-        case processorType::ACOUSTICAVE:
-            processor = new processor::Acousticave(this->period_size);
+        case processor::types::ACOUSTICAVE:
+            proc = new processor::Acousticave(this->periodSize);
             break;
-        case processorType::DISTANCEATTENUATION:
-            processor = new processor::DistanceAttenuation(this->period_size);
+        case processor::types::DISTANCE_ATTENUATION:
+            proc = new processor::DistanceAttenuation(this->periodSize);
             break;
     }
     return 1;
 }
 
-int Core::setOutput(outputType outType)
+int Core::setOutput(output::types outType)
 {
     switch(outType) {
-        case outputType::FILE:
-            output = new output::File();
+        case output::types::FILE:
+            out = new output::File();
             break;
-        case outputType::ALSA:
-            output = new output::Alsa();
+        case output::types::ALSA:
+            out = new output::Alsa();
             break;
-        case outputType::MEMORY:
-            output = new output::Memory();
+        case output::types::MEMORY:
+            out = new output::Memory();
             break;
     }
 }
@@ -63,21 +64,21 @@ int Core::setOutput(outputType outType)
 
 int Core::addSource()
 {
-    std::map<int, generator::Generator*>::iterator it = --generators.end();
-    this->processor->addSource(it->second);
+    std::map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
+    this->proc->addSource(it->second);
 }
 
 /** \brief Renders \c n periods to file.
 *
 */
 
-void Core::renderFile(unsigned n)
+void Core::render(unsigned writePeriods)
 {
-    for (int i = 0; i < n; i++) {
-        processor->render();
-        output->write(*processor->buffer);
+    for (int i = 0; i < writePeriods; i++) {
+        proc->render();
+        out->write(*proc->buffer);
     }
-    output->close();
+    out->close();
 }
 
 } //end namespace aserver

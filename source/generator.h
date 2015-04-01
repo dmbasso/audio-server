@@ -4,49 +4,28 @@
 #include <map>
 #include <cstdint>
 
+#include "sound_buffer.h"
+#include "location.h"
+
 namespace aserver {
-
-/** \brief SoundBuffer is a container for blocks of size \c period_size of audio frames with size \c frame_size.
- *
- *  \c period_size corresponds to the size of each period of audio frames that are processed.
- *  It is set by the Core class in the server initialization.
- *  \c frame_size is the number of 16 bit audio samples per audio frame (mono = 1, stereo = 2 (default));
- *  \c data is a pointer to an array of \c int16_t type variables. It contains the 16 bit audio samples correnponding to one period. The SoundBuffer constructor initialization allocates this pointer, an \c int16_t vector of size = \c frame_size * \c period_size, and zeros all values;
- *
- *  \todo Make data private and use get/set.
- */
-
-class SoundBuffer {
-
-    private:
-        unsigned short frame_size;
-        unsigned period_size;
-
-    public:
-        int16_t *data;
-
-        SoundBuffer(unsigned period_size);
-        unsigned getDataSize() {return frame_size * period_size;}
-        unsigned getPeriodSize () {return period_size;}
-        int16_t*  getData() {return data;}
-        void reset();
-};
-
-/** \brief Location contains a 3D space location.
- *
- */
-
-class Location {
-    public:
-        float x, y, z;
-        Location() : x(0.), y(0.), z(0.) {}
-        Location(float x, float y, float z) : x(x), y(y), z(z) {}
-};
 
 /** \brief Contains classes for waveform generation.
  */
 
 namespace generator {
+
+enum class types : int {
+    PRIMITIVE = 1,
+    WAVE = 2,
+    TEST = 3,
+    SCRIPT = 4
+};
+
+enum class waveform : int {
+    SIN = 1,
+    SQUARE = 2,
+    SAWTOOTH = 3
+};
 
 /** \brief Base class for all data configuration classes.
  */
@@ -62,28 +41,39 @@ class ConfigData {
  */
 
 class PrimitiveConfigData :public ConfigData {
+    private:
+        int amplitude = 3277;
+        short phase = 0;
+        unsigned short frequency = 220;
+        unsigned short squareFactor = 10;
+        Location location = Location();
+
     public:
-        int amplitude;
-        int phase;
-        int frequency;
-        int squareFactor;
-
-        Location location;
-
-        PrimitiveConfigData(int a, int p, int f, int s, Location loc) : amplitude(a), phase(p), frequency(f), squareFactor(s), location(loc) {};
+        //PrimitiveConfigData(int a, int p, int f, int s, Location loc) : amplitude(a), phase(p), frequency(f), squareFactor(s), location(loc) {};
+        //PrimitiveConfigData();
+        void setAmplitude(int a) {this->amplitude = a;}
+        int getAmplitude() {return this->amplitude;}
+        void setPhase(short p) {this->phase = p;}
+        short getPhase() {return this->phase;}
+        void setFrequency(unsigned short f) {this->frequency = f;}
+        unsigned short getFrequency() {return this->frequency;}
+        void setSquareFactor(unsigned short sf) {this->squareFactor = sf;}
+        unsigned short getSquareFactor() {return this->squareFactor;}
+        void setLocation(Location loc) {this->location = loc;}
+        Location getLocation() {return this->location;}
 };
 
 /** \brief Keyframe and other information for scripting sound files.
  */
 
-class ScriptConfigData : ConfigData {
+class ScriptConfigData :public ConfigData {
 
 };
 
 /** \brief Test configuration for the signal primitives generated.
  */
 
-class TestConfigData : ConfigData {
+class TestConfigData :public ConfigData {
 
 };
 
@@ -97,9 +87,10 @@ class Generator {
 
 public:
         Location location; // the start position for the generator.
+        //map<int, Location> locations;
         SoundBuffer *buffer;
 
-        Generator(unsigned period_size);
+        Generator(unsigned periodSize);
         virtual ~Generator() {};
         virtual void config(const ConfigData *configdata) =0;
         virtual void render() =0;
@@ -117,22 +108,23 @@ class Primitive :public Generator {
         int frequency;
         int amplitude;
         int squareFactor;
-        int time_index;
+        float lastSawVal = 1;
+        int timeIndex;
 
     public:
-        Primitive(unsigned period_size);
+        Primitive(unsigned periodSize);
         ~Primitive() {};
-        void config(const ConfigData *configdata) override;
+        void config(const ConfigData *configData) override;
         void render() override;
 
-        int getTimeIndex() {return this->time_index;}
+        int getTimeIndex() {return this->timeIndex;}
 };
 
 /**
  * Contains the script instructions for altering the properties of the primitive during playback.
  */
 
-class Test : Primitive {
+class Test :public Primitive {
     private:
         // time and frequency info
     public:
@@ -140,7 +132,7 @@ class Test : Primitive {
 
 };
 
-class Wave : Generator {
+class Wave :public Generator {
     private:
 //      WavHeader header;
 //		int16_t *samples;
@@ -148,13 +140,13 @@ class Wave : Generator {
 //		int channels;
 
     public:
-        Wave(unsigned period_size);
+        Wave(unsigned periodSize);
         virtual ~Wave() override;
-        virtual void config(const ConfigData *configdata) override;
+        virtual void config(const ConfigData *configData) override;
         virtual void render() override;
 };
 
-class Script : Wave {
+class Script :public Wave {
     private:
         //keyframe and other info
     public:

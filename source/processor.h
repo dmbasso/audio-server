@@ -4,6 +4,7 @@
 #include <map>
 
 #include "generator.h"
+#include "sound_buffer.h"
 
 namespace aserver {
 
@@ -14,6 +15,12 @@ namespace aserver {
 
 namespace processor {
 
+enum class types : int {
+    NO_OPERATION = 1,
+    ACOUSTICAVE = 2,
+    DISTANCE_ATTENUATION = 3
+};
+
 /**
  * Abstract base class for all process configuration classes.
  */
@@ -22,7 +29,7 @@ class ConfigData {
     // info regarding configuration data for the generator.
 };
 
-class AcousticaveConfigData : ConfigData {
+class AcousticaveConfigData :public ConfigData {
 
 };
 
@@ -32,21 +39,21 @@ class AcousticaveConfigData : ConfigData {
 
 class Source {
     private:
-        aserver::generator::Generator* generator;
-        aserver::Location location;
+        generator::Generator* gen;
+        Location loc;
 
     public:
-        Source() : location(Location()), generator(nullptr) {};
-        void setGenerator(aserver::generator::Generator* gen) {this->generator=gen;}
-        generator::Generator* getGenerator() {return this->generator;}
-        void setLocation(aserver::Location loc) {this->location = loc;}
+        Source() : gen(nullptr) {};
+        void setGenerator(aserver::generator::Generator* gen) {this->gen=gen;}
+        generator::Generator* getGenerator() {return this->gen;}
+        void setLocation(aserver::Location loc) {this->loc = loc;}
 };
 
 /** \brief Contains extra info needed by the Acousticave processor to manage sources.
  *
  */
 
-class AcousticaveSource : Source {
+class AcousticaveSource :public Source {
 
 };
 
@@ -65,10 +72,10 @@ class Processor {
     public:
         SoundBuffer *buffer;
         std::map<int, Source*> sources;
-        unsigned source_counter=0;
+        unsigned sourceCounter =0;
 
         Processor(unsigned period);
-        virtual void config(ConfigData *configdata)=0; // the class is abstract
+        virtual void config(ConfigData *configData)=0; // the class is abstract
         virtual void addSource(generator::Generator *gen)=0;
         virtual void render()=0;
 
@@ -81,7 +88,7 @@ class Processor {
 
 class NoOperation :public Processor {
     public:
-        NoOperation(unsigned period_size) : Processor(period_size) {};
+        NoOperation(unsigned periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen) override;
         void render() override;
@@ -93,7 +100,7 @@ class NoOperation :public Processor {
 
 class Acousticave :public Processor {
     public:
-        Acousticave(unsigned period_size) : Processor(period_size) {};
+        Acousticave(unsigned periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen) override;
         void render() override;
@@ -105,13 +112,10 @@ class Acousticave :public Processor {
 
 class DistanceAttenuation :public Processor {
     public:
-        DistanceAttenuation(unsigned period_size) : Processor(period_size) {};
+        DistanceAttenuation(unsigned periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen) override;
         void render() override;
-
-        float distanceBetween2Points(Location x, Location y);
-        float distanceToOrigin(Location x);
         void process(generator::Generator *gen);
 };
 

@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "processor.h"
+#include "location.h"
 
 using namespace std;
 
@@ -12,10 +13,12 @@ Processor::Processor(unsigned period)
     buffer = new SoundBuffer(period);
 }
 
-void Processor::addBufferData(SoundBuffer *buffer)
+void Processor::addBufferData(SoundBuffer *buf)
 {
-    for (int i = 0; i < buffer->getDataSize(); i++) {
-        this->buffer->data[i] += buffer->data[i];
+    int16_t *tempBufferProc = this->buffer->read();
+    int16_t *tempBuffer = buf->read();
+    for (int i = 0; i < this->buffer->getDataSize(); i++) {
+        tempBufferProc[i] += tempBuffer[i];
     }
 }
 
@@ -34,7 +37,7 @@ void NoOperation::addSource(generator::Generator *gen)
         auto source = new processor::Source();
         source->setGenerator(gen);
         source->setLocation(gen->getLocation());
-        this->sources.insert(std::pair<int, Source*>(source_counter++,source));
+        this->sources.insert(std::pair<int, Source*>(sourceCounter++,source));
 }
 
 void NoOperation::render()
@@ -89,13 +92,13 @@ void DistanceAttenuation::addSource(generator::Generator *gen)
     auto source = new processor::Source();
     source->setGenerator(gen);
     source->setLocation(gen->getLocation());
-    this->sources.insert(std::pair<int, Source*>(source_counter++,source));
+    this->sources.insert(std::pair<int, Source*>(sourceCounter++,source));
 }
 
 /** \brief Calculates distance attenuation according to the inverse distance law (used for sound pressure measurements).
 *  Calculate distance of each source using its location (the default user position is (0,0,0)
 *  Calculate the scalar da = 1/distance
-*  Multiply the saclar with every sample in the source rendered buffer.
+*  Multiply the scalar with every sample in the source rendered buffer.
 */
 
 void DistanceAttenuation::render()
@@ -113,22 +116,21 @@ void DistanceAttenuation::render()
     }
 }
 
-float DistanceAttenuation::distanceBetween2Points(Location x, Location y)
-{
-    return sqrt( (float) pow(x.x - y.x,2) + pow(x.y - y.y,2) + pow(x.z - y.z,2));
-}
-
-float DistanceAttenuation::distanceToOrigin(Location x)
-{
-    return sqrt( (float) pow(x.x,2) + pow(x.y,2) + pow(x.z,2));
-}
+/** \brief Calculates distance attenuation according to the inverse distance law (used for sound pressure measurements).
+*  Calculate distance of each source using its location (the default user position is (0,0,0)
+*  Calculate the scalar da = 1/distance
+*  Multiply the scalar with every sample in the source rendered buffer.
+*/
 
 void DistanceAttenuation::process(generator::Generator *gen)
 {
-    float atten = 1. / distanceToOrigin(gen->getLocation());
+    float distance = Location::distanceToOrigin(gen->getLocation());
+    float attenuation = (float) (1. / (distance + 1));
+    int16_t *tempBuffer = gen->buffer->read();
 
-    for (int i = 0; i < buffer->getDataSize(); i++)
-        gen->buffer->data[i] = (int16_t) gen->buffer->data[i] * atten;
+    for (int i = 0; i < buffer->getDataSize(); i++) {
+        tempBuffer[i] = (int16_t) tempBuffer[i] * attenuation;
+    }
 }
 
 } //end namespace processor

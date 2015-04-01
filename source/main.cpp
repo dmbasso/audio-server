@@ -14,29 +14,34 @@ using namespace std;
 
 int main () {
 
-    unsigned write_periods = 100;
+    unsigned writePeriods = 100;
     Core core;
 
-    core.setProcessor(processorType::DISTANCEATTENUATION);
+    core.setProcessor(processor::types::DISTANCE_ATTENUATION);
 
-    core.setOutput(outputType::FILE);
+    core.setOutput(output::types::FILE);
 
-    // generate an A2 minor chord with diferent note intensities due to their distance from the origin (0,0,0).
+    // generate an A3 minor chord with diferent note intensities due to their distance from the origin (0,0,0).
+    generator::ConfigData *cfgData1 = new generator::PrimitiveConfigData();
+    ((generator::PrimitiveConfigData*) cfgData1)->setFrequency(220);
+    ((generator::PrimitiveConfigData*) cfgData1)->setLocation(Location(0., 0., 0.));
+    generator::ConfigData *cfgData2 = new generator::PrimitiveConfigData();
+    ((generator::PrimitiveConfigData*) cfgData2)->setFrequency(262);
+    ((generator::PrimitiveConfigData*) cfgData2)->setLocation(Location(0., 0., 0.));
+    generator::ConfigData *cfgData3 = new generator::PrimitiveConfigData();
+    ((generator::PrimitiveConfigData*) cfgData3)->setFrequency(330);
+    ((generator::PrimitiveConfigData*) cfgData3)->setLocation(Location(0., 0., 0.));
 
-    generator::ConfigData *cfgdata1 = new generator::PrimitiveConfigData(32767, 0, 220, 2, Location(0., 10., 0.));
-    generator::ConfigData *cfgdata2 = new generator::PrimitiveConfigData(32767, 0, 262, 2, Location(0., 5., 0.));
-    generator::ConfigData *cfgdata3 = new generator::PrimitiveConfigData(32767, 0, 330, 2, Location(0., 15., 0.));
-
-    core.addGenerator(generatorType::PRIMITIVE, cfgdata1);
+    core.addGenerator(generator::types::PRIMITIVE, cfgData1);
     core.addSource();
 
-    core.addGenerator(generatorType::PRIMITIVE, cfgdata2);
+    core.addGenerator(generator::types::PRIMITIVE, cfgData2);
     core.addSource();
 
-    core.addGenerator(generatorType::PRIMITIVE, cfgdata3);
+    core.addGenerator(generator::types::PRIMITIVE, cfgData3);
     core.addSource();
 
-    core.renderFile(write_periods);
+    core.render(writePeriods);
 
     return 1;
 }

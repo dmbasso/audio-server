@@ -8,19 +8,19 @@
 using namespace std;
 
 typedef struct {
-    char     chunk_id[4];
-    uint32_t chunk_size;
+    char     chunkId[4];
+    uint32_t chunkSize;
     char     format[4];
-    char     fmtchunk_id[4];
-    uint32_t fmtchunk_size;
-    uint16_t audio_format;
-    uint16_t num_channels;
-    uint32_t sample_rate;
-    uint32_t byte_rate;
-    uint16_t block_align;
+    char     fmtchunkId[4];
+    uint32_t fmtchunkSize;
+    uint16_t audioFormat;
+    uint16_t numChannels;
+    uint32_t sampleRate;
+    uint32_t byteRate;
+    uint16_t blockAlign;
     uint16_t bps;
-    char     datachunk_id[4];
-    uint32_t datachunk_size;
+    char     datachunkId[4];
+    uint32_t datachunkSize;
 }WavHeader;
 
 
@@ -31,6 +31,12 @@ namespace aserver {
  */
 namespace output {
 
+enum class types : int {
+    FILE = 1,
+    ALSA = 2,
+    MEMORY = 3
+};
+
 class Output {
     public:
         virtual void write(SoundBuffer &buffer) =0;
@@ -39,7 +45,7 @@ class Output {
 
 class File :public Output {
     public:
-        unsigned current_size;
+        unsigned currentSize;
         WavHeader header;
         ofstream ofs;
 
