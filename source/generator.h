@@ -40,28 +40,16 @@ class ConfigData {
  *  The purpose of this class is to be used if there is need to alter the default parameters.
  */
 
+    //\todo remove get/set, replace class with struct
+
 class PrimitiveConfigData :public ConfigData {
-    private:
+    public:
         int amplitude = 3277;
         short phase = 0;
         unsigned short frequency = 220;
         unsigned short squareFactor = 10;
         Location location = Location();
         waveformType wft;
-
-    public:
-        void setAmplitude(int a) {this->amplitude = a;}
-        int getAmplitude() {return this->amplitude;}
-        void setPhase(short p) {this->phase = p;}
-        short getPhase() {return this->phase;}
-        void setFrequency(unsigned short f) {this->frequency = f;}
-        unsigned short getFrequency() {return this->frequency;}
-        void setSquareFactor(unsigned short sf) {this->squareFactor = sf;}
-        unsigned short getSquareFactor() {return this->squareFactor;}
-        void setLocation(float x, float y, float z) {this->location = Location(x, y, z);}
-        Location getLocation() {return this->location;}
-        void setWaveform(waveformType wf) {this->wft=wf;}
-        waveformType getWaveformType() {return this->wft;}
 };
 
 /** \brief Keyframe and other information for scripting sound files.
@@ -124,13 +112,21 @@ class Primitive :public Generator {
 
 /**
  * Contains the script instructions for altering the properties of the primitive during playback.
+ * This script is a map with key=frame  and Entry=Location
  */
+
+        //\todo Generator processes remaing frames
+        //      Writes a map with changes relative to the current buffer (location)
+        //      to be processed by the Source
 
 class Test :public Primitive {
     private:
         // time and frequency info
+        unsigned transitionPeriod = 22050;
+        unsigned remainingFrames;
     public:
-        virtual void render();
+        Test(unsigned ps, unsigned tp) : Primitive(ps), transitionPeriod(tp), remainingFrames(0) {}
+        virtual void render() override;
 
 };
 

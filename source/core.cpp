@@ -8,13 +8,12 @@ namespace aserver {
 
 int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
 {
+    generator::Generator *gen;
+
     switch (genType) {
         case generator::types::PRIMITIVE: {
-            generator::Generator* prim = new generator::Primitive(getPeriodSize());
-            if (cfgdata) {
-                prim->config(cfgdata);
-            }
-            gens.insert(std::pair<int, generator::Generator*>(generatorCounter++,prim));
+            //gens.insert(std::pair<int, generator::Generator*>(generatorCounter++,gen));
+            gen = new generator::Primitive(getPeriodSize());
             break;
         }
         case generator::types::WAVE:
@@ -24,6 +23,13 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
         case generator::types::SCRIPT:
             break;
     }
+
+    gens[generatorCounter++] = gen;
+
+    if (cfgdata) {
+        gen->config(cfgdata);
+    }
+
     return 1;
 }
 
@@ -74,7 +80,6 @@ int Core::addSource()
 
 void Core::render(unsigned writePeriods)
 {
-    gens.size();
     for (int i = 0; i < writePeriods; i++) {
         for (auto &gen : gens) {
             gen.second->render();

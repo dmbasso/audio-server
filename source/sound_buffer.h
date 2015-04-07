@@ -39,9 +39,9 @@ public:
 
     void reset();
 
-    void write(int16_t *buffer) {data = buffer;}
-
-    int16_t *read() {return data;}
+    void writeFrame(int16_t *sams, unsigned i);
+    int16_t* readFrame(int16_t *sams, unsigned i);
+    void mixFrame(int16_t *sams, unsigned i);
 
 };
 } //end namespace aserver

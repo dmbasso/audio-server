@@ -37,6 +37,10 @@ class AcousticaveConfigData :public ConfigData {
  *
  */
 
+    //\todo Source has a child for every processor
+    //Source parent implements noOperation processor
+    //Separate source type and processor type in files
+
 class Source {
     private:
         generator::Generator* gen;
@@ -47,6 +51,7 @@ class Source {
         void setGenerator(aserver::generator::Generator* gen) {this->gen=gen;}
         generator::Generator* getGenerator() {return this->gen;}
         void setLocation(aserver::Location loc) {this->loc = loc;}
+        Location getLocation() {return this->loc;}
 };
 
 /** \brief Contains extra info needed by the Acousticave processor to manage sources.
@@ -78,11 +83,9 @@ class Processor {
         virtual void config(ConfigData *configData)=0; // the class is abstract
         virtual void addSource(generator::Generator *gen)=0;
         virtual void render()=0;
-
-        void addBufferData(SoundBuffer *buffer);
 };
 
-/** \brief A processor that perfoms no processing on the sources.
+/** \brief A processor that performs no processing on the sources.
  *
  */
 
@@ -116,7 +119,7 @@ class DistanceAttenuation :public Processor {
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen) override;
         void render() override;
-        void process(generator::Generator *gen);
+        void process(Source *src);
 };
 
 } //end namespace processor

@@ -13,15 +13,6 @@ Processor::Processor(unsigned period)
     buffer = new SoundBuffer(period);
 }
 
-void Processor::addBufferData(SoundBuffer *buf)
-{
-    int16_t *tempBufferProc = this->buffer->read();
-    int16_t *tempBuffer = buf->read();
-    for (int i = 0; i < this->buffer->getDataSize(); i++) {
-        tempBufferProc[i] += tempBuffer[i];
-    }
-}
-
 void NoOperation::config(ConfigData *configData)
 {
 
@@ -41,6 +32,7 @@ void NoOperation::addSource(generator::Generator *gen)
 }
 
     //\todo loop the Core generators
+    //\todo check this method with new mixFrame methods
 
 void NoOperation::render()
 {
@@ -52,7 +44,6 @@ void NoOperation::render()
     for (auto const &it : sources) {
         auto gen = it.second->getGenerator();
         gen->render();
-        addBufferData(gen->buffer);
     }
 }
 
@@ -105,15 +96,10 @@ void DistanceAttenuation::addSource(generator::Generator *gen)
 
 void DistanceAttenuation::render()
 {
-    //Should we iterate the generators in the processors source map or the core generators?
-    //Currently iterating the processor sources...
-
     this->buffer->reset();
 
     for (auto const &it : sources) {
-        auto gen = it.second->getGenerator();
-        process(gen);
-        addBufferData(gen->buffer);
+        process(it.second);
     }
 }
 
@@ -123,15 +109,18 @@ void DistanceAttenuation::render()
 *  Multiply the scalar with every sample in the source rendered buffer.
 */
 
-void DistanceAttenuation::process(generator::Generator *gen)
+void DistanceAttenuation::process(Source *src)
 {
-    float distance = gen->getLocation().distanceTo(Location(0., 0., 0.));
-
+    float distance = src->getLocation().distanceTo(Location());
     float attenuation = (float) (1. / (distance + 1));
-    int16_t *tempBuffer = gen->buffer->read();
 
-    for (int i = 0; i < buffer->getDataSize(); i++) {
-        tempBuffer[i] = (int16_t) tempBuffer[i] * attenuation;
+    int16_t sams[2];
+
+    for (int i = 0; i < buffer->getPeriodSize(); i++) {
+        src->getGenerator()->buffer->readFrame(sams, i);
+        sams[0] *= attenuation;
+        sams[1] *= attenuation;
+        this->buffer->mixFrame(sams, i);
     }
 }
 
