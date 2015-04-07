@@ -20,6 +20,7 @@ Primitive::Primitive(unsigned periodSize) : Generator(periodSize)
     this->amplitude = 3277;
     this->squareFactor = 2;
     this->timeIndex = 0;
+    this->waveform = generator::waveformType::SIN;
 }
 
 void Primitive::config(const ConfigData *configData)
@@ -32,33 +33,38 @@ void Primitive::config(const ConfigData *configData)
     this->squareFactor = pcd->getSquareFactor();
 
     this->location = pcd->getLocation(); //use copy constructor for Location?
+    this->waveform = pcd->getWaveformType();
+
 }
 
     //\todo move static calculation part out of the loop...
+    //\todo take switch statement out of the for loop
 
 void Primitive::render()
 {
-    // renders a wave as: sample = (int16) (tanh(sin(phase) * squareFactor) * amplitude);
-    // squareFactor >= 1, amplitude < 32767 (if sample is int16)
-
     int16_t *tempBuffer = this->buffer->read();
     unsigned fs = 44100;
     float T = 1./fs;
-    float sawPhaseInc = (frequency * 2.) / fs;
+    float omega = M_PI * frequency * T;
+    float sawPhaseIncrement = (frequency * 2.) / fs;
     int16_t sam = 0;
 
     for (int i = 0; i < this->buffer->getPeriodSize(); i++) {
-        // sin waveform
-        sam = (int16_t) amplitude * cos(2. * M_PI * frequency * T * (timeIndex + i) + phase);
-        // square waveform
-        //sam = (int16_t) amplitude * tanh( sin((timeIndex + i) * M_PI * frequency * T) * squareFactor);
-        //cout << "data[" << (i*2)+timeIndex << "] = " << tempBuffer[i*2] << " - data[" << (i*2+1) + timeIndex << "] = " << tempBuffer[i*2+1] << endl;
-        // sawtooth waveform
-        //lastSawVal = fmod(lastSawVal + sawPhaseInc, 2.);
-        //sam = (int16_t) amplitude * (lastSawVal - 1.);
-
+        switch (this->waveform) {
+            case waveformType::SIN:
+                sam = (int16_t) amplitude * cos(2. * omega * (timeIndex + i) + phase);
+                break;
+            case waveformType::SQUARE:
+                sam = (int16_t) amplitude * tanh( sin((timeIndex + i) * omega) * squareFactor);
+                break;
+            case waveformType::SAWTOOTH:
+                lastSampleVal = fmod(lastSampleVal + sawPhaseIncrement, 2.);
+                sam = (int16_t) amplitude * (lastSampleVal - 1.);
+                break;
+        }
         tempBuffer[i*2] = sam;
         tempBuffer[i*2 + 1] = sam;
+        //cout << "data[" << (i*2)+timeIndex << "] = " << tempBuffer[i*2] << " - data[" << (i*2+1) + timeIndex << "] = " << tempBuffer[i*2+1] << endl;
     }
     timeIndex += this->buffer->getPeriodSize();
 }

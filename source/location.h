@@ -14,8 +14,7 @@ class Location {
     public:
         Location() : x(0.), y(0.), z(0.) {}
         Location(float x, float y, float z) : x(x), y(y), z(z) {}
-        static float distanceBetween2Points(Location x, Location y);
-        static float distanceToOrigin(Location x);
+        float distanceTo(const Location &loc);
 };
 
 } //end namespace aserver

@@ -4,25 +4,9 @@
 #include <fstream>
 
 #include "generator.h"
+#include "wav_file.h"
 
 using namespace std;
-
-typedef struct {
-    char     chunkId[4];
-    uint32_t chunkSize;
-    char     format[4];
-    char     fmtchunkId[4];
-    uint32_t fmtchunkSize;
-    uint16_t audioFormat;
-    uint16_t numChannels;
-    uint32_t sampleRate;
-    uint32_t byteRate;
-    uint16_t blockAlign;
-    uint16_t bps;
-    char     datachunkId[4];
-    uint32_t datachunkSize;
-}WavHeader;
-
 
 namespace aserver {
 
@@ -46,14 +30,12 @@ class Output {
 class File :public Output {
     public:
         unsigned currentSize;
-        WavHeader header;
         ofstream ofs;
 
     public:
         File();
         void write(SoundBuffer &buffer) override;
         void close() override;
-        void writeHeader();
 };
 
 class Alsa :public Output {

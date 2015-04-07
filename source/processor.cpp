@@ -40,6 +40,8 @@ void NoOperation::addSource(generator::Generator *gen)
         this->sources.insert(std::pair<int, Source*>(sourceCounter++,source));
 }
 
+    //\todo loop the Core generators
+
 void NoOperation::render()
 {
     //Should we iterate the generators in the processors source map or the core generators?
@@ -110,7 +112,6 @@ void DistanceAttenuation::render()
 
     for (auto const &it : sources) {
         auto gen = it.second->getGenerator();
-        gen->render();
         process(gen);
         addBufferData(gen->buffer);
     }
@@ -124,7 +125,8 @@ void DistanceAttenuation::render()
 
 void DistanceAttenuation::process(generator::Generator *gen)
 {
-    float distance = Location::distanceToOrigin(gen->getLocation());
+    float distance = gen->getLocation().distanceTo(Location(0., 0., 0.));
+
     float attenuation = (float) (1. / (distance + 1));
     int16_t *tempBuffer = gen->buffer->read();
 

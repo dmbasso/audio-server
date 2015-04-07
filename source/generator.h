@@ -21,7 +21,7 @@ enum class types : int {
     SCRIPT = 4
 };
 
-enum class waveform : int {
+enum class waveformType : int {
     SIN = 1,
     SQUARE = 2,
     SAWTOOTH = 3
@@ -35,7 +35,7 @@ class ConfigData {
 
 };
 
-/** \brief PrimitiveConfigData sets the configuration paramenters for a Primitive generator.
+/** \brief PrimitiveConfigData sets the configuration parameters for a Primitive generator.
  *  These parameters are set with their default values within the Primitive generator constructor.
  *  The purpose of this class is to be used if there is need to alter the default parameters.
  */
@@ -47,10 +47,9 @@ class PrimitiveConfigData :public ConfigData {
         unsigned short frequency = 220;
         unsigned short squareFactor = 10;
         Location location = Location();
+        waveformType wft;
 
     public:
-        //PrimitiveConfigData(int a, int p, int f, int s, Location loc) : amplitude(a), phase(p), frequency(f), squareFactor(s), location(loc) {};
-        //PrimitiveConfigData();
         void setAmplitude(int a) {this->amplitude = a;}
         int getAmplitude() {return this->amplitude;}
         void setPhase(short p) {this->phase = p;}
@@ -59,8 +58,10 @@ class PrimitiveConfigData :public ConfigData {
         unsigned short getFrequency() {return this->frequency;}
         void setSquareFactor(unsigned short sf) {this->squareFactor = sf;}
         unsigned short getSquareFactor() {return this->squareFactor;}
-        void setLocation(Location loc) {this->location = loc;}
+        void setLocation(float x, float y, float z) {this->location = Location(x, y, z);}
         Location getLocation() {return this->location;}
+        void setWaveform(waveformType wf) {this->wft=wf;}
+        waveformType getWaveformType() {return this->wft;}
 };
 
 /** \brief Keyframe and other information for scripting sound files.
@@ -108,8 +109,9 @@ class Primitive :public Generator {
         int frequency;
         int amplitude;
         int squareFactor;
-        float lastSawVal = 1;
+        float lastSampleVal = 1;
         int timeIndex;
+        waveformType waveform;
 
     public:
         Primitive(unsigned periodSize);

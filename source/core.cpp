@@ -74,7 +74,11 @@ int Core::addSource()
 
 void Core::render(unsigned writePeriods)
 {
+    gens.size();
     for (int i = 0; i < writePeriods; i++) {
+        for (auto &gen : gens) {
+            gen.second->render();
+        }
         proc->render();
         out->write(*proc->buffer);
     }

@@ -4,14 +4,9 @@
 
 namespace aserver {
 
-float Location::distanceToOrigin(Location x)
+float Location::distanceTo(const Location &loc)
 {
-    return sqrt( (float) pow(x.x,2) + pow(x.y,2) + pow(x.z,2));
-}
-
-float Location::distanceBetween2Points(Location x, Location y)
-{
-    return sqrt( (float) pow(x.x - y.x,2) + pow(x.y - y.y,2) + pow(x.z - y.z,2));
+    return sqrt((float) pow(this->x - loc.x, 2) + pow(this->y - loc.y, 2) + pow(this->z - loc.z, 2));
 }
 
 } //end namespace aserver
