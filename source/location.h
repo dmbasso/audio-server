@@ -19,7 +19,7 @@ class Location {
         Location() : x(0.), y(0.), z(0.) {}
         Location(float x, float y, float z) : x(x), y(y), z(z) {}
         float distanceTo(const Location &loc);
-        void sumY(float y) {this->y += y;}
+        Location sumY(float y) {this->y += y; return *this;}
         string toString();
 };
 

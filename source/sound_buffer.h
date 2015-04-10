@@ -32,7 +32,7 @@ class SoundBuffer {
         void reset();
         void writeFrame(int16_t *sams, unsigned i);
         void pushFrame(int16_t *sams);
-        int16_t* readFrame(int16_t *sams, unsigned i);
+        int16_t* readFrame(int16_t *sams, unsigned i); //\todo interpolate (linear) read ->get_stereo_frame
         void mixFrame(int16_t *sams, unsigned i);
 };
 

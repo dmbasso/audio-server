@@ -76,7 +76,7 @@ class Processor {
 
     public:
         SoundBuffer *buffer;
-        std::map<int, Source*> sources;
+        map<int, Source*> sources;
         unsigned sourceCounter =0;
 
         Processor(unsigned period);

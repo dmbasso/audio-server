@@ -27,7 +27,7 @@ class Core {
         unsigned samplingRate;
         unsigned short generatorCounter;
 
-        std::map<std::string, SoundBuffer*> waves;
+        std::map<std::string, SoundBuffer*> waves; //string = filename
         std::map<int, generator::Generator*> gens;
         processor::Processor *proc;
         output::Output *out;
@@ -46,6 +46,9 @@ class Core {
         //void generatorConfig(int id, generator::ConfigData *configData);  //optional, in case one wishes to alter the generators default values
         //void processorConfig(processor::ConfigData *configData)           //optional, in case one wishes to alter the generators default values
         //void setSourceGenerator(int sid, int gid)
+
+    //\todo void readWaveFile(...); -> stores a file in the waves map.
+    // check existence: if present return SoundBuffer pointer.
 };
 
 } //end aserver namespace

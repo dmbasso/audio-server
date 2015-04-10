@@ -23,6 +23,8 @@ void NoOperation::config(ConfigData *configData)
  * The new Source object is then added to the processors Source map.
  */
 
+    //\todo update map insertion
+
 void NoOperation::addSource(generator::Generator *gen)
 {
         auto source = new processor::Source();
@@ -111,15 +113,20 @@ void DistanceAttenuation::render()
 
 void DistanceAttenuation::process(Source *src)
 {
-    //float distance = src->getLocations().distanceTo(Location());
     float distance;
     float attenuation;
-
     int16_t sams[2];
 
+    map<unsigned, Location> locations = src->getGenerator()->locs;
+
     for (int i = 0; i < buffer->getPeriodSize(); i++) {
-        distance = src->getGenerator()->locationsInBuffer[i].distanceTo(Location());
-        attenuation = (float) (1. / (distance + 1));
+        if(!locations.empty() && locations.begin()->first == i) {
+            src->setLocation(locations.begin()->second);
+            locations.erase(locations.begin());
+            distance = src->getLocation().distanceTo(Location());
+            attenuation = (1. / (distance + 1.));
+            cout << "loc change in proc: i = " << i << " Loc = " << src->getLocation().toString() << endl;
+        }
         src->getGenerator()->buffer->readFrame(sams, i);
         sams[0] *= attenuation;
         sams[1] *= attenuation;

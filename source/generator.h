@@ -29,6 +29,21 @@ enum class waveformType : int {
     SAWTOOTH = 3
 };
 
+enum  class playbackCommand : int {
+    PLAY = 1,
+    STOP = 2,
+    PAUSE = 3,
+    PLAY_LOOP = 4,
+    REVERSE = 5
+};
+
+enum  class playbackState : int {
+    PLAYING = 1,
+    STOPPED = 2,
+    PAUSED = 3,
+    REWINDING = 4
+};
+
 /** \brief Base class for all data configuration classes.
  */
 
@@ -76,8 +91,8 @@ class TestConfigData :public ConfigData {
 class Generator {
 
 public:
-        Location loc;
-        vector<Location> locationsInBuffer;
+        Location loc;  //\todo Only source should have a location; Source config should be implemented
+        map<unsigned, Location> locs;
         SoundBuffer *buffer;
 
         Generator(unsigned periodSize);
@@ -96,7 +111,6 @@ class Primitive :public Generator {
     protected:
         float phase;
         float frequency;
-        vector<float> frequenciesInBuffer;
         int amplitude;
         int squareFactor;
         waveformType waveform;
@@ -106,6 +120,7 @@ class Primitive :public Generator {
         ~Primitive() {};
         void config(const ConfigData *configData) override;
         void render() override;
+        void renderNFrames(unsigned start, unsigned end);
 };
 
 /**
@@ -125,15 +140,14 @@ class Test :public Primitive {
         ~Test() {};
         void config(const ConfigData *configData) override;
         virtual void render() override;
-
 };
 
 class Wave :public Generator {
     private:
-//      WavHeader header;
-//		int16_t *samples;
-//		int length;
-//		int channels;
+//		SoundBuffer *soundFile;
+        //playbackState playbackState = playbackState::STOPPED;
+        // float position=0;
+        // float increment; //step size to read buffer -> determines new frequency output
 
     public:
         Wave(unsigned periodSize);
