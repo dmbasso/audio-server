@@ -1,6 +1,7 @@
 #include "sound_buffer.h"
 
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -11,13 +12,14 @@ SoundBuffer::SoundBuffer(unsigned _periodSize)
     this->frameSize = 2;
     this->periodSize = _periodSize;
     this->data = new int16_t[_periodSize * frameSize];
+    this->bufHead = 0;
 
     reset();
 }
 
 void SoundBuffer::reset()
 {
-    for (int i = 0; i < frameSize * periodSize; i++) {
+    for (unsigned i = 0; i < frameSize * periodSize; i++) {
         data[i] = 0;
     }
 }
@@ -48,6 +50,19 @@ void SoundBuffer::writeFrame(int16_t *sams, unsigned i)
     }
 }
 
+void SoundBuffer::pushFrame(int16_t *sams)
+{
+    if (frameSize == 1) {
+        data[bufHead] = sams[0];
+    }
+    if (frameSize == 2) {
+        data[bufHead * 2] = sams[0];
+        data[bufHead * 2 + 1] = sams[1];
+    }
+
+    bufHead = ++bufHead % periodSize;
+}
+
 void SoundBuffer::mixFrame(int16_t *sams, unsigned i)
 {
     if (i >= periodSize) {
@@ -62,12 +77,5 @@ void SoundBuffer::mixFrame(int16_t *sams, unsigned i)
         data[i * 2 + 1] += sams[1];
     }
 }
-
-
-//void writeFrame(const int16_t *buffer)
-//{
-
-//}
-
 
 } //end namespace aserver

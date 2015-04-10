@@ -37,7 +37,7 @@ class Core {
         unsigned getPeriodSize() {return this->periodSize;}
 
         int setProcessor(processor::types procType);
-        int addGenerator(generator::types genType, generator::ConfigData *cfgdata);
+        int addGenerator(generator::types genType, generator::ConfigData *cfgdata = nullptr);
         int setOutput(output::types outType);
         void setPeriodSize(unsigned ps) {this->periodSize = ps;}
         void setSamplingRate(unsigned samplingRate) {this->samplingRate = samplingRate;}

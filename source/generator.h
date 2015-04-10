@@ -7,6 +7,8 @@
 #include "sound_buffer.h"
 #include "location.h"
 
+using namespace std;
+
 namespace aserver {
 
 /** \brief Contains classes for waveform generation.
@@ -22,7 +24,7 @@ enum class types : int {
 };
 
 enum class waveformType : int {
-    SIN = 1,
+    SINE = 1,
     SQUARE = 2,
     SAWTOOTH = 3
 };
@@ -45,11 +47,10 @@ class ConfigData {
 class PrimitiveConfigData :public ConfigData {
     public:
         int amplitude = 3277;
-        short phase = 0;
         unsigned short frequency = 220;
         unsigned short squareFactor = 10;
+        waveformType wft = waveformType::SINE;
         Location location = Location();
-        waveformType wft;
 };
 
 /** \brief Keyframe and other information for scripting sound files.
@@ -75,8 +76,8 @@ class TestConfigData :public ConfigData {
 class Generator {
 
 public:
-        Location location; // the start position for the generator.
-        //map<int, Location> locations;
+        Location loc;
+        vector<Location> locationsInBuffer;
         SoundBuffer *buffer;
 
         Generator(unsigned periodSize);
@@ -84,7 +85,7 @@ public:
         virtual void config(const ConfigData *configdata) =0;
         virtual void render() =0;
 
-        Location getLocation() {return location;}
+        Location getLocation() {return loc;}
 };
 
 /** \brief Generates a primitive waveform.
@@ -92,13 +93,12 @@ public:
  */
 
 class Primitive :public Generator {
-    private:
-        int phase;
-        int frequency;
+    protected:
+        float phase;
+        float frequency;
+        vector<float> frequenciesInBuffer;
         int amplitude;
         int squareFactor;
-        float lastSampleVal = 1;
-        int timeIndex;
         waveformType waveform;
 
     public:
@@ -106,8 +106,6 @@ class Primitive :public Generator {
         ~Primitive() {};
         void config(const ConfigData *configData) override;
         void render() override;
-
-        int getTimeIndex() {return this->timeIndex;}
 };
 
 /**
@@ -115,17 +113,17 @@ class Primitive :public Generator {
  * This script is a map with key=frame  and Entry=Location
  */
 
-        //\todo Generator processes remaing frames
-        //      Writes a map with changes relative to the current buffer (location)
-        //      to be processed by the Source
-
 class Test :public Primitive {
     private:
-        // time and frequency info
-        unsigned transitionPeriod = 22050;
+        unsigned transitionPeriod;
         unsigned remainingFrames;
+        float frequencyScaleFactor;
+        float locationScaleFactor;
+
     public:
-        Test(unsigned ps, unsigned tp) : Primitive(ps), transitionPeriod(tp), remainingFrames(0) {}
+        Test(unsigned periodSize);
+        ~Test() {};
+        void config(const ConfigData *configData) override;
         virtual void render() override;
 
 };

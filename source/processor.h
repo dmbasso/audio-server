@@ -37,9 +37,9 @@ class AcousticaveConfigData :public ConfigData {
  *
  */
 
-    //\todo Source has a child for every processor
-    //Source parent implements noOperation processor
-    //Separate source type and processor type in files
+//\todo Source has a child for every processor
+//Source parent implements noOperation processor
+//Separate source type and processor type in files
 
 class Source {
     private:
@@ -47,10 +47,10 @@ class Source {
         Location loc;
 
     public:
-        Source() : gen(nullptr) {};
-        void setGenerator(aserver::generator::Generator* gen) {this->gen=gen;}
+        Source() : gen(nullptr) {}
+        void setGenerator(generator::Generator* gen) {this->gen = gen;}
         generator::Generator* getGenerator() {return this->gen;}
-        void setLocation(aserver::Location loc) {this->loc = loc;}
+        void setLocation(Location _loc) {this->loc = _loc;}
         Location getLocation() {return this->loc;}
 };
 

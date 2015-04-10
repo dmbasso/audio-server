@@ -1,7 +1,4 @@
-#include <string.h>
-
 #include "output.h"
-#include "wav_file.h"
 
 using namespace std;
 
@@ -19,6 +16,8 @@ void File::write(SoundBuffer &buffer)
     ofs.write(reinterpret_cast<char *>(buffer.getData()), 2 * 2 * buffer.getPeriodSize());
     currentSize += 2 * 2 * buffer.getPeriodSize();
 }
+
+    //\todo Normalize output file?
 
 void File::close()
 {

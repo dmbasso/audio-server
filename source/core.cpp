@@ -12,13 +12,13 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
 
     switch (genType) {
         case generator::types::PRIMITIVE: {
-            //gens.insert(std::pair<int, generator::Generator*>(generatorCounter++,gen));
             gen = new generator::Primitive(getPeriodSize());
             break;
         }
         case generator::types::WAVE:
             break;
         case generator::types::TEST:
+            gen = new generator::Test(getPeriodSize());
             break;
         case generator::types::SCRIPT:
             break;
@@ -75,7 +75,7 @@ int Core::addSource()
 }
 
 /** \brief Renders \c n periods to file.
-*
+*   //\todo check for empty generator map and empty source map
 */
 
 void Core::render(unsigned writePeriods)

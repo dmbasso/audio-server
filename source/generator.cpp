@@ -1,6 +1,7 @@
 #include "generator.h"
 
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -10,75 +11,97 @@ namespace generator {
 Generator::Generator(unsigned periodSize)
 {
     this->buffer = new SoundBuffer(periodSize);
-    this->location = Location(0., 10., 0.);
+    this->locationsInBuffer = vector<Location>(periodSize);
 }
 
 Primitive::Primitive(unsigned periodSize) : Generator(periodSize)
 {
-    this->phase = 0;
-    this->frequency = 440;
-    this->amplitude = 3277;
+    this->phase = 1.;
+    this->frequency = 220.;
+    this->frequenciesInBuffer = vector<float>(periodSize, this->frequency);
+    this->amplitude = 3276;
     this->squareFactor = 2;
-    this->timeIndex = 0;
-    this->waveform = generator::waveformType::SIN;
+    this->waveform = generator::waveformType::SINE;
+    this->loc = Location();
+    this->locationsInBuffer = vector<Location>(periodSize, Location());
 }
 
 void Primitive::config(const ConfigData *configData)
 {
     PrimitiveConfigData* pcd = (PrimitiveConfigData*) configData;
-
     this->amplitude = pcd->amplitude;
-    this->phase = pcd->phase;
     this->frequency = pcd->frequency;
+    this->frequenciesInBuffer = vector<float>(buffer->getPeriodSize(), pcd->frequency);
     this->squareFactor = pcd->squareFactor;
-
-    this->location = pcd->location;
     this->waveform = pcd->wft;
+    this->loc = pcd->location;
+    this->locationsInBuffer = vector<Location>(buffer->getPeriodSize(), pcd->location);
 }
-
-    //\todo remove timeIndex and update signal with phase increment
-    //\todo remove sin phase
 
 void Primitive::render()
 {
     unsigned fs = 44100;
     float T = 1./fs;
-    float omega = M_PI * frequency * T;
-    float sawPhaseIncrement = (frequency * 2.) / fs;
-
-    int16_t sams[2] = {0, 0};
+    int16_t sams[2];
 
     switch (this->waveform) {
-        case waveformType::SIN:
-            for (int i = 0; i < this->buffer->getPeriodSize(); i++) {
-                sams[0] = sams[1] = (int16_t) amplitude * cos(2. * omega * (timeIndex + i) + phase);
+        case waveformType::SINE:
+            for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
+                phase += 2. * M_PI * frequenciesInBuffer[i] * T;
+                sams[0] = sams[1] = (int16_t) amplitude * cos(phase);
                 this->buffer->writeFrame(sams, i);
             }
             break;
         case waveformType::SQUARE:
-            for (int i = 0; i < this->buffer->getPeriodSize(); i++) {
-                sams[0] = sams[1] = (int16_t) amplitude * tanh(sin((timeIndex + i) * omega) * squareFactor);
+            for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
+                phase += M_PI * frequenciesInBuffer[i] * T;
+                sams[0] = sams[1] = (int16_t) amplitude * tanh(sin(phase) * squareFactor);
                 this->buffer->writeFrame(sams, i);
             }
             break;
         case waveformType::SAWTOOTH:
-            for (int i = 0; i < this->buffer->getPeriodSize(); i++) {
-                lastSampleVal = fmod(lastSampleVal + sawPhaseIncrement, 2.);
-                sams[0] = sams[1] = (int16_t) amplitude * (lastSampleVal - 1.);
+            for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
+                phase = fmod(phase + (2. * frequenciesInBuffer[i] * T), 2.);
+                sams[0] = sams[1] = (int16_t) amplitude * (phase - 1.);
                 this->buffer->writeFrame(sams, i);
-                //cout << "data[" << (i*2)+timeIndex << "] = " << sams[0] << " - data[" << (i*2+1) + timeIndex << "] = " << sams[1] << endl;
             }
             break;
     }
-    timeIndex += this->buffer->getPeriodSize();
 }
+
+Test::Test(unsigned periodSize) : Primitive(periodSize)
+{
+    transitionPeriod = 22050;
+    remainingFrames = transitionPeriod;
+    //frequencyScaleFactor = 1.05946; //half tone scaling factor
+    frequencyScaleFactor = 1.5; //fifth scaling factor
+    //frequencyScaleFactor = 2.; //octave scaling factor
+    locationScaleFactor = 5.;
+}
+
 
     //\todo test.render must check possible frequency changes within the buffer and execute them
     //      this should not copy primitive.render, instead it should use it and process freq changes
 
 void Test::render()
 {
+    for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
+        if (remainingFrames == 0) {
+            loc.sumY(locationScaleFactor);
+            frequency *= frequencyScaleFactor;
+            remainingFrames = transitionPeriod;
+            cout << "frequency/location change: " << loc.toString() << " Frequency = " << frequency << endl;
+        }
+        frequenciesInBuffer[i] = frequency;
+        locationsInBuffer[i] = loc;
+        remainingFrames--;
+    }
+    Primitive::render();
+}
 
+void Test::config(const ConfigData *configData)
+{
+    Primitive::config(configData);
 }
 
 Wave::Wave(unsigned periodSize) : Generator(periodSize)

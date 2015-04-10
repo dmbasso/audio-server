@@ -1,7 +1,7 @@
 #include <cmath>
+#include <iostream>
 
 #include "processor.h"
-#include "location.h"
 
 using namespace std;
 
@@ -111,12 +111,15 @@ void DistanceAttenuation::render()
 
 void DistanceAttenuation::process(Source *src)
 {
-    float distance = src->getLocation().distanceTo(Location());
-    float attenuation = (float) (1. / (distance + 1));
+    //float distance = src->getLocations().distanceTo(Location());
+    float distance;
+    float attenuation;
 
     int16_t sams[2];
 
     for (int i = 0; i < buffer->getPeriodSize(); i++) {
+        distance = src->getGenerator()->locationsInBuffer[i].distanceTo(Location());
+        attenuation = (float) (1. / (distance + 1));
         src->getGenerator()->buffer->readFrame(sams, i);
         sams[0] *= attenuation;
         sams[1] *= attenuation;
@@ -125,5 +128,4 @@ void DistanceAttenuation::process(Source *src)
 }
 
 } //end namespace processor
-
 } //end namespace aserver

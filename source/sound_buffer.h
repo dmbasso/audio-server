@@ -2,6 +2,9 @@
 #define SOUND_BUFFER_H
 
 #include <cstdint>
+#include <vector>
+
+using namespace std;
 
 namespace aserver {
 
@@ -12,38 +15,27 @@ namespace aserver {
  *  \c frameSize is the number of 16 bit audio samples per audio frame (mono = 1, stereo = 2 (default));
  *  \c data is a pointer to an array of \c int16_t type variables. It contains the 16 bit audio samples correnponding to one period. The SoundBuffer constructor initialization allocates this pointer, an \c int16_t vector of size = \c frameSize * \c periodSize, and zeros all values;
  *
- *  \todo Make data private and use get/setgit .
  */
 
 class SoundBuffer {
+    private:
+        unsigned short frameSize;
+        unsigned periodSize;
+        int16_t *data;
 
-private:
-    unsigned short frameSize;
-    unsigned periodSize;
-    int16_t *data;
+    public:
+        unsigned bufHead;
+        SoundBuffer(unsigned _periodSize);
 
-public:
-    SoundBuffer(unsigned _periodSize);
-
-    unsigned getDataSize() {
-        return frameSize * periodSize;
-    }
-
-    unsigned getPeriodSize() {
-        return periodSize;
-    }
-
-    int16_t *getData() {
-        return this->data;
-    }
-
-    void reset();
-
-    void writeFrame(int16_t *sams, unsigned i);
-    int16_t* readFrame(int16_t *sams, unsigned i);
-    void mixFrame(int16_t *sams, unsigned i);
-
+        unsigned getPeriodSize() {return periodSize;}
+        int16_t *getData() {return this->data;}
+        void reset();
+        void writeFrame(int16_t *sams, unsigned i);
+        void pushFrame(int16_t *sams);
+        int16_t* readFrame(int16_t *sams, unsigned i);
+        void mixFrame(int16_t *sams, unsigned i);
 };
+
 } //end namespace aserver
 
 #endif
