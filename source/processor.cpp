@@ -119,13 +119,15 @@ void DistanceAttenuation::process(Source *src)
 
     map<unsigned, Location> locations = src->getGenerator()->locs;
 
+    distance = src->getLocation().distanceTo(Location());
+    attenuation = (1. / (distance + 1.));
+
     for (int i = 0; i < buffer->getPeriodSize(); i++) {
         if(!locations.empty() && locations.begin()->first == i) {
             src->setLocation(locations.begin()->second);
             locations.erase(locations.begin());
             distance = src->getLocation().distanceTo(Location());
             attenuation = (1. / (distance + 1.));
-            cout << "loc change in proc: i = " << i << " Loc = " << src->getLocation().toString() << endl;
         }
         src->getGenerator()->buffer->readFrame(sams, i);
         sams[0] *= attenuation;
