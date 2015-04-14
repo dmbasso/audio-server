@@ -25,12 +25,17 @@ void NoOperation::config(ConfigData *configData)
 
     //\todo update map insertion
 
-void NoOperation::addSource(generator::Generator *gen)
+void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
-        auto source = new processor::Source();
-        source->setGenerator(gen);
-        source->setLocation(gen->getLocation());
-        this->sources.insert(std::pair<int, Source*>(sourceCounter++,source));
+    auto source = new processor::Source();
+    source->setGenerator(gen);
+
+    if (srcData) {
+        DistanceAttenuationSourceConfigData *srcConfigData = (DistanceAttenuationSourceConfigData*) srcData;
+        source->setLocation(srcConfigData->loc);
+    }
+
+    this->sources.insert(std::pair<int, Source*>(sourceCounter++,source));
 }
 
     //\todo loop the Core generators
@@ -57,7 +62,7 @@ void Acousticave::config(ConfigData *configData)
     //}
 }
 
-void Acousticave::addSource(generator::Generator *gen)
+void Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
     //auto source = new processor::AcousticaveSource
     //insert it
@@ -82,12 +87,16 @@ void DistanceAttenuation::config(ConfigData *configData)
 * The new Source object is then added to the processors Source map.
 */
 
-void DistanceAttenuation::addSource(generator::Generator *gen)
+void DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
     auto source = new processor::Source();
     source->setGenerator(gen);
-    source->setLocation(gen->getLocation());
-    this->sources.insert(std::pair<int, Source*>(sourceCounter++,source));
+
+    if (srcData) {
+        DistanceAttenuationSourceConfigData *srcConfigData = (DistanceAttenuationSourceConfigData*) srcData;
+        source->setLocation(srcConfigData->loc);
+    }
+    this->sources[sourceCounter++] = source;
 }
 
 /** \brief Calculates distance attenuation according to the inverse distance law (used for sound pressure measurements).
@@ -122,9 +131,12 @@ void DistanceAttenuation::process(Source *src)
     distance = src->getLocation().distanceTo(Location());
     attenuation = (1. / (distance + 1.));
 
+    //cout << "Src location = " << src->getLocation().toString() << endl;
+
     for (int i = 0; i < buffer->getPeriodSize(); i++) {
         if(!locations.empty() && locations.begin()->first == i) {
-            src->setLocation(locations.begin()->second);
+            src->setLocation(src->getLocation().incrementLocation(locations.begin()->second));
+            cout << "New Source Location = " << src->getLocation().toString() << endl;
             locations.erase(locations.begin());
             distance = src->getLocation().distanceTo(Location());
             attenuation = (1. / (distance + 1.));

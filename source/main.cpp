@@ -22,30 +22,35 @@ int main () {
 
     // generate an A3 minor chord: with different note intensities due to their distance from the origin (0,0,0).
 
-    generator::PrimitiveConfigData cfgData1, cfgData2, cfgData3, cfgData4;
-    cfgData1.frequency = 220;
-    cfgData1.wft = generator::waveformType::SINE;
-    cfgData1.location = Location(0., 0., 0.);
-    cfgData2.frequency = 262;
-    cfgData2.wft = generator::waveformType::SQUARE;
-    cfgData2.location = Location(0., 0., 0.);
-    cfgData3.frequency = 330;
-    cfgData3.wft = generator::waveformType::SAWTOOTH;
-    cfgData3.location = Location(0., 0., 0.);
+    generator::PrimitiveConfigData genData1, genData2, genData3, genData4;
+    processor::DistanceAttenuationSourceConfigData srcData1, srcData2, srcData3, srcData4;
 
-    cfgData4.amplitude = 32767/2;
+    genData1.frequency = 220;
+    genData1.wft = generator::waveformType::SINE;
+    srcData1.loc = Location(0., 5., 0.);
+    
+    genData2.frequency = 262;
+    genData2.wft = generator::waveformType::SQUARE;
+    srcData2.loc = Location(0., 8., 0.);
 
-    //core.addGenerator(generator::types::PRIMITIVE, &cfgData1);
+    genData3.frequency = 330;
+    genData3.wft = generator::waveformType::SAWTOOTH;
+    srcData1.loc = Location(0., 10., 0.);
+
+    genData4.amplitude = 32767/2;
+    srcData4.loc = Location(0., 5., 0.);
+
+    //core.addGenerator(generator::types::PRIMITIVE, &genData1);
     //core.addSource();
 
-    //core.addGenerator(generator::types::PRIMITIVE, &cfgData2);
+    //core.addGenerator(generator::types::PRIMITIVE, &genData2);
     //core.addSource();
 
-    //core.addGenerator(generator::types::PRIMITIVE, &cfgData3);
-    //core.addSource();
-
-    core.addGenerator(generator::types::TEST, &cfgData4);
+    core.addGenerator(generator::types::PRIMITIVE, &genData3);
     core.addSource();
+
+    core.addGenerator(generator::types::TEST, &genData4);
+    core.addSource(&srcData4);
 
     core.render(writePeriods);
 }

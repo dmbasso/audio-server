@@ -33,6 +33,39 @@ class AcousticaveConfigData :public ConfigData {
 
 };
 
+/** \brief Parent class for source configuration relative to a specific processor.
+ *
+ */
+
+struct SourceConfigData {
+
+
+};
+
+/** \brief Source configuration for the NoOperation processor.
+ *
+ */
+
+struct NoOperationSourceConfigData :SourceConfigData {
+
+};
+
+/** \brief Source configuration for the DistanceAttenuation processor.
+*
+*/
+
+struct DistanceAttenuationSourceConfigData :SourceConfigData {
+    Location loc;
+};
+
+/** \brief Source configuration for the Acouticave processor.
+*
+*/
+
+struct AcousticaveSourceConfigData :SourceConfigData {
+
+};
+
 /** \brief Container for the generators that will be used by a specific processor.
  *
  */
@@ -52,6 +85,14 @@ class Source {
         generator::Generator* getGenerator() {return this->gen;}
         void setLocation(Location _loc) {this->loc = _loc;}
         Location getLocation() {return this->loc;}
+};
+
+class NoOperationSource :public Source {
+
+};
+
+class DistanceAttenuationSource :public Source {
+
 };
 
 /** \brief Contains extra info needed by the Acousticave processor to manage sources.
@@ -80,8 +121,8 @@ class Processor {
         unsigned sourceCounter =0;
 
         Processor(unsigned period);
-        virtual void config(ConfigData *configData)=0; // the class is abstract
-        virtual void addSource(generator::Generator *gen)=0;
+        virtual void config(ConfigData *configData) =0; // the class is abstract
+        virtual void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) =0;
         virtual void render()=0;
 };
 
@@ -93,7 +134,7 @@ class NoOperation :public Processor {
     public:
         NoOperation(unsigned periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) override;
-        void addSource(generator::Generator *gen) override;
+        void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
         void render() override;
 };
 
@@ -105,7 +146,7 @@ class Acousticave :public Processor {
     public:
         Acousticave(unsigned periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) override;
-        void addSource(generator::Generator *gen) override;
+        void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
         void render() override;
 };
 
@@ -117,7 +158,7 @@ class DistanceAttenuation :public Processor {
     public:
         DistanceAttenuation(unsigned periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) override;
-        void addSource(generator::Generator *gen) override;
+        void addSource(generator::Generator *gen, SourceConfigData *srcData =nullptr) override;
         void render() override;
         void process(Source *src);
 };

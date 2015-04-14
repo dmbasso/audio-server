@@ -41,7 +41,7 @@ class Core {
         int setOutput(output::types outType);
         void setPeriodSize(unsigned ps) {this->periodSize = ps;}
         void setSamplingRate(unsigned samplingRate) {this->samplingRate = samplingRate;}
-        int addSource();
+        int addSource(processor::SourceConfigData *srcData = nullptr);
         void render(unsigned writePeriods);
         //void generatorConfig(int id, generator::ConfigData *configData);  //optional, in case one wishes to alter the generators default values
         //void processorConfig(processor::ConfigData *configData)           //optional, in case one wishes to alter the generators default values

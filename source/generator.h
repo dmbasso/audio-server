@@ -88,10 +88,14 @@ class TestConfigData :public ConfigData {
  *  render the next period (this base class only renders silence).
  */
 
+// Locations is a map<unsigned bufferIndex, Location loc> that stores location changes in each buffer.
+// This map will be used to update the location of each source when rendered (source.render)
+// \todo For that we must create a map iterator to check the next map pair for location changes.
+// \todo Only source should have a location; Source config should be implemented.
+
 class Generator {
 
 public:
-        Location loc;  //\todo Only source should have a location; Source config should be implemented
         map<unsigned, Location> locs;
         SoundBuffer *buffer;
 
@@ -99,8 +103,6 @@ public:
         virtual ~Generator() {};
         virtual void config(const ConfigData *configdata) =0;
         virtual void render() =0;
-
-        Location getLocation() {return loc;}
 };
 
 /** \brief Generates a primitive waveform.

@@ -68,14 +68,19 @@ int Core::setOutput(output::types outType)
 *
 */
 
-int Core::addSource()
+int Core::addSource(processor::SourceConfigData *srcData)
 {
     std::map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
-    this->proc->addSource(it->second);
+    if (srcData) {
+        this->proc->addSource(it->second, srcData); //\todo already is null, unnecessary test...
+    }
+    else {
+        this->proc->addSource(it->second);
+    }
 }
 
 /** \brief Renders \c n periods to file.
-*   //\todo check for empty generator map and empty source map
+*   If no generators are initialized, the processor will render silence.
 */
 
 void Core::render(unsigned writePeriods)
