@@ -18,22 +18,20 @@ void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData
 {
     auto source = new processor::Source();
     source->setGenerator(gen);
-
     this->sources[sourceCounter++] = source;
 }
 
-//\todo loop the Core generators
-//\todo check this method with new mixFrame methods
-
 void NoOperation::render()
 {
-    //\todo we iterate the core generatorss -> update
+    int16_t sams[2];
 
     this->buffer->reset();
 
     for (auto const &it : sources) {
-        auto gen = it.second->getGenerator();
-        gen->render();
+        for (int i = 0; i < buffer->getPeriodSize(); i++) {
+            it.second->getGenerator()->buffer->readFrame(sams, i);
+            this->buffer->mixFrame(sams, i);
+        }
     }
 }
 
