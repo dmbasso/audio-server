@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 
-#include "generator.h"
-#include "processor.h"
+#include "generator/generator.h"
+#include "processor/processor.h"
 #include "output.h"
 #include "sound_buffer.h"
 

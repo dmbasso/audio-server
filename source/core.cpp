@@ -1,4 +1,12 @@
+#include <iostream>
+
 #include "core.h"
+#include "processor/processor_distance_attenuation.h"
+#include "processor/processor_acousticave.h"
+#include "processor/processor_nooperation.h"
+#include "generator/generator_primitive.h"
+#include "generator/generator_test.h"
+
 
 namespace aserver {
 
@@ -71,12 +79,7 @@ int Core::setOutput(output::types outType)
 int Core::addSource(processor::SourceConfigData *srcData)
 {
     std::map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
-    if (srcData) {
-        this->proc->addSource(it->second, srcData); //\todo already is null, unnecessary test...
-    }
-    else {
-        this->proc->addSource(it->second);
-    }
+    this->proc->addSource(it->second, srcData);
 }
 
 /** \brief Renders \c n periods to file.

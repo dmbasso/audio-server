@@ -1,85 +1,15 @@
-#include <cmath>
-#include <iostream>
+#include "processor_distance_attenuation.h"
 
-#include "processor.h"
+#include <iostream>
 
 using namespace std;
 
 namespace aserver {
 namespace processor {
 
-Processor::Processor(unsigned period)
-{
-    buffer = new SoundBuffer(period);
-}
-
-void NoOperation::config(ConfigData *configData)
-{
-
-}
-
-/** \brief Add a Source object to the Processor map.
- * This method takes a Generator object to allocate a new Source.
- * The new Source object is then added to the processors Source map.
- */
-
-    //\todo update map insertion
-
-void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData)
-{
-    auto source = new processor::Source();
-    source->setGenerator(gen);
-
-    if (srcData) {
-        DistanceAttenuationSourceConfigData *srcConfigData = (DistanceAttenuationSourceConfigData*) srcData;
-        source->setLocation(srcConfigData->loc);
-    }
-
-    this->sources.insert(std::pair<int, Source*>(sourceCounter++,source));
-}
-
-    //\todo loop the Core generators
-    //\todo check this method with new mixFrame methods
-
-void NoOperation::render()
-{
-    //Should we iterate the generators in the processors source map or the core generators?
-    //Currently iterating the processor sources..
-
-    this->buffer->reset();
-
-    for (auto const &it : sources) {
-        auto gen = it.second->getGenerator();
-        gen->render();
-    }
-}
-
-void Acousticave::config(ConfigData *configData)
-{
-    //auto cfg = (AcousticaveConfigData*) configData;
-    //if (cfg->flags & blabla::setReverb) {
-    //    bla bla bla
-    //}
-}
-
-void Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)
-{
-    //auto source = new processor::AcousticaveSource
-    //insert it
-}
-
-void Acousticave::render()
-{
-    //do whatever Acousticave needs to be done,
-    //then copy the results into `buffer`
-}
-
 void DistanceAttenuation::config(ConfigData *configData)
 {
-    //auto cfg = (AcousticaveConfigData*) configData;
-    //if (cfg->flags & blabla::setReverb) {
-    //    bla bla bla
-    //}
+
 }
 
 /** \brief Add a Source object to the Processor map.

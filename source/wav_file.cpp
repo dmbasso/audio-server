@@ -1,5 +1,5 @@
 #include "string.h"
-#include <fstream>
+#include <cstdint>
 
 #include "wav_file.h"
 

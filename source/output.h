@@ -3,7 +3,7 @@
 
 #include <fstream>
 
-#include "generator.h"
+#include "generator/generator.h"
 #include "wav_file.h"
 
 using namespace std;

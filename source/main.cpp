@@ -6,8 +6,10 @@
  *
  */
 
-#include "generator.h"
+#include "generator/generator.h"
+#include "generator/generator_primitive.h"
 #include "core.h"
+#include "processor/processor_distance_attenuation.h"
 
 using namespace aserver;
 using namespace std;
@@ -22,8 +24,8 @@ int main () {
 
     // generate an A3 minor chord: with different note intensities due to their distance from the origin (0,0,0).
 
-    generator::PrimitiveConfigData genData1, genData2, genData3, genData4;
-    processor::DistanceAttenuationSourceConfigData srcData1, srcData2, srcData3;
+    generator::PrimitiveConfigData genData1, genData2, genData3;
+    processor::DistanceAttenuationSourceConfigData srcData1, srcData2, srcData3, srcData4;
 
     genData1.frequency = 220;
     genData1.wft = generator::waveformType::SINE;
@@ -43,8 +45,8 @@ int main () {
     //core.addGenerator(generator::types::PRIMITIVE, &genData3);
     //core.addSource(&srcData3);
 
-    genData4.amplitude = 32767/2;
-    core.addGenerator(generator::types::TEST, &genData4);
+    //srcData4.loc = Location(0., 20., 0.);
+    core.addGenerator(generator::types::TEST);
     core.addSource();
 
     core.render(writePeriods);
