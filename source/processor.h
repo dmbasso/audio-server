@@ -70,9 +70,8 @@ struct AcousticaveSourceConfigData :SourceConfigData {
  *
  */
 
-//\todo Source has a child for every processor
-//Source parent implements noOperation processor
-//Separate source type and processor type in files
+//\todo Source parent implements noOperationSource processor
+//\todo Separate source type and processor type in files
 
 class Source {
     private:
@@ -85,10 +84,6 @@ class Source {
         generator::Generator* getGenerator() {return this->gen;}
         void setLocation(Location _loc) {this->loc = _loc;}
         Location getLocation() {return this->loc;}
-};
-
-class NoOperationSource :public Source {
-
 };
 
 class DistanceAttenuationSource :public Source {

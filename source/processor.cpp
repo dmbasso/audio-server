@@ -131,15 +131,13 @@ void DistanceAttenuation::process(Source *src)
     distance = src->getLocation().distanceTo(Location());
     attenuation = (1. / (distance + 1.));
 
-    //cout << "Src location = " << src->getLocation().toString() << endl;
-
     for (int i = 0; i < buffer->getPeriodSize(); i++) {
         if(!locations.empty() && locations.begin()->first == i) {
-            src->setLocation(src->getLocation().incrementLocation(locations.begin()->second));
-            cout << "New Source Location = " << src->getLocation().toString() << endl;
+            src->setLocation(locations.begin()->second);
             locations.erase(locations.begin());
             distance = src->getLocation().distanceTo(Location());
             attenuation = (1. / (distance + 1.));
+            cout << "Distance = " << distance << " Attenuation = " << attenuation << endl;
         }
         src->getGenerator()->buffer->readFrame(sams, i);
         sams[0] *= attenuation;

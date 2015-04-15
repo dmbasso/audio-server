@@ -135,7 +135,11 @@ class Test :public Primitive {
         unsigned transitionPeriod;
         unsigned remainingFrames;
         float frequencyScaleFactor;
-        float locationScaleFactor;
+
+        double distance; // overrides source location...
+        double angleStep;
+        double initialAngle;
+        double currentAngle;
 
     public:
         Test(unsigned periodSize);

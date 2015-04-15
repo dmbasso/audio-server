@@ -70,30 +70,47 @@ void Primitive::render()
 Test::Test(unsigned periodSize) : Primitive(periodSize)
 {
     transitionPeriod = 22050;
-    remainingFrames = transitionPeriod;
+    remainingFrames = 0;
     //frequencyScaleFactor = 1.05946; //half tone scaling factor
     frequencyScaleFactor = 1.5; //fifth scaling factor
-    //frequencyScaleFactor = 2.; //octave scaling factor
-    locationScaleFactor = 2.;
+
+    distance = 5.;
+    angleStep = M_PI/4.;
+    initialAngle = M_PI/2.;
+    currentAngle = initialAngle;
 }
+
+/** \brief Generates a clockwise rotation for a generator.
+ * Default position is along the Y axis (front).
+ */
 
 void Test::render()
 {
-    locs.clear();
-
     unsigned startIndex = 0;
+
+    locs.clear();
+    buffer->reset();
 
     for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
         if (remainingFrames == 0) {
-            locs[i] = Location::incrementTest(locationScaleFactor);
+            if ((-2. * M_PI) + initialAngle  - currentAngle == 0) {
+                Primitive::renderNFrames(startIndex, i);
+                return;
+            }
+
+            locs[i] = Location::computeTestPosition(distance, currentAngle);
             Primitive::renderNFrames(startIndex, i);
+
+            cout << "Frequency = " << frequency << " -> " << locs[i].toString() << endl;
+
             startIndex = i;
+            this->currentAngle -= this->angleStep;
             frequency *= frequencyScaleFactor;
             remainingFrames = transitionPeriod;
-            cout << "Frequency change: Frequency = " << frequency << endl;
         }
         remainingFrames--;
     }
+
     if (startIndex != buffer->getPeriodSize()) {
         Primitive::renderNFrames(startIndex, buffer->getPeriodSize());
     }
