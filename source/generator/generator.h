@@ -30,7 +30,7 @@ enum class waveformType : int {
     SAWTOOTH = 3
 };
 
-enum  class playbackCommand : int {
+enum class playbackCommand : int {
     PLAY = 1,
     STOP = 2,
     PAUSE = 3,
@@ -38,7 +38,7 @@ enum  class playbackCommand : int {
     REVERSE = 5
 };
 
-enum  class playbackState : int {
+enum class playbackState : int {
     PLAYING = 1,
     STOPPED = 2,
     PAUSED = 3,

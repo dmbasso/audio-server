@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "core.h"
 #include "processor/processor_distance_attenuation.h"
@@ -6,12 +7,15 @@
 #include "processor/processor_nooperation.h"
 #include "generator/generator_primitive.h"
 #include "generator/generator_test.h"
+#include "generator/generator_wave.h"
+#include "wav_header.h"
 
+using namespace std;
 
 namespace aserver {
 
 /** \brief Note: This method takes as input a specific ConfigData for the generator to be instantiated.
-*
+* Currently, in the wave generator, it includes the last wave read into the waves map.
 */
 
 int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
@@ -19,16 +23,19 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
     generator::Generator *gen;
 
     switch (genType) {
-        case generator::types::PRIMITIVE: {
+        case generator::types::PRIMITIVE:
             gen = new generator::Primitive(getPeriodSize());
             break;
-        }
-        case generator::types::WAVE:
+        case generator::types::WAVE: {
+            map<std::string, SoundBuffer *>::reverse_iterator it = waves.rbegin();
+            gen = new generator::Wave(getPeriodSize(), it->second);
             break;
+        }
         case generator::types::TEST:
             gen = new generator::Test(getPeriodSize());
             break;
         case generator::types::SCRIPT:
+            //gen = new generator::Script(getPeriodSize());
             break;
     }
 
@@ -78,7 +85,7 @@ int Core::setOutput(output::types outType)
 
 int Core::addSource(processor::SourceConfigData *srcData)
 {
-    std::map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
+    map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
     this->proc->addSource(it->second, srcData);
 }
 
@@ -96,6 +103,39 @@ void Core::render(unsigned writePeriods)
         out->write(*proc->buffer);
     }
     out->close();
+}
+
+int Core::readWave(const string filename)
+{
+    ifstream ifs;
+    string filePath = "input/" + filename;
+
+    ifs.open(filePath, ifstream::in);
+    if (ifs.is_open()) {
+        wavHeader wh;
+        ifs.read(reinterpret_cast<char *>(&wh), sizeof(wavHeader));
+        cout << "\nReading wavfile = " << filename << "\nDatachunkSize = " << wh.datachunkSize;
+        cout << " numChannels = " << wh.numChannels << " Soundbuffer period size = " << wh.datachunkSize/ (wh.numChannels*2) << endl << endl;
+
+        SoundBuffer *sb = new SoundBuffer(wh.datachunkSize/ (wh.numChannels*2), wh.numChannels);
+        ifs.read(reinterpret_cast<char *>(sb->getData()), wh.datachunkSize);
+        waves[filename] = sb;
+        return 1;
+    }
+    else {
+        cout << "\nError opening file " << filename << endl;
+        return 0;
+    }
+}
+
+SoundBuffer* Core::getWave(const string filename)
+{
+    if (waves.find(filename) != waves.end()) {
+        return waves[filename];
+    }
+    else {
+        return nullptr;
+    }
 }
 
 } //end namespace aserver

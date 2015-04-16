@@ -40,7 +40,8 @@ cmake_install.cmake
 *.pdf
 doc/latex
 
-# Output files
+# IO files
+input
 output
 
 # Temporary tests

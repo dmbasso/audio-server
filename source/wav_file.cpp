@@ -1,29 +1,13 @@
 #include "string.h"
-#include <cstdint>
 
 #include "wav_file.h"
+#include "wav_header.h"
 
 using namespace std;
 
-typedef struct {
-    char     chunkId[4];
-    uint32_t chunkSize;
-    char     format[4];
-    char     fmtchunkId[4];
-    uint32_t fmtchunkSize;
-    uint16_t audioFormat;
-    uint16_t numChannels;
-    uint32_t sampleRate;
-    uint32_t byteRate;
-    uint16_t blockAlign;
-    uint16_t bps;
-    char     datachunkId[4];
-    uint32_t datachunkSize;
-} WavHeader;
-
 void writeWavHeader(ofstream *ofs, unsigned int currentSize)
 {
-    WavHeader header;
+    wavHeader header;
 
     strncpy(header.chunkId,"RIFF",4);
     header.datachunkSize = currentSize;
@@ -40,5 +24,5 @@ void writeWavHeader(ofstream *ofs, unsigned int currentSize)
     strncpy(header.datachunkId,"data",4);
 
     ofs->seekp(0);
-    ofs->write((char *) &header, sizeof(WavHeader));
+    ofs->write((char *) &header, sizeof(wavHeader));
 }

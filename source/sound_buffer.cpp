@@ -7,11 +7,11 @@ using namespace std;
 
 namespace aserver {
 
-SoundBuffer::SoundBuffer(unsigned _periodSize)
+SoundBuffer::SoundBuffer(unsigned _periodSize, unsigned short _frameSize)
 {
-    this->frameSize = 2;
+    this->frameSize = _frameSize;
     this->periodSize = _periodSize;
-    this->data = new int16_t[_periodSize * frameSize];
+    this->data = new int16_t[_periodSize * _frameSize];
     this->bufHead = 0;
 
     reset();
@@ -33,6 +33,7 @@ int16_t* SoundBuffer::readFrame(int16_t *sams, unsigned i)
         sams[0] = data[i * 2];
         sams[1] = data[i * 2 + 1];
     }
+    return sams;
 }
 
 void SoundBuffer::writeFrame(int16_t *sams, unsigned i)

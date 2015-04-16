@@ -46,9 +46,8 @@ class Core {
         //void generatorConfig(int id, generator::ConfigData *configData);  //optional, in case one wishes to alter the generators default values
         //void processorConfig(processor::ConfigData *configData)           //optional, in case one wishes to alter the generators default values
         //void setSourceGenerator(int sid, int gid)
-
-    //\todo void readWaveFile(...); -> stores a file in the waves map.
-    // check existence: if present return SoundBuffer pointer.
+        int readWave(const string filename);
+        SoundBuffer* getWave(const string filename);
 };
 
 } //end aserver namespace

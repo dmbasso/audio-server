@@ -1,5 +1,5 @@
-#ifndef WAV_HEADER_H
-#define WAV_HEADER_H
+#ifndef WAV_FILE_H
+#define WAV_FILE_H
 
 #include <fstream>
 

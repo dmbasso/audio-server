@@ -13,8 +13,8 @@ namespace generator {
     {
         transitionPeriod = 22050;
         remainingFrames = 0;
-        //frequencyScaleFactor = 1.05946; //half tone scaling factor
-        frequencyScaleFactor = 1.5; //fifth scaling factor
+        frequencyScaleFactor = 1.05946; //half tone scaling factor
+        //frequencyScaleFactor = 1.5; //fifth scaling factor
 
         distance = 5.;
         angleStep = M_PI/4.;

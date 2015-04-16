@@ -25,7 +25,7 @@ class SoundBuffer {
 
     public:
         unsigned bufHead;
-        SoundBuffer(unsigned _periodSize);
+        SoundBuffer(unsigned _periodSize, unsigned short _frameSize=2);
 
         unsigned getPeriodSize() {return periodSize;}
         int16_t *getData() {return this->data;}
