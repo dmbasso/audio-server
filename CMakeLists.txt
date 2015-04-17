@@ -7,22 +7,22 @@ set(SOURCE_FILES
     source/wav_header.h
     source/generator/generator.cpp
     source/generator/generator.h
-    source/generator/generator_script.cpp
-    source/generator/generator_script.h
-    source/generator/generator_wave.cpp
-    source/generator/generator_wave.h
-    source/generator/generator_test.cpp
-    source/generator/generator_test.h
-    source/generator/generator_primitive.cpp
-    source/generator/generator_primitive.h
+    source/generator/script.cpp
+    source/generator/script.h
+    source/generator/wave.cpp
+    source/generator/wave.h
+    source/generator/test.cpp
+    source/generator/test.h
+    source/generator/primitive.cpp
+    source/generator/primitive.h
     source/processor/processor.cpp
     source/processor/processor.h
-    source/processor/processor_nooperation.cpp
-    source/processor/processor_nooperation.h
-    source/processor/processor_acousticave.cpp
-    source/processor/processor_acousticave.h
-    source/processor/processor_distance_attenuation.cpp
-    source/processor/processor_distance_attenuation.h
+    source/processor/no_operation.cpp
+    source/processor/no_operation.h
+    source/processor/acousticave.cpp
+    source/processor/acousticave.h
+    source/processor/distance_attenuation.cpp
+    source/processor/distance_attenuation.h
     source/wav_file.cpp
     source/wav_file.h
     source/location.cpp

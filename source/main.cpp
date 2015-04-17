@@ -7,12 +7,17 @@
  */
 
 #include "generator/generator.h"
-#include "generator/generator_primitive.h"
+#include "generator/primitive.h"
 #include "core.h"
-#include "processor/processor_distance_attenuation.h"
+#include "processor/distance_attenuation.h"
 
 using namespace aserver;
 using namespace std;
+
+
+/** \todo wav_file_header -> wav_file.cpp
+*   \todo "encapsulamento" header files
+*/
 
 int main () {
 
@@ -29,19 +34,20 @@ int main () {
     genData1.frequency = 220;
     genData1.wft = generator::waveformType::SINE;
     srcData1.loc = Location(0., 5., 0.);
-    core.addGenerator(generator::types::PRIMITIVE, &genData1);
-    core.addSource(&srcData1);
+    //core.addGenerator(generator::types::PRIMITIVE, &genData1);
+    //core.addSource(&srcData1);
 
     // Test generator example
-    srcData2.loc = Location(0., 5., 0.);
+    //srcData2.loc = Location(0., 5., 0.);
     core.addGenerator(generator::types::TEST);
     core.addSource();
 
     // wave generator example
-    srcData3.loc = Location(0., 5., 0.);
-    core.readWave("test.wav"); // input wav files should be placed in the input directory in the project root
-    core.addGenerator(generator::types::WAVE);
-    core.addSource(&srcData3);
+    //srcData3.loc = Location(0., 5., 0.);
+    //genData3.filename = "test.wav";
+    //core.readWave("test.wav"); // input wav files should be placed in the input directory in the project root
+    //core.addGenerator(generator::types::WAVE);
+    //core.addSource(&srcData3);
 
     core.render(writePeriods);
 }

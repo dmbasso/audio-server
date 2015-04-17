@@ -2,7 +2,7 @@
 #define GENERATOR_SCRIPT_H
 
 #include "generator.h"
-#include "generator_wave.h"
+#include "wave.h"
 
 using namespace std;
 

@@ -1,4 +1,4 @@
-#include "processor_nooperation.h"
+#include "no_operation.h"
 
 namespace aserver {
 namespace processor {
@@ -29,7 +29,7 @@ void NoOperation::render()
 
     for (auto const &it : sources) {
         for (int i = 0; i < buffer->getPeriodSize(); i++) {
-            it.second->getGenerator()->buffer->readFrame(sams, i);
+            it.second->getGenerator()->buffer->readFrame(sams, i); //\todo it.second->getGenerator()->buffer-> instantiate variable outside loop
             this->buffer->mixFrame(sams, i);
         }
     }

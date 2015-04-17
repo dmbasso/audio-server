@@ -16,7 +16,7 @@ namespace generator {
 //\todo remove get/set, replace class with struct
 
 struct PrimitiveConfigData : ConfigData {
-    int amplitude = 3277;
+    int amplitude = 32767/5;
     unsigned short frequency = 220;
     unsigned short squareFactor = 10;
     waveformType wft = waveformType::SINE;

@@ -1,4 +1,4 @@
-#include "generator_script.h"
+#include "script.h"
 
 using namespace std;
 

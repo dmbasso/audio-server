@@ -2,7 +2,7 @@
 #define GENERATOR_TEST_H
 
 #include "generator.h"
-#include "generator_primitive.h"
+#include "primitive.h"
 
 using namespace std;
 
@@ -12,13 +12,12 @@ namespace generator {
 /** \brief Test configuration for the signal primitives generated.
 */
 
-struct TestConfigData : ConfigData {
+struct TestConfigData : ConfigData { //\todo derives from PrimiticeConfigData -> configData may configure all superclasses.
     unsigned transitionPeriod = 22050;
     float frequencyScaleFactor = 1.05946; //half tone scaling factor
     double distance = 5.;
     double angleStep = M_PI/4.;
     double initialAngle = M_PI/2.;
-
 };
 
 /**

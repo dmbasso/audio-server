@@ -1,4 +1,4 @@
-#include "generator_test.h"
+#include "test.h"
 
 #include <cmath>
 #include <iostream>
@@ -25,6 +25,8 @@ namespace generator {
 /** \brief Generates a clockwise rotation for a generator.
  * Default position is along the Y axis (front).
  */
+
+    //\todo computeTestPosition belongs to Test objects.
 
 void Test::render()
 {

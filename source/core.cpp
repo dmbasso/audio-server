@@ -2,12 +2,12 @@
 #include <fstream>
 
 #include "core.h"
-#include "processor/processor_distance_attenuation.h"
-#include "processor/processor_acousticave.h"
-#include "processor/processor_nooperation.h"
-#include "generator/generator_primitive.h"
-#include "generator/generator_test.h"
-#include "generator/generator_wave.h"
+#include "processor/distance_attenuation.h"
+#include "processor/acousticave.h"
+#include "processor/no_operation.h"
+#include "generator/primitive.h"
+#include "generator/test.h"
+#include "generator/wave.h"
 #include "wav_header.h"
 
 using namespace std;
@@ -27,8 +27,8 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
             gen = new generator::Primitive(getPeriodSize());
             break;
         case generator::types::WAVE: {
-            map<std::string, SoundBuffer *>::reverse_iterator it = waves.rbegin();
-            gen = new generator::Wave(getPeriodSize(), it->second);
+            map<std::string, SoundBuffer *>::reverse_iterator it = waves.rbegin(); //\todo string filename as config data wave
+            gen = new generator::Wave(getPeriodSize(), it->second); //\todo buffer is loaded upon configuration, not init.
             break;
         }
         case generator::types::TEST:
@@ -104,6 +104,8 @@ void Core::render(unsigned writePeriods)
     }
     out->close();
 }
+    //\todo wav_file.loadWave takes care of reading the sound file
+    //\todo merge read and get wave, to manage wave buffers: readWave just searches the waves map, returns buffer pointer or nullptr
 
 int Core::readWave(const string filename)
 {

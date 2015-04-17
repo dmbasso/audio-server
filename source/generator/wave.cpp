@@ -1,6 +1,7 @@
 #include "generator.h"
 #include <iostream>
-#include "generator_wave.h"
+#include "wave.h"
+#include "../core.h"
 
 using namespace std;
 
@@ -20,7 +21,8 @@ Wave::~Wave()
 
 void Wave::config(const ConfigData *configData)
 {
-
+    //increment, amplitude, filename
+    //wave = Core::readWave(configData.filename);
 }
 
 void Wave::render()

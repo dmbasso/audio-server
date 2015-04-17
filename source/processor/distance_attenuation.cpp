@@ -1,4 +1,4 @@
-#include "processor_distance_attenuation.h"
+#include "distance_attenuation.h"
 
 #include <iostream>
 

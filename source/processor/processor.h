@@ -73,6 +73,7 @@ class Processor {
         SoundBuffer *buffer;
         map<int, Source*> sources;
         unsigned sourceCounter =0;
+        Location listenerPosition;
 
         Processor(unsigned period);
         virtual void config(ConfigData *configData) =0; // the class is abstract

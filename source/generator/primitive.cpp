@@ -1,4 +1,4 @@
-#include "generator_primitive.h"
+#include "primitive.h"
 
 #include <cmath>
 
