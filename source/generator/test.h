@@ -12,7 +12,7 @@ namespace generator {
 /** \brief Test configuration for the signal primitives generated.
 */
 
-struct TestConfigData : ConfigData { //\todo derives from PrimiticeConfigData -> configData may configure all superclasses.
+struct TestConfigData : PrimitiveConfigData { //\todo derives from PrimitiveConfigData -> configData may configure all superclasses.
     unsigned transitionPeriod = 22050;
     float frequencyScaleFactor = 1.05946; //half tone scaling factor
     double distance = 5.;
@@ -41,6 +41,7 @@ public:
     ~Test() {};
     void config(const ConfigData *configData) override;
     virtual void render() override;
+    Location computeTestPosition(float distance, float angle);
 };
 
 } //end generator namespace

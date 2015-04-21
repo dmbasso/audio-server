@@ -26,8 +26,6 @@ namespace generator {
  * Default position is along the Y axis (front).
  */
 
-    //\todo computeTestPosition belongs to Test objects.
-
 void Test::render()
 {
     unsigned startIndex = 0;
@@ -42,7 +40,7 @@ void Test::render()
                 return;
             }
 
-            locs[i] = Location::computeTestPosition(distance, currentAngle);
+            locs[i] = computeTestPosition(distance, currentAngle);
             Primitive::renderNFrames(startIndex, i);
 
             cout << "Frequency = " << frequency << " -> " << locs[i].toString() << endl;
@@ -60,8 +58,6 @@ void Test::render()
     }
 }
 
-//\todo correct config for parent classes
-
 void Test::config(const ConfigData *configData)
 {
     TestConfigData *cfgData = (TestConfigData*) configData;
@@ -72,7 +68,16 @@ void Test::config(const ConfigData *configData)
     this->angleStep = cfgData->angleStep;
     this->initialAngle = cfgData->initialAngle;
 
-    //Primitive::config(configData);
+    Primitive::config(configData);
+}
+
+Location Test::computeTestPosition(float distance, float angle)
+{
+    unsigned decimalCases = 1000000;
+    float x = (round(cos(angle) * decimalCases) / decimalCases) * distance;
+    float y = (round(sin(angle) * decimalCases) / decimalCases) * distance;
+
+    return Location(x, y, 0.);
 }
 
 } //end generator namespace

@@ -12,7 +12,7 @@ void NoOperation::config(ConfigData *configData)
 * This method takes a Generator object to allocate a new Source.
 * The new Source object is then added to the processors Source map.
 */
-//\todo config data for the no operation processor
+//\todo Source parent implements noOperationSource processor
 
 void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
@@ -28,8 +28,9 @@ void NoOperation::render()
     this->buffer->reset();
 
     for (auto const &it : sources) {
+        SoundBuffer *sb = it.second->getGenerator()->buffer;
         for (int i = 0; i < buffer->getPeriodSize(); i++) {
-            it.second->getGenerator()->buffer->readFrame(sams, i); //\todo it.second->getGenerator()->buffer-> instantiate variable outside loop
+            sb->readFrame(sams, i);
             this->buffer->mixFrame(sams, i);
         }
     }

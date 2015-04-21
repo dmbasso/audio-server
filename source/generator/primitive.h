@@ -13,8 +13,6 @@ namespace generator {
 *  The purpose of this class is to be used if there is need to alter the default parameters.
 */
 
-//\todo remove get/set, replace class with struct
-
 struct PrimitiveConfigData : ConfigData {
     int amplitude = 32767/5;
     unsigned short frequency = 220;

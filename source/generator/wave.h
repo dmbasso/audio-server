@@ -10,6 +10,11 @@ using namespace std;
 namespace aserver{
 namespace generator {
 
+struct WaveConfigData : ConfigData {
+    string filename;
+    float increment = 1;
+    float position = 0;
+};
 
 class Wave :public Generator {
 private:
@@ -19,7 +24,7 @@ private:
     float increment; //step size to read buffer -> determines new frequency output
 
 public:
-    Wave(unsigned periodSize, SoundBuffer* sound);
+    Wave(unsigned periodSize);
     virtual ~Wave() override;
     virtual void config(const ConfigData *configData) override;
     virtual void render() override;

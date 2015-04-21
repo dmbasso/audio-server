@@ -17,8 +17,6 @@ void File::write(SoundBuffer &buffer)
     currentSize += 2 * 2 * buffer.getPeriodSize();
 }
 
-    //\todo Normalize output file?
-
 void File::close()
 {
     writeWavHeader(&ofs, this->currentSize);

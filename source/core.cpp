@@ -8,14 +8,13 @@
 #include "generator/primitive.h"
 #include "generator/test.h"
 #include "generator/wave.h"
-#include "wav_header.h"
 
 using namespace std;
 
 namespace aserver {
 
 /** \brief Note: This method takes as input a specific ConfigData for the generator to be instantiated.
-* Currently, in the wave generator, it includes the last wave read into the waves map.
+*  \todo When does the core::waves map load the wave soundBuffer?
 */
 
 int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
@@ -26,11 +25,9 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
         case generator::types::PRIMITIVE:
             gen = new generator::Primitive(getPeriodSize());
             break;
-        case generator::types::WAVE: {
-            map<std::string, SoundBuffer *>::reverse_iterator it = waves.rbegin(); //\todo string filename as config data wave
-            gen = new generator::Wave(getPeriodSize(), it->second); //\todo buffer is loaded upon configuration, not init.
+        case generator::types::WAVE:
+            gen = new generator::Wave(getPeriodSize());
             break;
-        }
         case generator::types::TEST:
             gen = new generator::Test(getPeriodSize());
             break;
@@ -103,31 +100,6 @@ void Core::render(unsigned writePeriods)
         out->write(*proc->buffer);
     }
     out->close();
-}
-    //\todo wav_file.loadWave takes care of reading the sound file
-    //\todo merge read and get wave, to manage wave buffers: readWave just searches the waves map, returns buffer pointer or nullptr
-
-int Core::readWave(const string filename)
-{
-    ifstream ifs;
-    string filePath = "input/" + filename;
-
-    ifs.open(filePath, ifstream::in);
-    if (ifs.is_open()) {
-        wavHeader wh;
-        ifs.read(reinterpret_cast<char *>(&wh), sizeof(wavHeader));
-        cout << "\nReading wavfile = " << filename << "\nDatachunkSize = " << wh.datachunkSize;
-        cout << " numChannels = " << wh.numChannels << " Soundbuffer period size = " << wh.datachunkSize/ (wh.numChannels*2) << endl << endl;
-
-        SoundBuffer *sb = new SoundBuffer(wh.datachunkSize/ (wh.numChannels*2), wh.numChannels);
-        ifs.read(reinterpret_cast<char *>(sb->getData()), wh.datachunkSize);
-        waves[filename] = sb;
-        return 1;
-    }
-    else {
-        cout << "\nError opening file " << filename << endl;
-        return 0;
-    }
 }
 
 SoundBuffer* Core::getWave(const string filename)
