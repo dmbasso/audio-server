@@ -46,7 +46,7 @@ void Test::render()
             cout << "Frequency = " << frequency << " -> " << locs[i].toString() << endl;
 
             startIndex = i;
-            this->currentAngle -= this->angleStep;
+            currentAngle -= angleStep;
             frequency *= frequencyScaleFactor;
             remainingFrames = transitionPeriod;
         }
@@ -62,11 +62,11 @@ void Test::config(const ConfigData *configData)
 {
     TestConfigData *cfgData = (TestConfigData*) configData;
 
-    this->transitionPeriod = cfgData->transitionPeriod;
-    this->frequencyScaleFactor = cfgData->frequencyScaleFactor;
-    this->distance = cfgData->distance;
-    this->angleStep = cfgData->angleStep;
-    this->initialAngle = cfgData->initialAngle;
+    transitionPeriod = cfgData->transitionPeriod;
+    frequencyScaleFactor = cfgData->frequencyScaleFactor;
+    distance = cfgData->distance;
+    angleStep = cfgData->angleStep;
+    initialAngle = cfgData->initialAngle;
 
     Primitive::config(configData);
 }

@@ -11,8 +11,8 @@ void DistanceAttenuation::config(ConfigData *configData)
 {
     DistanceAttenuationConfigData *cfgData = (DistanceAttenuationConfigData *) configData;
 
-    this->motionSamplingRate = cfgData->motionSamplingRate;
-    this->inputListenerPositions = cfgData->inputListenerPositions;
+    motionSamplingRate = cfgData->motionSamplingRate;
+    inputListenerPositions = cfgData->inputListenerPositions;
 }
 
 /** \brief Add a Source object to the Processor map.
@@ -29,7 +29,7 @@ void DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData 
         DistanceAttenuationSourceConfigData *srcConfigData = (DistanceAttenuationSourceConfigData*) srcData;
         source->setLocation(srcConfigData->loc);
     }
-    this->sources[sourceCounter++] = source;
+    sources[sourceCounter++] = source;
 }
 
 /** \brief Calculates distance attenuation according to the inverse distance law (used for sound pressure measurements).
@@ -40,7 +40,7 @@ void DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData 
 
 void DistanceAttenuation::render()
 {
-    this->buffer->reset();
+    buffer->reset();
 
     // update listener position:
     loadListenerPositions();
@@ -77,7 +77,7 @@ void DistanceAttenuation::process(Source *src)
         src->getGenerator()->buffer->readFrame(sams, i);
         sams[0] *= attenuation;
         sams[1] *= attenuation;
-        this->buffer->mixFrame(sams, i);
+        buffer->mixFrame(sams, i);
     }
 }
 
@@ -85,33 +85,33 @@ float DistanceAttenuation::distanceToListener(Location sourceLocation, unsigned 
 {
     for (auto it : listenerPositions) {
         if (it.first == frame) {
-            this->listenerPosition = it.second;
+            listenerPosition = it.second;
         }
     }
-    return sourceLocation.distanceTo(this->listenerPosition);
+    return sourceLocation.distanceTo(listenerPosition);
 }
 
 void DistanceAttenuation::loadListenerPositions()
 {
-    float motionSamplingStep = 44100./this->motionSamplingRate;
+    float motionSamplingStep = 44100./motionSamplingRate;
 
-    if (this->inputListenerPositions.size() == 0) {
+    if (inputListenerPositions.size() == 0) {
         return;
     }
 
-    this->listenerPositions.clear();
+    listenerPositions.clear();
 
     unsigned i;
 
-    for (i = 0; (i*motionSamplingStep + this->periodicPositionRemainder) < this->buffer->getPeriodSize(); i++) {
+    for (i = 0; (i*motionSamplingStep + periodicPositionRemainder) < buffer->getPeriodSize(); i++) {
         if (inputListenerPositions.size() == 0) {
             break;
         }
-        this->listenerPositions[round(motionSamplingStep * i + this->periodicPositionRemainder)] = this->inputListenerPositions[0];
+        listenerPositions[round(motionSamplingStep * i + periodicPositionRemainder)] = inputListenerPositions[0];
         inputListenerPositions.erase(inputListenerPositions.begin());
     }
-    periodicPositionRemainder = (i * motionSamplingStep + this->periodicPositionRemainder) - this->buffer->getPeriodSize();
-    this->listenerPosition = listenerPositions.rbegin()->second;
+    periodicPositionRemainder = (i * motionSamplingStep + periodicPositionRemainder) - buffer->getPeriodSize();
+    listenerPosition = listenerPositions.rbegin()->second;
 }
 
 } //end namespace processor

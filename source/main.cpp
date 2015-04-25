@@ -41,22 +41,22 @@ int main () {
     generator::WaveConfigData waveData1;
     processor::DistanceAttenuationSourceConfigData srcData1, srcData2, srcData3;
 
-    // Primitive generator example
+    //********** Primitive generator example
     genData1.frequency = 220;
-    genData1.wft = generator::waveformType::SQUARE;
+    genData1.waveform = generator::waveformType::SQUARE;
     srcData1.loc = Location(0., 10., 0.);
     core.addGenerator(generator::types::PRIMITIVE, &genData1);
     core.addSource(&srcData1);
 
-    // Test generator example
+    //********** Test generator example
     //testData1.wft = generator::waveformType::SAWTOOTH;
     //srcData2.loc = Location(0., 5., 0.);
     //core.addGenerator(generator::types::TEST, &testData1);
     //core.addSource();
 
-    // Wave generator example
-    //srcData3.loc = Location(0., 5., 0.);
-    //waveData1.filename = "test.wav"; // input wav files should be placed in the input directory in the project root
+    //********** Wave generator example
+    //srcData3.loc = Location(0., 10., 0.);
+    //waveData1.filename = "Olson.wav"; // input wav files should be placed in the input directory in the project root
     //core.addGenerator(generator::types::WAVE, &waveData1);
     //core.addSource(&srcData3);
 

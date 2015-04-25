@@ -49,13 +49,13 @@ int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData
 {
     switch (procType) {
         case processor::types::NO_OPERATION:
-            proc = new processor::NoOperation(this->periodSize);
+            proc = new processor::NoOperation(periodSize);
             break;
         case processor::types::ACOUSTICAVE:
-            proc = new processor::Acousticave(this->periodSize);
+            proc = new processor::Acousticave(periodSize);
             break;
         case processor::types::DISTANCE_ATTENUATION:
-            proc = new processor::DistanceAttenuation(this->periodSize);
+            proc = new processor::DistanceAttenuation(periodSize);
             break;
     }
 
@@ -87,7 +87,7 @@ int Core::setOutput(output::types outType)
 int Core::addSource(processor::SourceConfigData *srcData)
 {
     map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
-    this->proc->addSource(it->second, srcData);
+    proc->addSource(it->second, srcData);
 }
 
 /** \brief Renders \c n periods to file.

@@ -10,7 +10,7 @@ namespace generator {
 
 Generator::Generator(unsigned periodSize)
 {
-    this->buffer = new SoundBuffer(periodSize);
+    buffer = new SoundBuffer(periodSize);
 }
 
 } //end generator namespace

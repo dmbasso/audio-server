@@ -2,7 +2,6 @@
 #define SOUND_BUFFER_H
 
 #include <cstdint>
-#include <vector>
 
 using namespace std;
 
@@ -24,15 +23,13 @@ class SoundBuffer {
         int16_t *data;
 
     public:
-        unsigned bufHead;
         SoundBuffer(unsigned _periodSize, unsigned short _frameSize=2);
 
         unsigned getPeriodSize() {return periodSize;}
         int16_t *getData() {return this->data;}
         void reset();
         void writeFrame(int16_t *sams, unsigned i);
-        void pushFrame(int16_t *sams);
-        int16_t* readFrame(int16_t *sams, unsigned i); //\todo interpolate (linear) read ->get_stereo_frame
+        int16_t* readFrame(int16_t *sams, unsigned i);
         void mixFrame(int16_t *sams, unsigned i);
 };
 

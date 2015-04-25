@@ -18,20 +18,20 @@ void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData
 {
     auto source = new processor::Source();
     source->setGenerator(gen);
-    this->sources[sourceCounter++] = source;
+    sources[sourceCounter++] = source;
 }
 
 void NoOperation::render()
 {
     int16_t sams[2];
 
-    this->buffer->reset();
+    buffer->reset();
 
     for (auto const &it : sources) {
         SoundBuffer *sb = it.second->getGenerator()->buffer;
         for (int i = 0; i < buffer->getPeriodSize(); i++) {
             sb->readFrame(sams, i);
-            this->buffer->mixFrame(sams, i);
+            buffer->mixFrame(sams, i);
         }
     }
 }

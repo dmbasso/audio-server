@@ -2,6 +2,7 @@
 #define PROCESSOR_DISTANCE_ATTENUATION_H
 
 #include "processor.h"
+#include <vector>
 
 namespace aserver {
 namespace processor {
@@ -32,7 +33,7 @@ class DistanceAttenuation :public Processor {
         vector<Location> inputListenerPositions;
         float motionSamplingRate;
         float periodicPositionRemainder;
-    
+
         DistanceAttenuation(unsigned periodSize) : Processor(periodSize), periodicPositionRemainder(0) {};
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen, SourceConfigData *srcData =nullptr) override;

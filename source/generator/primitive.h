@@ -17,7 +17,7 @@ struct PrimitiveConfigData : ConfigData {
     int amplitude = 32767/5;
     unsigned short frequency = 220;
     unsigned short squareFactor = 10;
-    waveformType wft = waveformType::SINE;
+    waveformType waveform = waveformType::SINE;
 };
 
 /** \brief Generates a primitive waveform.
