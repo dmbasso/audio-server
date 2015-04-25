@@ -27,7 +27,7 @@ enum class types : int {
  */
 
 class ConfigData {
-    // info regarding configuration data for the generator.
+    // info regarding configuration data for the processor.
 };
 
 /** \brief Parent class for source configuration relative to a specific processor.
@@ -65,6 +65,8 @@ class Source {
  *  \c config is used to configure the processor beyond its default values.
  *  \c addSource adds a Source based on the input Generator data.
  *  \c render renders all sources and stores the result on the processors buffer.
+ *
+ *  Default listener position = (0,0,0)
  */
 
 class Processor {

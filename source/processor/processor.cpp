@@ -9,7 +9,8 @@ namespace processor {
 
 Processor::Processor(unsigned period)
 {
-    buffer = new SoundBuffer(period);
+    this->buffer = new SoundBuffer(period);
+    this->listenerPosition = Location(0., 0., 0.);
 }
 
 } //end namespace processor

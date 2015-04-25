@@ -4,6 +4,8 @@ project(audio-server)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
+    source/temp.cpp
+    source/temp.h
     source/generator/generator.cpp
     source/generator/generator.h
     source/generator/script.cpp

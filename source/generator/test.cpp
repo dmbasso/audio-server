@@ -9,18 +9,18 @@ namespace aserver {
 namespace generator {
 
 
-    Test::Test(unsigned periodSize) : Primitive(periodSize)
-    {
-        transitionPeriod = 22050;
-        remainingFrames = 0;
-        frequencyScaleFactor = 1.05946; //half tone scaling factor
-        //frequencyScaleFactor = 1.5; //fifth scaling factor
+Test::Test(unsigned periodSize) : Primitive(periodSize)
+{
+    transitionPeriod = 22050;
+    remainingFrames = 0;
+    frequencyScaleFactor = 1.05946; //half tone scaling factor
+    //frequencyScaleFactor = 1.5; //fifth scaling factor
 
-        distance = 5.;
-        angleStep = M_PI/4.;
-        initialAngle = M_PI/2.;
-        currentAngle = initialAngle;
-    }
+    distance = 5.;
+    angleStep = M_PI/4.;
+    initialAngle = M_PI/2.;
+    currentAngle = initialAngle;
+}
 
 /** \brief Generates a clockwise rotation for a generator.
  * Default position is along the Y axis (front).

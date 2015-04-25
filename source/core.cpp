@@ -17,7 +17,7 @@ namespace aserver {
 *  \todo When does the core::waves map load the wave soundBuffer?
 */
 
-int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
+int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
 {
     generator::Generator *gen;
 
@@ -38,14 +38,14 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgdata)
 
     gens[generatorCounter++] = gen;
 
-    if (cfgdata) {
-        gen->config(cfgdata);
+    if (cfgData) {
+        gen->config(cfgData);
     }
 
     return 1;
 }
 
-int Core::setProcessor(processor::types procType)
+int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData)
 {
     switch (procType) {
         case processor::types::NO_OPERATION:
@@ -57,6 +57,10 @@ int Core::setProcessor(processor::types procType)
         case processor::types::DISTANCE_ATTENUATION:
             proc = new processor::DistanceAttenuation(this->periodSize);
             break;
+    }
+
+    if (cfgData) {
+        proc->config(cfgData);
     }
     return 1;
 }

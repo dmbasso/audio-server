@@ -1,3 +1,4 @@
+#include <iostream>
 #include "output.h"
 
 using namespace std;
@@ -19,7 +20,7 @@ void File::write(SoundBuffer &buffer)
 
 void File::close()
 {
-    writeWavHeader(&ofs, this->currentSize);
+    writeWavHeader(&ofs, currentSize);
     ofs.close();
 }
 

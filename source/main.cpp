@@ -13,6 +13,8 @@
 #include "processor/distance_attenuation.h"
 #include "generator/wave.h"
 
+#include "temp.h"
+
 using namespace aserver;
 using namespace std;
 
@@ -21,35 +23,38 @@ using namespace std;
 *   \todo "encapsulamento" header files
 */
 
-wavHeader definition and loadWav moved to wav_file.cpp, filename loads in Wave::config, wav_file normalise in progress...
-
 int main () {
 
-    unsigned writePeriods = 100;
+    unsigned writePeriods = 430; //render  +/- 20 secs of audio
     Core core;
 
-    core.setProcessor(processor::types::DISTANCE_ATTENUATION);
+    processor::DistanceAttenuationConfigData procData;
+    generatePositions();
+    procData.inputListenerPositions = readPositions();
+    procData.motionSamplingRate = 240; //Hertz
+    core.setProcessor(processor::types::DISTANCE_ATTENUATION, &procData);
+
     core.setOutput(output::types::FILE);
 
-    //generator::PrimitiveConfigData genData1, genData2, genData3;
+    generator::PrimitiveConfigData genData1;
     generator::TestConfigData testData1;
     generator::WaveConfigData waveData1;
     processor::DistanceAttenuationSourceConfigData srcData1, srcData2, srcData3;
 
     // Primitive generator example
-    //genData1.frequency = 220;
-    //genData1.wft = generator::waveformType::SINE;
-    srcData1.loc = Location(0., 5., 0.);
-    //core.addGenerator(generator::types::PRIMITIVE, &genData1);
-    //core.addSource(&srcData1);
+    genData1.frequency = 220;
+    genData1.wft = generator::waveformType::SQUARE;
+    srcData1.loc = Location(0., 10., 0.);
+    core.addGenerator(generator::types::PRIMITIVE, &genData1);
+    core.addSource(&srcData1);
 
     // Test generator example
-    testData1.wft = generator::waveformType::SAWTOOTH;
-    srcData2.loc = Location(0., 5., 0.);
-    core.addGenerator(generator::types::TEST, &testData1);
-    core.addSource();
+    //testData1.wft = generator::waveformType::SAWTOOTH;
+    //srcData2.loc = Location(0., 5., 0.);
+    //core.addGenerator(generator::types::TEST, &testData1);
+    //core.addSource();
 
-    // wave generator example
+    // Wave generator example
     //srcData3.loc = Location(0., 5., 0.);
     //waveData1.filename = "test.wav"; // input wav files should be placed in the input directory in the project root
     //core.addGenerator(generator::types::WAVE, &waveData1);
