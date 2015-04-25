@@ -8,7 +8,7 @@ using namespace std;
 
 namespace aserver {
 
-void writeWavHeader(ofstream *ofs, unsigned int currentSize);
+void writeWavHeader(fstream *fs, unsigned int currentSize);
 SoundBuffer* loadWave(const string filename);
 void normalise(fstream *fs, unsigned int currentSize);
 

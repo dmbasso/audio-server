@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <valarray>
+#include <limits.h>
 
 #include "wav_file.h"
 
@@ -25,7 +26,7 @@ typedef struct {
 
 namespace aserver {
 
-void writeWavHeader(ofstream *ofs, unsigned int currentSize) {
+void writeWavHeader(fstream *fs, unsigned int currentSize) {
     wavHeader header;
 
     strncpy(header.chunkId, "RIFF", 4);
@@ -42,8 +43,8 @@ void writeWavHeader(ofstream *ofs, unsigned int currentSize) {
     header.bps = 16;
     strncpy(header.datachunkId, "data", 4);
 
-    ofs->seekp(0);
-    ofs->write((char *) &header, sizeof(wavHeader));
+    fs->seekp(0);
+    fs->write((char *) &header, sizeof(wavHeader));
 }
 
     /** \brief Reads a wavfile names /c filename and returns a pointer to a SoundBuffer that contains
@@ -59,7 +60,7 @@ SoundBuffer* loadWave(const string filename) {
         wavHeader wh;
         ifs.read(reinterpret_cast<char *>(&wh), sizeof(wavHeader));
         cout << "\nReading wavfile = " << filename << "\nDatachunkSize = " << wh.datachunkSize;
-        cout << "\nnumChannels = " << wh.numChannels << "\nSoundbuffer period size = " <<
+        cout << "\nnumChannels = " << wh.numChannels << "\nWave Soundbuffer period size = " <<
         wh.datachunkSize / (wh.numChannels * 2) << endl << endl;
 
         SoundBuffer *sb = new SoundBuffer(wh.datachunkSize / (wh.numChannels * 2), wh.numChannels);
@@ -68,30 +69,27 @@ SoundBuffer* loadWave(const string filename) {
     }
     else {
         cout << "\nError opening file " << filename << endl;
-        return 0;
+        return nullptr;
     }
 }
 
 void normalise(fstream *fs, unsigned int currentSize)
 {
-    fs->seekp(sizeof(wavHeader));
-    cout << "file ptr = " << fs->tellp() << endl;
 
+    int16_t max = 0;
     valarray<int16_t> temp = valarray<int16_t>(currentSize);
-    for (unsigned i = 0; i < currentSize; i++) {
-        fs->read(reinterpret_cast<char *>(&temp[i]), sizeof(int16_t));
-    }
-
-    int16_t max = *max_element(begin(temp), end(temp));
-    cout << "temp[0] = " << temp[90] << endl;
-
-    double normFactor = 32767./max;
-    temp *= normFactor;
-
-    cout << "temp[0] = " << temp[90] << endl;
 
     fs->seekp(sizeof(wavHeader));
-    for (unsigned i = 0; i < currentSize; i++) {
+    for (unsigned i = 0; i < currentSize/2; i++) {
+        fs->read(reinterpret_cast<char *>(&temp[i]), sizeof(int16_t));
+        if (abs(temp[i]) > max) {
+            max = abs(temp[i]);
+        }
+    }
+    temp *= SHRT_MAX / max;
+
+    fs->seekg(sizeof(wavHeader));
+    for (unsigned i = 0; i < currentSize/2; i++) {
         fs->write(reinterpret_cast<char *>(&temp[i]), sizeof(int16_t));
     }
 }

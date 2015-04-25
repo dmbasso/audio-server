@@ -8,20 +8,21 @@ namespace output {
 
 File::File()
 {
-    ofs.open("output/output.wav", std::ofstream::out);
-    writeWavHeader(&ofs, 0);
+    fs.open("output/output.wav", fstream::out | fstream::in);
+    writeWavHeader(&fs, 0);
 }
 
 void File::write(SoundBuffer &buffer)
 {
-    ofs.write(reinterpret_cast<char *>(buffer.getData()), 2 * 2 * buffer.getPeriodSize());
+    fs.write(reinterpret_cast<char *>(buffer.getData()), 2 * 2 * buffer.getPeriodSize());
     currentSize += 2 * 2 * buffer.getPeriodSize();
 }
 
 void File::close()
 {
-    writeWavHeader(&ofs, currentSize);
-    ofs.close();
+    writeWavHeader(&fs, currentSize);
+    normalise(&fs, currentSize);
+    fs.close();
 }
 
 void Alsa::write(SoundBuffer &buffer)

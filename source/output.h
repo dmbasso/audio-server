@@ -30,7 +30,7 @@ class Output {
 class File :public Output {
     public:
         unsigned currentSize;
-        ofstream ofs;
+        fstream fs;
 
     public:
         File();
