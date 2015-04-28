@@ -48,6 +48,8 @@ void DistanceAttenuation::render()
     for (auto const &it : sources) {
         process(it.second);
     }
+
+    listenerPositions.clear();
 }
 
 /** \brief Calculates distance attenuation according to the inverse distance law (used for sound pressure measurements).
@@ -63,6 +65,10 @@ void DistanceAttenuation::process(Source *src)
     int16_t sams[2];
 
     map<unsigned, Location> locations = src->getGenerator()->locs;
+
+    //\todo locations update -> use map iterator to update src/list location
+    map<unsigned, Location>::iterator sourceLocationsIt = locations.begin();
+    map<unsigned, Location>::iterator listenerLocationsIt = listenerPositions.begin();
 
     distance = src->getLocation().distanceTo(Location());
     attenuation = (1. / (distance + 1.));
@@ -99,8 +105,6 @@ void DistanceAttenuation::loadListenerPositions()
         return;
     }
 
-    listenerPositions.clear();
-
     unsigned i;
 
     for (i = 0; (i*motionSamplingStep + periodicPositionRemainder) < buffer->getPeriodSize(); i++) {
@@ -111,7 +115,7 @@ void DistanceAttenuation::loadListenerPositions()
         inputListenerPositions.erase(inputListenerPositions.begin());
     }
     periodicPositionRemainder = (i * motionSamplingStep + periodicPositionRemainder) - buffer->getPeriodSize();
-    listenerPosition = listenerPositions.rbegin()->second;
+    listenerPosition = listenerPositions.rbegin()->second; //\todo check the correct position to check (first, last or...?)
 }
 
 } //end namespace processor

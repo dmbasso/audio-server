@@ -69,6 +69,8 @@ class Source {
  *  Default listener position = (0,0,0)
  */
 
+        //\todo Populate the listenerPositions map using Processor::loadPositions(vector periodPositions)
+
 class Processor {
 
     public:

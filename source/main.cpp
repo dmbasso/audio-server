@@ -62,3 +62,14 @@ int main () {
 
     core.render(writePeriods);
 }
+
+/*
+float f = 0;
+for (int i=0, vector::iterator it=p.begin(); it!=p.end();)  {
+while (it!=p.end() && i * 1. / 240 < f + 2048. / 44100) {
+core.processor->listenerPositions[(int)((i * 1. / 240 - f) * 44100)] = *it;
+++it; ++i;
+}
+f += 2048. / 44100;
+core.render();
+}*/
