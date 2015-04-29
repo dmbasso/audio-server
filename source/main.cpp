@@ -28,10 +28,13 @@ int main () {
     unsigned nPeriods = 430; //render  +/- 20 secs of audio
     Core core;
 
+    processor::ProcessorInput procInput;
     processor::DistanceAttenuationConfigData procData;
     generatePositions();
-    procData.inputListenerPositions = readPositions();
-    procData.motionSamplingRate = 240; //Hertz
+    procInput.inputListenerPositions = readPositions();
+    procInput.motionSamplingRate = 240; //Hertz
+    procInput.periodSize = 2048;
+    procData.input = procInput;
     core.setProcessor(processor::types::DISTANCE_ATTENUATION, &procData);
 
     core.setOutput(output::types::FILE);
@@ -63,6 +66,7 @@ int main () {
     for (int i = 0; i < nPeriods; i++) {
         core.render();
     }
+
     core.shutdown();
 }
 

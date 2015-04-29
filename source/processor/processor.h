@@ -2,6 +2,7 @@
 #define PROCESSOR_H
 
 #include <map>
+#include <vector>
 
 #include "../generator/generator.h"
 #include "../sound_buffer.h"
@@ -38,6 +39,18 @@ struct SourceConfigData {
 
 };
 
+/** This is a temporary class, created for loading the position file data.
+*/
+
+struct ProcessorInput {
+    vector<Location> inputListenerPositions;
+    float motionSamplingRate;
+    float periodicPositionRemainder;
+    unsigned periodSize;
+
+    map<unsigned, Location> loadListenerPositions();
+};
+
 /** \brief Container for the generators that will be used by a specific processor.
  *
  */
@@ -69,8 +82,6 @@ class Source {
  *  Default listener position = (0,0,0)
  */
 
-        //\todo Populate the listenerPositions map using Processor::loadPositions(vector periodPositions)
-
 class Processor {
 
     public:
@@ -78,6 +89,7 @@ class Processor {
         map<int, Source*> sources;
         unsigned sourceCounter =0;
         Location listenerPosition;
+        ProcessorInput input;
 
         Processor(unsigned period);
         virtual void config(ConfigData *configData) =0; // the class is abstract

@@ -15,8 +15,7 @@ struct DistanceAttenuationSourceConfigData :SourceConfigData {
 };
 
 struct DistanceAttenuationConfigData : ConfigData {
-    float motionSamplingRate;
-    vector<Location> inputListenerPositions;
+    ProcessorInput input;
 };
 
 class DistanceAttenuationSource :public Source {
@@ -30,18 +29,12 @@ class DistanceAttenuationSource :public Source {
 class DistanceAttenuation :public Processor {
     public:
         map<unsigned, Location> listenerPositions;
-        vector<Location> inputListenerPositions;
-        float motionSamplingRate;
-        float periodicPositionRemainder;
 
-        DistanceAttenuation(unsigned periodSize) : Processor(periodSize), periodicPositionRemainder(0) {};
+        DistanceAttenuation(unsigned periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen, SourceConfigData *srcData =nullptr) override;
         void render() override;
         void process(Source *src);
-
-        void loadListenerPositions();
-        float distanceToListener(Location sourceLocation, unsigned frame);
 };
 
 } //end namespace processor

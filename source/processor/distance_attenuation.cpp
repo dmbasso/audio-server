@@ -11,8 +11,7 @@ void DistanceAttenuation::config(ConfigData *configData)
 {
     DistanceAttenuationConfigData *cfgData = (DistanceAttenuationConfigData *) configData;
 
-    motionSamplingRate = cfgData->motionSamplingRate;
-    inputListenerPositions = cfgData->inputListenerPositions;
+    input = cfgData->input;
 }
 
 /** \brief Add a Source object to the Processor map.
@@ -43,7 +42,10 @@ void DistanceAttenuation::render()
     buffer->reset();
 
     // update listener position:
-    loadListenerPositions();
+    listenerPositions = input.loadListenerPositions();
+    if (!listenerPositions.empty()) {
+        listenerPosition = listenerPositions.begin()->second;
+    }
 
     for (auto const &it : sources) {
         process(it.second);
@@ -60,62 +62,31 @@ void DistanceAttenuation::render()
 
 void DistanceAttenuation::process(Source *src)
 {
-    float distance;
-    float attenuation;
+    float distance, attenuation;
     int16_t sams[2];
 
-    map<unsigned, Location> locations = src->getGenerator()->locs;
-
-    //\todo locations update -> use map iterator to update src/list location
-    map<unsigned, Location>::iterator sourceLocationsIt = locations.begin();
+    map<unsigned, Location>::iterator sourceLocationsIt = src->getGenerator()->locs.begin();
     map<unsigned, Location>::iterator listenerLocationsIt = listenerPositions.begin();
 
-    distance = src->getLocation().distanceTo(Location());
-    attenuation = (1. / (distance + 1.));
-
     for (int i = 0; i < buffer->getPeriodSize(); i++) {
-        if(!locations.empty() && locations.begin()->first == i) { // process a moving source
-            src->setLocation(locations.begin()->second);
-            locations.erase(locations.begin());
+        if(!src->getGenerator()->locs.empty() && sourceLocationsIt->first == i) { // process a moving source
+            src->setLocation(sourceLocationsIt->second);
+            sourceLocationsIt++;
         }
-        distance = distanceToListener(src->getLocation(), i);
+
+        if(!listenerPositions.empty() && listenerLocationsIt->first == i) { // process a moving listener
+            listenerPosition = listenerLocationsIt->second;
+            listenerLocationsIt++;
+        }
+
+        distance = src->getLocation().distanceTo(listenerPosition);
         attenuation = (1. / (distance + 1.));
+
         src->getGenerator()->buffer->readFrame(sams, i);
         sams[0] *= attenuation;
         sams[1] *= attenuation;
         buffer->mixFrame(sams, i);
     }
-}
-
-float DistanceAttenuation::distanceToListener(Location sourceLocation, unsigned frame)
-{
-    for (auto it : listenerPositions) {
-        if (it.first == frame) {
-            listenerPosition = it.second;
-        }
-    }
-    return sourceLocation.distanceTo(listenerPosition);
-}
-
-void DistanceAttenuation::loadListenerPositions()
-{
-    float motionSamplingStep = 44100./motionSamplingRate;
-
-    if (inputListenerPositions.size() == 0) {
-        return;
-    }
-
-    unsigned i;
-
-    for (i = 0; (i*motionSamplingStep + periodicPositionRemainder) < buffer->getPeriodSize(); i++) {
-        if (inputListenerPositions.size() == 0) {
-            break;
-        }
-        listenerPositions[round(motionSamplingStep * i + periodicPositionRemainder)] = inputListenerPositions[0];
-        inputListenerPositions.erase(inputListenerPositions.begin());
-    }
-    periodicPositionRemainder = (i * motionSamplingStep + periodicPositionRemainder) - buffer->getPeriodSize();
-    listenerPosition = listenerPositions.rbegin()->second; //\todo check the correct position to check (first, last or...?)
 }
 
 } //end namespace processor
