@@ -12,7 +12,7 @@ namespace generator {
 /** \brief Test configuration for the signal primitives generated.
 */
 
-struct TestConfigData : PrimitiveConfigData { //\todo derives from PrimitiveConfigData -> configData may configure all superclasses.
+struct TestConfigData : PrimitiveConfigData {
     unsigned transitionPeriod = 22050;
     float frequencyScaleFactor = 1.05946; //half tone scaling factor
     double distance = 5.;

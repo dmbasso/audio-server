@@ -94,16 +94,13 @@ int Core::addSource(processor::SourceConfigData *srcData)
 *   If no generators are initialized, the processor will render silence.
 */
 
-void Core::render(unsigned writePeriods)
+void Core::render()
 {
-    for (int i = 0; i < writePeriods; i++) {
-        for (auto &gen : gens) {
-            gen.second->render();
-        }
-        proc->render();
-        out->write(*proc->buffer);
+    for (auto &gen : gens) {
+        gen.second->render();
     }
-    out->close();
+    proc->render();
+    out->write(*proc->buffer);
 }
 
 SoundBuffer* Core::getWave(const string filename)
@@ -114,6 +111,11 @@ SoundBuffer* Core::getWave(const string filename)
     else {
         return nullptr;
     }
+}
+
+void Core::shutdown()
+{
+    out->close();
 }
 
 } //end namespace aserver

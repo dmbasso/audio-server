@@ -67,7 +67,6 @@ struct ScriptConfigData : ConfigData {
 
 // Locations is a map<unsigned bufferIndex, Location loc> that stores location changes in each buffer.
 // This map will be used to update the location of each source when rendered (source.render)
-// \todo Only source should have a location; Source config should be implemented.
 
 class Generator {
 

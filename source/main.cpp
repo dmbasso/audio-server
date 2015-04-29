@@ -25,7 +25,7 @@ using namespace std;
 
 int main () {
 
-    unsigned writePeriods = 430; //render  +/- 20 secs of audio
+    unsigned nPeriods = 430; //render  +/- 20 secs of audio
     Core core;
 
     processor::DistanceAttenuationConfigData procData;
@@ -60,7 +60,10 @@ int main () {
     //core.addGenerator(generator::types::WAVE, &waveData1);
     //core.addSource(&srcData3);
 
-    core.render(writePeriods);
+    for (int i = 0; i < nPeriods; i++) {
+        core.render();
+    }
+    core.shutdown();
 }
 
 /*
