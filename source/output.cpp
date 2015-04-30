@@ -8,7 +8,7 @@ namespace output {
 
 File::File()
 {
-    fs.open("output/output.wav", fstream::out | fstream::in);
+    fs.open("audio/output/output.wav", fstream::out | fstream::in | fstream::trunc);
     writeWavHeader(&fs, 0);
 }
 
@@ -21,7 +21,7 @@ void File::write(SoundBuffer &buffer)
 void File::close()
 {
     writeWavHeader(&fs, currentSize);
-    normalise(&fs, currentSize);
+    //normalise(&fs, currentSize);
     fs.close();
 }
 

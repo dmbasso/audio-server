@@ -24,8 +24,9 @@ void SoundBuffer::reset()
 
 int16_t* SoundBuffer::readFrame(int16_t *sams, unsigned i)
 {
-    if (frameSize == 1) {
+    if (frameSize == 1) {  // IMPORTANT: here we assume our output is always going to be stereo
         sams[0] = data[i];
+        sams[1] = data[i];
     }
     if (frameSize == 2) {
         sams[0] = data[i * 2];

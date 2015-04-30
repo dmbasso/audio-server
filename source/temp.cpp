@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -19,10 +20,10 @@ void generatePositions()
 
     n = 24000; // number of positions in file
 
-    fs.open("input/positions.txt", fstream::in | fstream::out | fstream::trunc);
+    fs.open("data/input/positions.txt", fstream::in | fstream::out | fstream::trunc);
 
     if (!fs.is_open()) {
-        cout << "Error opening file..." << endl;
+        cout << "Error opening input file..." << endl;
         return;
     }
 
@@ -36,23 +37,23 @@ void generatePositions()
     fs.close();
 }
 
-vector<aserver::Location> readPositions()
+vector<aserver::Location> readPositions(const string filename)
 {
-    fs.open("input/positions.txt", fstream::in );
+    fs.open(filename, fstream::in );
 
     if (!fs.is_open()) {
-        cout << "Error opening file..." << endl;
+        cout << "Error opening file " << filename << endl;
     }
 
     float x, y, z;
-    unsigned n;
-    fs >> n;
+    unsigned n, i=0;
 
+    fs >> n;
     vector<aserver::Location> pos = vector<aserver::Location>(n);
 
-    for (unsigned i = 0; i < n; i++) {
-        fs >> x >> y >> z;
+    while (fs >> x >> y >> z) {
         pos[i] = aserver::Location(x, y, z);
+        i++;
     }
     return pos;
 }

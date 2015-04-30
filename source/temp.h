@@ -5,6 +5,6 @@
 #include "location.h"
 
 void generatePositions();
-vector<aserver::Location> readPositions();
+vector<aserver::Location> readPositions(const string filename);
 
 #endif

@@ -53,7 +53,7 @@ void writeWavHeader(fstream *fs, unsigned int currentSize) {
 
 SoundBuffer* loadWave(const string filename) {
     ifstream ifs;
-    string filePath = "input/" + filename;
+    string filePath = "audio/input/" + filename;
 
     ifs.open(filePath, ifstream::in);
     if (ifs.is_open()) {
