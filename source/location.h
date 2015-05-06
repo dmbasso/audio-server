@@ -19,6 +19,9 @@ class Location {
         Location() : x(0.), y(0.), z(0.) {}
         Location(float x, float y, float z) : x(x), y(y), z(z) {}
         float distanceTo(const Location &loc);
+        float getX() const {return x;}
+        float getY() const {return y;}
+        float getZ() const {return z;}
         string toString();
 };
 

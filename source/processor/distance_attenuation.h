@@ -7,13 +7,6 @@
 namespace aserver {
 namespace processor {
 
-/** \brief Source configuration for the DistanceAttenuation processor.
-*/
-
-struct DistanceAttenuationSourceConfigData :SourceConfigData {
-    Location loc;
-};
-
 struct DistanceAttenuationConfigData : ConfigData {
     ProcessorInput input;
 };

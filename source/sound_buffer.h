@@ -31,6 +31,8 @@ class SoundBuffer {
         void writeFrame(int16_t *sams, unsigned i);
         int16_t* readFrame(int16_t *sams, unsigned i);
         void mixFrame(int16_t *sams, unsigned i);
+
+        unsigned short getFrameSize() const {return frameSize;}
 };
 
 } //end namespace aserver

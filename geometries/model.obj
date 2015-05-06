@@ -1,0 +1,30 @@
+# shoebox.obj: trivial 4-wall 60x40x10m room. like a shoe box
+# x = right. y = forward. z = up. (0.0.2) is the center
+
+# Bottom vertices
+v -30 -30 0	    # 1
+v 30 -30 0		# 2
+v 30 10 0		# 3
+v -30 10 0		# 4
+
+# Top vertices
+v -30 -30 10	# 5
+v 30 -30 10	    # 6
+v 30 10 10		# 7
+v -30 10 10	    # 8
+
+# Floor
+usemtl carpet
+f 1 2 3 4
+
+# Ceiling
+usemtl carpet
+f 8 7 6 5
+
+# Walls
+usemtl carpet
+f 2 3 7 6
+f 3 4 8 7
+f 1 4 8 5
+f 1 2 6 5
+

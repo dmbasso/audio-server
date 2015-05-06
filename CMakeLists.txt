@@ -3,6 +3,8 @@ project(audio-server)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+FIND_LIBRARY(AAVE_LIBRARY libaave.a "../libaave")
+
 set(SOURCE_FILES
     source/temp.cpp
     source/temp.h
@@ -36,3 +38,5 @@ set(SOURCE_FILES
     source/output.cpp
     source/output.h)
 add_executable(audio-server ${SOURCE_FILES})
+
+target_link_libraries(audio-server asound ${AAVE_LIBRARY})

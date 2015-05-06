@@ -21,12 +21,11 @@ void DistanceAttenuation::config(ConfigData *configData)
 
 void DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
-    auto source = new processor::Source();
+    auto source = new processor::DistanceAttenuationSource();
     source->setGenerator(gen);
 
     if (srcData) {
-        DistanceAttenuationSourceConfigData *srcConfigData = (DistanceAttenuationSourceConfigData*) srcData;
-        source->setLocation(srcConfigData->loc);
+        source->setLocation(srcData->loc);
     }
     sources[sourceCounter++] = source;
 }

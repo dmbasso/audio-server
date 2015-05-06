@@ -14,6 +14,7 @@
 #include "generator/wave.h"
 
 #include "temp.h"
+#include "processor/acousticave.h"
 
 using namespace aserver;
 using namespace std;
@@ -22,60 +23,51 @@ Core core;
 
 // opera data
 generator::WaveConfigData celloWaveData, clarinetWaveData, double_bassWaveData, fluteWaveData, harpWaveData, oboeWaveData, percussionWaveData, tromboneWaveData, violinWaveData;
-processor::DistanceAttenuationSourceConfigData celloSourceData, clarinetSourceData, double_bassSourceData, fluteSourceData, harpSourceData, oboeSourceData, percussionSourceData,tromboneSourceData, violinSourceData;
+processor::SourceConfigData celloSourceData, clarinetSourceData, double_bassSourceData, fluteSourceData, harpSourceData, oboeSourceData, percussionSourceData,tromboneSourceData, violinSourceData;
 
 void loadOperaData()
 {
     celloWaveData.filename = "cello.wav";
-    celloWaveData.framesize = 1;
     celloSourceData.loc = Location(2., 4., 0.82);
     core.addGenerator(generator::types::WAVE, &celloWaveData);
     core.addSource(&celloSourceData);
 
     clarinetWaveData.filename = "clarinet.wav";
-    clarinetWaveData.framesize = 1;
     clarinetSourceData.loc = Location(-1.45, 6., 0.8);
     core.addGenerator(generator::types::WAVE, &clarinetWaveData);
     core.addSource(&clarinetSourceData);
 
     double_bassWaveData.filename = "double_bass.wav";
-    double_bassWaveData.framesize = 1;
     double_bassSourceData.loc = Location(4.13, 4., 0.86);
     core.addGenerator(generator::types::WAVE, &double_bassWaveData);
     core.addSource(&double_bassSourceData);
 
     fluteWaveData.filename = "flute.wav";
-    fluteWaveData.framesize = 1;
     fluteSourceData.loc = Location(0., 6., 0.95);
     core.addGenerator(generator::types::WAVE, &fluteWaveData);
     core.addSource(&fluteSourceData);
 
     harpWaveData.filename = "harp.wav";
-    harpWaveData.framesize = 1;
     harpSourceData.loc = Location(-3.7, 4., 1.08);
     core.addGenerator(generator::types::WAVE, &fluteWaveData);
     core.addSource(&fluteSourceData);
 
     oboeWaveData.filename = "oboe.wav";
-    oboeWaveData.framesize = 1;
     oboeSourceData.loc = Location(2.13, 6., 0.63);
     core.addGenerator(generator::types::WAVE, &oboeWaveData);
     core.addSource(&oboeSourceData);
 
     percussionWaveData.filename = "percussion.wav";
-    percussionWaveData.framesize = 1;
     percussionSourceData.loc = Location(-3.5, 6., 0.64);
     core.addGenerator(generator::types::WAVE, &percussionWaveData);
     core.addSource(&percussionSourceData);
 
     tromboneWaveData.filename = "trombone.wav";
-    tromboneWaveData.framesize = 1;
     tromboneSourceData.loc = Location(4.2, 6., 1.23);
     core.addGenerator(generator::types::WAVE, &tromboneWaveData);
     core.addSource(&tromboneSourceData);
 
     violinWaveData.filename = "violin.wav";
-    violinWaveData.framesize = 1;
     violinSourceData.loc = Location(-1.33, 4., .85);
     core.addGenerator(generator::types::WAVE, &violinWaveData);
     core.addSource(&violinSourceData);
@@ -86,44 +78,45 @@ void loadOperaData()
 
 int main () {
 
-    unsigned nPeriods = 2808; //render  +/- 133.4 secs of audio (listener data length)
+    unsigned nPeriods = 200;
 
-    processor::ProcessorInput procInput;
+/*  processor::ProcessorInput procInput;
     processor::DistanceAttenuationConfigData procData;
     generatePositions();
     procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
     procInput.motionSamplingRate = 240; //Hertz
     procInput.periodSize = 2048;
     procData.input = procInput;
-    core.setProcessor(processor::types::DISTANCE_ATTENUATION, &procData);
+    core.setProcessor(processor::types::DISTANCE_ATTENUATION, &procData);*/
 
     core.setOutput(output::types::FILE);
 
-    generator::PrimitiveConfigData genData1;
-    generator::TestConfigData testData1;
-    generator::WaveConfigData waveData1;
-    processor::DistanceAttenuationSourceConfigData srcData1, srcData2, srcData3;
-
-    //********** Primitive generator example
-    //genData1.frequency = 220;
-    //genData1.waveform = generator::waveformType::SQUARE;
-    //srcData1.loc = Location(-2., 2., 1.5);
-    //core.addGenerator(generator::types::PRIMITIVE, &genData1);
-    //core.addSource(&srcData1);
+    processor::AcousticaveConfigData aaveConfigData;
+    aaveConfigData.gain = 1;
+    aaveConfigData.hrtf = 1;
+    aaveConfigData.modelFilePath = "geometries/model.obj";
+    aaveConfigData.reflections = 0;
+    aaveConfigData.reverbActive = 0;
+    aaveConfigData.area = 3000;
+    aaveConfigData.volume = 4000;
+    aaveConfigData.rt60 = 5000;
+    core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
 
     //********** Test generator example
-    //testData1.wft = generator::waveformType::SAWTOOTH;
-    //srcData2.loc = Location(0., 5., 0.);
-    //core.addGenerator(generator::types::TEST, &testData1);
-    //core.addSource();
+    generator::TestConfigData testData1;
+    testData1.waveform = generator::waveformType::SQUARE;
+    core.addGenerator(generator::types::TEST, &testData1);
+    core.addSource();
 
     //********** Wave generator example
-    //srcData3.loc = Location(0., 10., 0.);
-    //waveData1.filename = "Olson.wav"; // input wav files should be placed in the audio/input directory
+    //generator::WaveConfigData waveData1;
+    //processor::SourceConfigData srcData1;
+    //srcData1.loc = Location(0., -5., 0.);
+    //waveData1.filename = "test.wav"; // input wav files should be placed in the audio/input directory
     //core.addGenerator(generator::types::WAVE, &waveData1);
-    //core.addSource(&srcData3);
+    //core.addSource(&srcData1);
 
-    loadOperaData();
+    //loadOperaData();
 
     for (int i = 0; i < nPeriods; i++) {
         core.render();

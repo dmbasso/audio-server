@@ -13,9 +13,9 @@ namespace generator {
 */
 
 struct TestConfigData : PrimitiveConfigData {
-    unsigned transitionPeriod = 22050;
+    unsigned transitionPeriod = 44100;
     float frequencyScaleFactor = 1.05946; //half tone scaling factor
-    double distance = 5.;
+    double distance = 10.;
     double angleStep = M_PI/4.;
     double initialAngle = M_PI/2.;
 };

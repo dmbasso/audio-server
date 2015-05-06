@@ -11,12 +11,10 @@ namespace generator {
 
 Test::Test(unsigned periodSize) : Primitive(periodSize)
 {
-    transitionPeriod = 22050;
+    transitionPeriod = 44100;
     remainingFrames = 0;
     frequencyScaleFactor = 1.05946; //half tone scaling factor
-    //frequencyScaleFactor = 1.5; //fifth scaling factor
-
-    distance = 5.;
+    distance = 10.;
     angleStep = M_PI/4.;
     initialAngle = M_PI/2.;
     currentAngle = initialAngle;
@@ -35,11 +33,9 @@ void Test::render()
 
     for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
         if (remainingFrames == 0) {
-            if ((-2. * M_PI) + initialAngle  - currentAngle == 0) { // one clockwise rotation...
-                Primitive::renderNFrames(startIndex, i); //\todo a bit ugly, needs fixing...
+            if ((-2. * M_PI) + initialAngle  - currentAngle > 0) { // one clockwise rotation...
                 return;
             }
-
             locs[i] = computeTestPosition(distance, currentAngle);
             Primitive::renderNFrames(startIndex, i);
 

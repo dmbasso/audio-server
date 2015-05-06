@@ -36,7 +36,7 @@ class ConfigData {
  */
 
 struct SourceConfigData {
-
+    Location loc;
 };
 
 /** This is a temporary class, created for loading the position file data.

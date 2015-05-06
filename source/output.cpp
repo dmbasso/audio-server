@@ -21,7 +21,7 @@ void File::write(SoundBuffer &buffer)
 void File::close()
 {
     writeWavHeader(&fs, currentSize);
-    //normalise(&fs, currentSize);
+    normalise(&fs, currentSize);
     fs.close();
 }
 
