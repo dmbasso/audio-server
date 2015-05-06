@@ -8,6 +8,13 @@ FIND_LIBRARY(AAVE_LIBRARY libaave.a "../libaave")
 set(SOURCE_FILES
     source/temp.cpp
     source/temp.h
+    source/output/memory.cpp
+    source/output/memory.h
+    source/output/alsa.cpp
+    source/output/alsa.h
+    source/output/file.cpp
+    source/output/file.h
+    source/output/output.h
     source/generator/generator.cpp
     source/generator/generator.h
     source/generator/script.cpp
@@ -34,9 +41,7 @@ set(SOURCE_FILES
     source/sound_buffer.h
     source/core.cpp
     source/core.h
-    source/main.cpp
-    source/output.cpp
-    source/output.h)
+    source/main.cpp)
 add_executable(audio-server ${SOURCE_FILES})
 
 target_link_libraries(audio-server asound ${AAVE_LIBRARY})

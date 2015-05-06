@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 
 #include "core.h"
 #include "processor/distance_attenuation.h"
@@ -8,6 +7,9 @@
 #include "generator/primitive.h"
 #include "generator/test.h"
 #include "generator/wave.h"
+#include "output/file.h"
+#include "output/alsa.h"
+#include "output/memory.h"
 
 using namespace std;
 

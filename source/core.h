@@ -6,7 +6,7 @@
 
 #include "generator/generator.h"
 #include "processor/processor.h"
-#include "output.h"
+#include "output/output.h"
 #include "sound_buffer.h"
 
 /** \brief  Main namespace for the server, where the top classes reside.

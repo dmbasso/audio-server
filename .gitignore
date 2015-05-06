@@ -41,8 +41,8 @@ cmake_install.cmake
 doc/latex
 
 # IO files
-input
-output
+audio
+data
 
 # Temporary tests
 tests

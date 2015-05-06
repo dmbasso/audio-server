@@ -1,5 +1,5 @@
-#include <iostream>
-#include "output.h"
+#include "file.h"
+#include "../wav_file.h"
 
 using namespace std;
 
@@ -23,16 +23,6 @@ void File::close()
     writeWavHeader(&fs, currentSize);
     normalise(&fs, currentSize);
     fs.close();
-}
-
-void Alsa::write(SoundBuffer &buffer)
-{
-
-}
-
-void Memory::write(SoundBuffer &buffer)
-{
-
 }
 
 } //end namespace output
