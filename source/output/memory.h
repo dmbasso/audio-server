@@ -9,9 +9,9 @@ namespace aserver {
 namespace output {
 
 class Memory :public Output {
-    public:
+    private:
         vector<int16_t> outputData;
-
+    public:
         void write(SoundBuffer &buffer) override;
         void close() override;
 };
