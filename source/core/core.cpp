@@ -88,8 +88,13 @@ int Core::setOutput(output::types outType)
 
 int Core::addSource(processor::SourceConfigData *srcData)
 {
-    map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
-    proc->addSource(it->second, srcData);
+    if (proc) {
+        map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
+        // TODO: return the source id
+        // return proc->addSource(it->second, srcData);
+        proc->addSource(it->second, srcData);
+    }
+    return -1;
 }
 
 /** \brief Renders \c n periods to file.
@@ -98,6 +103,9 @@ int Core::addSource(processor::SourceConfigData *srcData)
 
 void Core::render()
 {
+    if (!proc || !out) {
+        return;
+    }
     for (auto &gen : gens) {
         gen.second->render();
     }
@@ -117,7 +125,9 @@ SoundBuffer* Core::getWave(const string filename)
 
 void Core::shutdown()
 {
-    out->close();
+    if (out) {
+        out->close();
+    }
 }
 
 void Core::generatorConfig(int gid, generator::ConfigData *configData)
