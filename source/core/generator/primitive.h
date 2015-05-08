@@ -1,7 +1,7 @@
 #ifndef GENERATOR_PRIMITIVE_H
 #define GENERATOR_PRIMITIVE_H
 
-#include "generator.h"
+#include "base.h"
 
 using namespace std;
 

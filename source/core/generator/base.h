@@ -1,5 +1,5 @@
-#ifndef GENERATOR_H
-#define GENERATOR_H
+#ifndef GENERATOR_BASE_H
+#define GENERATOR_BASE_H
 
 #include <map>
 #include <cstdint>
@@ -84,3 +84,4 @@ public:
 } //end aserver namespace
 
 #endif
+
