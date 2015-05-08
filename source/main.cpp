@@ -6,15 +6,8 @@
  *
  */
 
-#include "generator/generator.h"
-#include "generator/primitive.h"
-#include "generator/test.h"
-#include "core.h"
-#include "processor/distance_attenuation.h"
-#include "generator/wave.h"
-
+#include "core/core.h"
 #include "temp.h"
-#include "processor/acousticave.h"
 
 using namespace aserver;
 using namespace std;

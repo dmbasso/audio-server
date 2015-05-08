@@ -1,7 +1,7 @@
 #ifndef GENERATOR_WAVE_H
 #define GENERATOR_WAVE_H
 
-#include "generator.h"
+#include "base.h"
 
 #include <string>
 

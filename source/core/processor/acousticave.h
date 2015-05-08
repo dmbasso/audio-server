@@ -4,7 +4,7 @@
 #include "processor.h"
 
 extern "C" {
-#include "../../../libaave/aave.h"
+#include <aave.h>
 }
 
 namespace aserver {

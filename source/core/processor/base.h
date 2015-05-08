@@ -1,5 +1,5 @@
-#ifndef PROCESSOR_H
-#define PROCESSOR_H
+#ifndef PROCESSOR_BASE_H
+#define PROCESSOR_BASE_H
 
 #include <map>
 #include <vector>
@@ -101,3 +101,4 @@ class Processor {
 } //end namespace aserver
 
 #endif
+

@@ -1,7 +1,6 @@
 #ifndef GENERATOR_TEST_H
 #define GENERATOR_TEST_H
 
-#include "generator.h"
 #include "primitive.h"
 
 using namespace std;
