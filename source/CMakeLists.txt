@@ -14,3 +14,5 @@ add_executable(audio-server ${MAIN_SOURCES})
 
 target_link_libraries(audio-server asound core)
 
+add_subdirectory(bindings)
+

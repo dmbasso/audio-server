@@ -33,7 +33,7 @@ class Core {
         output::Output *out;
 
     public:
-        Core() : periodSize(2048), samplingRate(44100), generatorCounter(0) {};
+        Core() : periodSize(2048), samplingRate(44100), generatorCounter(0), out(nullptr) {};
         unsigned getPeriodSize() {return this->periodSize;}
 
         int setProcessor(processor::types procType, processor::ConfigData *cfgData = nullptr);
