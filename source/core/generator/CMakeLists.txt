@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.9)
 
 set(GENERATOR_SOURCES
-    generator.cpp
+    base.cpp
     generator.h
     script.cpp
     script.h

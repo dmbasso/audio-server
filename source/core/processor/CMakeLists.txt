@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.9)
 
 set(PROCESSOR_SOURCES
     base.h
-    processor.cpp
+    base.cpp
     processor.h
     no_operation.cpp
     no_operation.h
