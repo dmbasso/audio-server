@@ -120,4 +120,30 @@ void Core::shutdown()
     out->close();
 }
 
+void Core::generatorConfig(int gid, generator::ConfigData *configData)
+{
+    if (gens.find(gid) != gens.end()) {
+        gens[gid]->config(configData);
+    }
+    else {
+        cout << "Generator " << gid << " is not allocated..." << endl;
+    }
+}
+
+void Core::processorConfig(processor::ConfigData *configData)
+{
+    proc->config(configData);
+}
+void Core::sourceConfig(int sid, processor::SourceConfigData *srcData)
+{
+    if (proc->sources.find(sid) != proc->sources.end()) {
+        proc->sources[sid]->config(srcData);
+    }
+}
+
+void Core::outputConfig(output::OutputConfigData *outputData)
+{
+    out->config(outputData);
+}
+
 } //end namespace aserver

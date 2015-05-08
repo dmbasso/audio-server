@@ -43,9 +43,11 @@ class Core {
         void setSamplingRate(unsigned samplingRate) {this->samplingRate = samplingRate;}
         int addSource(processor::SourceConfigData *srcData = nullptr);
         void render();
-        //void generatorConfig(int id, generator::ConfigData *configData);  //optional, in case one wishes to alter the generators default values
-        //void processorConfig(processor::ConfigData *configData)           //optional, in case one wishes to alter the generators default values
-        //void setSourceGenerator(int sid, int gid)
+        void generatorConfig(int gid, generator::ConfigData *configData);  //optional, in case one wishes to alter the generators default values
+        void processorConfig(processor::ConfigData *configData);         //optional, in case one wishes to alter the generators default values
+        void sourceConfig(int sid, processor::SourceConfigData *srcData);
+        void outputConfig(output::OutputConfigData *outputData);
+        //void setSourceGenerator(int sid, int gid);
         int readWave(const string filename); //static
         SoundBuffer* getWave(const string filename);
         void shutdown();

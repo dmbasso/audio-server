@@ -21,7 +21,7 @@ void DistanceAttenuation::config(ConfigData *configData)
 
 void DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
-    auto source = new processor::DistanceAttenuationSource();
+    auto source = new processor::Source();
     source->setGenerator(gen);
 
     if (srcData) {

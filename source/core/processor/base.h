@@ -64,6 +64,8 @@ class Source {
 
     public:
         Source() : gen(nullptr) {}
+
+        virtual void config(SourceConfigData *srcData);
         void setGenerator(generator::Generator* gen) {this->gen = gen;}
         generator::Generator* getGenerator() {return this->gen;}
         void setLocation(Location _loc) {this->loc = _loc;}

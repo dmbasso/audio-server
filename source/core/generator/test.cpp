@@ -11,12 +11,9 @@ namespace generator {
 
 Test::Test(unsigned periodSize) : Primitive(periodSize)
 {
-    transitionPeriod = 44100;
+    TestConfigData *cfg = new TestConfigData(); //set flags for all data in the constructor
+    config(cfg);
     remainingFrames = 0;
-    frequencyScaleFactor = 1.05946; //half tone scaling factor
-    distance = 10.;
-    angleStep = M_PI/4.;
-    initialAngle = M_PI/2.;
     currentAngle = initialAngle;
 }
 

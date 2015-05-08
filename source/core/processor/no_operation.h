@@ -6,15 +6,6 @@
 namespace aserver {
 namespace processor {
 
-/** \brief Source configuration for the NoOperation processor.
- *
- */
-
-struct NoOperationSourceConfigData :SourceConfigData {
-
-};
-
-
 /** \brief A processor that performs no processing on the sources.
 *
 */

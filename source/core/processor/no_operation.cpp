@@ -18,6 +18,10 @@ void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData
 {
     auto source = new processor::Source();
     source->setGenerator(gen);
+
+    if (srcData) {
+        source->setLocation(srcData->loc);
+    }
     sources[sourceCounter++] = source;
 }
 

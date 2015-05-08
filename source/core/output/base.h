@@ -20,10 +20,15 @@ enum class types : int {
     MEMORY = 3
 };
 
+struct OutputConfigData {
+
+};
+
 class Output {
     public:
-        virtual void write(SoundBuffer &buffer) =0;
-        virtual void close() =0;
+        virtual void config(OutputConfigData *outputData) {};
+        virtual void write(SoundBuffer &buffer) {};
+        virtual void close() {};
 };
 
 } //end namespace output

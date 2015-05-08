@@ -11,10 +11,6 @@ struct DistanceAttenuationConfigData : ConfigData {
     ProcessorInput input;
 };
 
-class DistanceAttenuationSource :public Source {
-
-};
-
 /** \brief A processor that processes source distances using a predefined criteria (1/d distance law).
 *
 */

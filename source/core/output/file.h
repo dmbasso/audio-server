@@ -8,12 +8,18 @@
 namespace aserver {
 namespace output {
 
+struct FileOutputConfigData : OutputConfigData {
+    string outputFilePath;
+};
+
 class File :public Output {
     public:
         unsigned currentSize;
         fstream fs;
+        string outputFilePath;
 
         File();
+        void config(OutputConfigData *cfgData);
         void write(SoundBuffer &buffer) override;
         void close() override;
 };
