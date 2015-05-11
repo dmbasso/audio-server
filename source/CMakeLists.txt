@@ -12,7 +12,7 @@ set(RUNTIME_OUTPUT_DIRECTORY "../")
 
 add_executable(audio-server ${MAIN_SOURCES})
 
-target_link_libraries(audio-server asound core)
+target_link_libraries(audio-server core)
 
 add_subdirectory(bindings)
 

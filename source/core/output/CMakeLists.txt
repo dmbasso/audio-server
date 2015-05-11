@@ -12,3 +12,5 @@ set(OUTPUT_SOURCES
 )
 
 add_library(output ${OUTPUT_SOURCES})
+
+target_link_libraries(output asound)
