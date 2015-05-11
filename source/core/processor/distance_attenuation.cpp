@@ -67,8 +67,8 @@ void DistanceAttenuation::process(Source *src)
     map<unsigned, Location>::iterator sourceLocationsIt = src->getGenerator()->locs.begin();
     map<unsigned, Location>::iterator listenerLocationsIt = listenerPositions.begin();
 
-    for (int i = 0; i < buffer->getPeriodSize(); i++) {
-        if(!src->getGenerator()->locs.empty() && sourceLocationsIt->first == i) { // process a moving source
+    for (int i = 0; i < buffer->getPeriodSize(); i++) { // process a moving source
+        if(sourceLocationsIt != src->getGenerator()->locs.end()  && sourceLocationsIt->first == i) {
             src->setLocation(sourceLocationsIt->second);
             sourceLocationsIt++;
         }
