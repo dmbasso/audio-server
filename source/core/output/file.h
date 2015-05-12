@@ -8,7 +8,7 @@
 namespace aserver {
 namespace output {
 
-struct FileOutputConfigData : OutputConfigData {
+struct FileOutputConfigData : ConfigData {
     string outputFilePath;
 };
 
@@ -19,7 +19,7 @@ class File :public Output {
         string outputFilePath;
 
         File();
-        void config(OutputConfigData *cfgData);
+        void config(ConfigData *cfgData);
         void write(SoundBuffer &buffer) override;
         void close() override;
 };

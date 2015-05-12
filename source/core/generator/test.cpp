@@ -11,10 +11,33 @@ namespace generator {
 
 Test::Test(unsigned periodSize) : Primitive(periodSize)
 {
-    TestConfigData *cfg = new TestConfigData(); //set flags for all data in the constructor
-    config(cfg);
-    remainingFrames = 0;
+    TestConfigData *cfgData = new TestConfigData(); // set flags for all data in the constructor
+    cfgData->flags = testConfigFlags::TEST_ALL; // configure all data fields in constructor
+    config(cfgData);
     currentAngle = initialAngle;
+}
+
+void Test::config(const ConfigData *configData)
+{
+    TestConfigData *cfgData = (TestConfigData*) configData;
+
+    Primitive::config(configData);
+
+    if (cfgData->flags & testConfigFlags::TRANSITION_PERIOD) {
+        transitionPeriod = cfgData->transitionPeriod;
+    }
+    if (cfgData->flags & testConfigFlags::FREQUENCY_SCALE_FACTOR) {
+        frequencyScaleFactor = cfgData->frequencyScaleFactor;
+    }
+    if (cfgData->flags & testConfigFlags::DISTANCE) {
+        distance = cfgData->distance;
+    }
+    if (cfgData->flags & testConfigFlags::ANGLE_STEP) {
+        angleStep = cfgData->angleStep;
+    }
+    if (cfgData->flags & testConfigFlags::INITIAL_ANGLE) {
+        initialAngle = cfgData->initialAngle;
+    }
 }
 
 /** \brief Generates a clockwise rotation for a generator.
@@ -49,19 +72,6 @@ void Test::render()
     if (startIndex != buffer->getPeriodSize()) {
         Primitive::renderNFrames(startIndex, buffer->getPeriodSize());
     }
-}
-
-void Test::config(const ConfigData *configData)
-{
-    TestConfigData *cfgData = (TestConfigData*) configData;
-
-    transitionPeriod = cfgData->transitionPeriod;
-    frequencyScaleFactor = cfgData->frequencyScaleFactor;
-    distance = cfgData->distance;
-    angleStep = cfgData->angleStep;
-    initialAngle = cfgData->initialAngle;
-
-    Primitive::config(configData);
 }
 
 Location Test::computeTestPosition(float distance, float angle)

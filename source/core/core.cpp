@@ -154,7 +154,7 @@ void Core::sourceConfig(int sid, processor::SourceConfigData *srcData)
     }
 }
 
-void Core::outputConfig(output::OutputConfigData *outputData)
+void Core::outputConfig(output::ConfigData *outputData)
 {
     out->config(outputData);
 }

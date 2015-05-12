@@ -10,20 +10,27 @@ namespace generator {
 
 Primitive::Primitive(unsigned periodSize) : Generator(periodSize)
 {
-    phase = 1.;
-    frequency = 220.;
-    amplitude = 3276;
-    squareFactor = 2;
-    waveform = generator::waveformType::SINE;
+    PrimitiveConfigData *cfgData = new PrimitiveConfigData();
+    cfgData->flags = primitiveConfigFlags::PRIMITIVE_ALL; //configure all data fields in constructor
+    config(cfgData);
 }
 
 void Primitive::config(const ConfigData *configData)
 {
-    PrimitiveConfigData* pcd = (PrimitiveConfigData*) configData;
-    amplitude = pcd->amplitude;
-    frequency = pcd->frequency;
-    squareFactor = pcd->squareFactor;
-    waveform = pcd->waveform;
+    PrimitiveConfigData* cfgData = (PrimitiveConfigData*) configData;
+
+    if (cfgData->flags & primitiveConfigFlags::AMPLITUDE) {
+        amplitude = cfgData->amplitude;
+    }
+    if (cfgData->flags & primitiveConfigFlags::FREQUENCY) {
+        frequency = cfgData->frequency;
+    }
+    if (cfgData->flags & primitiveConfigFlags::SQUARE_FACTOR) {
+        squareFactor = cfgData->squareFactor;
+    }
+    if (cfgData->flags & primitiveConfigFlags::WAVEFORM) {
+        waveform = cfgData->waveform;
+    }
 }
 
 void Primitive::renderNFrames(unsigned start, unsigned end)

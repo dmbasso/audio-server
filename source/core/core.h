@@ -46,7 +46,7 @@ class Core {
         void generatorConfig(int gid, generator::ConfigData *configData);  //optional, in case one wishes to alter the generators default values
         void processorConfig(processor::ConfigData *configData);         //optional, in case one wishes to alter the generators default values
         void sourceConfig(int sid, processor::SourceConfigData *srcData);
-        void outputConfig(output::OutputConfigData *outputData);
+        void outputConfig(output::ConfigData *outputData);
         //void setSourceGenerator(int sid, int gid);
         int readWave(const string filename); //static
         SoundBuffer* getWave(const string filename);

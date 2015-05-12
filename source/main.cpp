@@ -66,7 +66,9 @@ void loadOperaData()
     core.addSource(&violinSourceData);
 }
 /**
-*   \todo "encapsulamento" header files
+*   \todo constructors call config with default data
+*   \todo finish all config methods
+*   \todo finish all flags
 */
 
 int main () {
@@ -96,16 +98,17 @@ int main () {
     core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData); */
 
     //********** Test generator example
-    //generator::TestConfigData testData1;
-    //testData1.waveform = generator::waveformType::SQUARE;
-    //core.addGenerator(generator::types::TEST, &testData1);
-    //core.addSource();
+    generator::TestConfigData testData;
+    testData.flags = generator::primitiveConfigFlags::WAVEFORM;
+    testData.waveform = generator::waveformType::SQUARE;
+    core.addGenerator(generator::types::TEST, &testData);
+    core.addSource();
     
     //********** Noise generator example
-    generator::NoiseConfigData noiseData;
-    noiseData.distType = generator::distributionType::NORMAL;
-    core.addGenerator(generator::types::NOISE, &noiseData);
-    core.addSource();
+//    generator::NoiseConfigData noiseData;
+//    noiseData.distType = generator::distributionType::NORMAL;
+//    core.addGenerator(generator::types::NOISE, &noiseData);
+//    core.addSource();
 
     //********** Wave generator example
     //generator::WaveConfigData waveData1;

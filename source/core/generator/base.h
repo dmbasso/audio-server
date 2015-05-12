@@ -50,14 +50,7 @@ enum class playbackState : int {
  */
 
 struct ConfigData {
-    // info regarding general configuration data for a generator.
-};
-
-/** \brief Keyframe and other information for scripting sound files.
- */
-
-struct ScriptConfigData : ConfigData {
-
+    uint64_t flags;
 };
 
 /** \brief Generator is the abstract base class for all sound generators.
