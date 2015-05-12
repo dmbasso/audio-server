@@ -1,6 +1,8 @@
 #include "file.h"
 #include "../wav_file.h"
 
+#include <iostream>
+
 using namespace std;
 
 namespace aserver {
@@ -9,6 +11,9 @@ namespace output {
 File::File()
 {
     fs.open("../audio/output/output.wav", fstream::out | fstream::in | fstream::trunc);
+    if (!fs) {
+        cout << "Failed to open default output file..." << endl;
+    }
     writeWavHeader(&fs, 0);
 }
 void File::config(ConfigData *cfgData)
