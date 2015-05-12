@@ -12,6 +12,8 @@ set(GENERATOR_SOURCES
     base.h
     primitive.cpp
     primitive.h
+    noise.h
+    noise.cpp
 )
 
 add_library(generator ${GENERATOR_SOURCES})

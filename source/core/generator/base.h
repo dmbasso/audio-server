@@ -21,7 +21,8 @@ enum class types : int {
     PRIMITIVE = 1,
     WAVE = 2,
     TEST = 3,
-    SCRIPT = 4
+    SCRIPT = 4,
+    NOISE = 5
 };
 
 enum class waveformType : int {

@@ -8,7 +8,7 @@ namespace output {
 
 File::File()
 {
-    fs.open("audio/output/output.wav", fstream::out | fstream::in | fstream::trunc);
+    fs.open("../audio/output/output.wav", fstream::out | fstream::in | fstream::trunc);
     writeWavHeader(&fs, 0);
 }
 void File::config(OutputConfigData *cfgData)

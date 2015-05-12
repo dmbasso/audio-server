@@ -39,6 +39,7 @@ cmake_install.cmake
 # Documentation related files
 *.pdf
 doc/latex
+doc/html
 
 # IO files
 audio

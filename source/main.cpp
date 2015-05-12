@@ -71,7 +71,7 @@ void loadOperaData()
 
 int main () {
 
-    unsigned nPeriods = 200;
+    unsigned nPeriods = 100;
 
 /*  processor::ProcessorInput procInput;
     processor::DistanceAttenuationConfigData procData;
@@ -79,12 +79,12 @@ int main () {
     procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
     procInput.motionSamplingRate = 240; //Hertz
     procInput.periodSize = 2048;
-    procData.input = procInput;
-    core.setProcessor(processor::types::DISTANCE_ATTENUATION, &procData);*/
+    procData.input = procInput; */
+    core.setProcessor(processor::types::DISTANCE_ATTENUATION);
 
     core.setOutput(output::types::FILE);
 
-    processor::AcousticaveConfigData aaveConfigData;
+    /*processor::AcousticaveConfigData aaveConfigData;
     aaveConfigData.gain = 1;
     aaveConfigData.hrtf = 1;
     aaveConfigData.modelFilePath = "geometries/model.obj";
@@ -93,12 +93,18 @@ int main () {
     aaveConfigData.area = 3000;
     aaveConfigData.volume = 4000;
     aaveConfigData.rt60 = 5000;
-    core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
+    core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData); */
 
     //********** Test generator example
-    generator::TestConfigData testData1;
-    testData1.waveform = generator::waveformType::SQUARE;
-    core.addGenerator(generator::types::TEST, &testData1);
+    //generator::TestConfigData testData1;
+    //testData1.waveform = generator::waveformType::SQUARE;
+    //core.addGenerator(generator::types::TEST, &testData1);
+    //core.addSource();
+    
+    //********** Noise generator example
+    generator::NoiseConfigData noiseData;
+    noiseData.distType = generator::distributionType::NORMAL;
+    core.addGenerator(generator::types::NOISE, &noiseData);
     core.addSource();
 
     //********** Wave generator example

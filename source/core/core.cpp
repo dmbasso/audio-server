@@ -36,6 +36,9 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
         case generator::types::SCRIPT:
             //gen = new generator::Script(getPeriodSize());
             break;
+        case generator::types::NOISE:
+            gen = new generator::Noise(getPeriodSize());
+            break;
     }
 
     gens[generatorCounter++] = gen;
