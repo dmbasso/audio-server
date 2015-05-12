@@ -26,13 +26,13 @@ typedef struct output_config_data output_config_data_t;
 core_t* new_core();
 // TODO: set_period_size
 int add_generator(core_t* core, int type);
-// int configure_generator(core_t* core, int gid, generator_config_data_t* cfg);
+int configure_generator(core_t* core, int gid, generator_config_data_t* cfg);
 int add_source(core_t* core);
-// int configure_source(core_t* core, int sid, source_config_data_t* cfg);
+int configure_source(core_t* core, int sid, source_config_data_t* cfg);
 void set_processor(core_t* core, int type);
-//int configure_processor(core_t* core, processor_config_data_t* cfg);
+int configure_processor(core_t* core, processor_config_data_t* cfg);
 void set_output(core_t* core, int type);
-//int configure_output(core_t* core, output_config_data_t* cfg);
+int configure_output(core_t* core, output_config_data_t* cfg);
 void render(core_t* core, int periods);
 void del_core(core_t* core);
 

@@ -16,36 +16,36 @@ int add_generator(core_t* core, int type)
     return AS_TYPE(Core*, core)->addGenerator(static_cast<generator::types>(type));
 }
 
-/*
+
 int configure_generator(core_t* core, int gid, generator_config_data_t* cfg)
 {
     AS_TYPE(Core*, core)->generatorConfig(gid, AS_TYPE(generator::ConfigData*, cfg));
 }
-*/
+
 
 int add_source(core_t* core)
 {
     return AS_TYPE(Core*, core)->addSource();
 }
 
-/*
+
 int configure_source(core_t* core, int sid, source_config_data_t* cfg)
 {
     AS_TYPE(Core*, core)->sourceConfig(sid, AS_TYPE(processor::SourceConfigData*, cfg));
 }
-*/
+
 
 void set_processor(core_t* core, int type)
 {
     AS_TYPE(Core*, core)->setProcessor(static_cast<processor::types>(type));
 }
 
-/*
+
 int configure_processor(core_t* core, processor_config_data_t* cfg)
 {
     AS_TYPE(Core*, core)->processorConfig(AS_TYPE(processor::ConfigData*, cfg));
 }
-*/
+
 
 
 void set_output(core_t* core, int type)

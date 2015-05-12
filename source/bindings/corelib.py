@@ -19,52 +19,6 @@ ffi.cdef(
 lib = ffi.dlopen(os.path.join(path, 'libcshim.so'))
 
 
-# Generators
-
-class GeneratorType:
-    PRIMITIVE = 1
-    WAVE = 2
-    TEST = 3
-    SCRIPT = 4
-
-
-class WaveformType:
-    SINE = 1
-    SQUARE = 2
-    SAWTOOTH = 3
-
-
-class PlaybackCommand:
-    PLAY = 1
-    STOP = 2
-    PAUSE = 3
-    PLAY_LOOP = 4
-    REVERSE = 5
-
-
-class PlaybackState:
-    PLAYING = 1
-    STOPPED = 2
-    PAUSED = 3
-    REWINDING = 4
-
-
-# Processors
-
-class ProcessorType:
-    NO_OPERATION = 1
-    ACOUSTICAVE = 2
-    DISTANCE_ATTENUATION = 3
-
-
-# Output
-
-class OutputType:
-    FILE = 1
-    ALSA = 2
-    MEMORY = 3
-
-
 # Core
 
 class Core:
@@ -76,7 +30,10 @@ class Core:
     def add_generator(self, generator_type):
         return lib.add_generator(self.core, generator_type)
 
-    # int configure_generator(core_t* core, int gid, cfg)
+    def configure_generator(self, gid, cfg):
+        from ctypes import byref
+        print cfg
+        return lib.configure_generator(self.core, gid, byref(cfg))
 
     def add_source(self):
         return lib.add_source(self.core)
@@ -102,10 +59,16 @@ class Core:
 
 if __name__ == '__main__':
     c = Core()
-    # c.set_processor(ProcessorType.DISTANCE_ATTENUATION)
-    c.set_processor(ProcessorType.ACOUSTICAVE)
-    c.set_output(OutputType.FILE)
-    gid = c.add_generator(GeneratorType.TEST)
+    import coretypes as ct
+    c.set_processor(ct.ProcessorType.DISTANCE_ATTENUATION)
+    #c.set_processor(ProcessorType.ACOUSTICAVE)
+    c.set_output(ct.OutputType.FILE)
+    cfg = ct.PrimitiveConfigData()
+    cfg.flags = 2
+    cfg.frequency = 20
+    #gid = c.add_generator(ct.GeneratorType.TEST)
+    gid = c.add_generator(ct.GeneratorType.PRIMITIVE)
+    c.configure_generator(gid, cfg);
     sid = c.add_source()  # RETURN VALUE NOT YET IMPLEMENTED
     c.render(200)
     c.shutdown()
