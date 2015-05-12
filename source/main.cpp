@@ -69,6 +69,8 @@ void loadOperaData()
 *   \todo constructors call config with default data
 *   \todo finish all config methods
 *   \todo finish all flags
+*   \todo use SHRT_MAX instead of 32767...
+*   \todo test opera setup with different distance factors
 */
 
 int main () {
@@ -97,12 +99,15 @@ int main () {
     aaveConfigData.rt60 = 5000;
     core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData); */
 
-    //********** Test generator example
-    generator::TestConfigData testData;
-    testData.flags = generator::primitiveConfigFlags::WAVEFORM;
-    testData.waveform = generator::waveformType::SQUARE;
-    core.addGenerator(generator::types::TEST, &testData);
+    core.addGenerator(generator::types::PRIMITIVE);
     core.addSource();
+
+    //********** Test generator example
+//    generator::TestConfigData testData;
+//    testData.flags = generator::primitiveConfigFlags::WAVEFORM;
+//    testData.waveform = generator::waveformType::SQUARE;
+//    core.addGenerator(generator::types::TEST, &testData);
+//    core.addSource();
     
     //********** Noise generator example
 //    generator::NoiseConfigData noiseData;

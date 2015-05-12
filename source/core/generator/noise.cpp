@@ -1,7 +1,6 @@
 #include "noise.h"
 
 #include <cmath>
-#include <iostream>
 #include <climits>
 
 using namespace std;
