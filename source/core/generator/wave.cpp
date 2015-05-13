@@ -1,7 +1,7 @@
-#include "generator.h"
-#include <iostream>
 #include "wave.h"
 #include "../wav_file.h"
+
+#include <iostream>
 
 using namespace std;
 
@@ -10,26 +10,41 @@ namespace generator {
 
 Wave::Wave(unsigned periodSize) : Generator(periodSize)
 {
-    position = 0;
-    increment = 1;
-}
-
-Wave::~Wave()
-{
-
+    WaveConfigData* cfgData = new WaveConfigData();
+    cfgData->flags = waveConfigFlags::WAVE_ALL - waveConfigFlags::WAVE_FILENAME;
+    config(cfgData);
 }
 
 void Wave::config(const ConfigData *configData)
 {
-    WaveConfigData* wcd = (WaveConfigData*) configData;
-    wave = loadWave(wcd->filename);
-    increment = wcd->increment;
-    position = wcd->position;
+    WaveConfigData *cfgData = (WaveConfigData*) configData;
+
+    if (cfgData->flags & waveConfigFlags::WAVE_FILENAME) {
+        ifstream ifs(cfgData->filename);
+        if (ifs.good()) {
+            wave = loadWave(cfgData->filename);
+        }
+        else {
+            cout << "Error opening input wave file = " << cfgData->filename << endl;
+            return;
+        }
+    }
+    if (cfgData->flags & waveConfigFlags::INCREMENT) {
+        increment = cfgData->increment;
+    }
+    if (cfgData->flags & waveConfigFlags::POSITION) {
+        position = cfgData->position;
+    }
 }
 
 void Wave::render()
 {
     int16_t sams[2];
+
+    if (!wave) {
+        cout << "Wave generator rendering an empty wave sound buffer..." << endl;
+        return;
+    }
 
     for (unsigned i = 0; i < buffer->getPeriodSize(); i++, position += increment) {
         if (position == wave->getPeriodSize()) { //currently looping all waves

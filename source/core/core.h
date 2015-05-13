@@ -2,7 +2,6 @@
 #define CORE_H
 
 #include <map>
-#include <string>
 
 #include "generator/generator.h"
 #include "processor/processor.h"
@@ -27,7 +26,7 @@ class Core {
         unsigned samplingRate;
         unsigned short generatorCounter;
 
-        std::map<std::string, SoundBuffer*> waves; //string = filename, static
+        std::map<const char *, SoundBuffer*> waves; //string = filename, static
         std::map<int, generator::Generator*> gens;
         processor::Processor *proc;
         output::Output *out;
@@ -38,7 +37,7 @@ class Core {
 
         int setProcessor(processor::types procType, processor::ConfigData *cfgData = nullptr);
         int addGenerator(generator::types genType, generator::ConfigData *cfgData = nullptr);
-        int setOutput(output::types outType);
+        int setOutput(output::types outType, output::ConfigData *cfgData = nullptr);
         void setPeriodSize(unsigned ps) {this->periodSize = ps;}
         void setSamplingRate(unsigned samplingRate) {this->samplingRate = samplingRate;}
         int addSource(processor::SourceConfigData *srcData = nullptr);
@@ -48,8 +47,8 @@ class Core {
         void sourceConfig(int sid, processor::SourceConfigData *srcData);
         void outputConfig(output::ConfigData *outputData);
         //void setSourceGenerator(int sid, int gid);
-        int readWave(const string filename); //static
-        SoundBuffer* getWave(const string filename);
+        int readWave(const char *filename); //static
+        SoundBuffer* getWave(const char *filename);
         void shutdown();
 };
 

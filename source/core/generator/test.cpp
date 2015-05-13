@@ -59,7 +59,7 @@ void Test::render()
             locs[i] = computeTestPosition(distance, currentAngle);
             Primitive::renderNFrames(startIndex, i);
 
-            cout << "Frequency = " << frequency << " -> " << locs[i].toString() << endl;
+            cout << "Frequency = " << frequency << " Hz -> " << locs[i].toString() << endl;
 
             startIndex = i;
             currentAngle -= angleStep;

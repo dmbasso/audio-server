@@ -66,62 +66,89 @@ void loadOperaData()
     core.addSource(&violinSourceData);
 }
 /**
-*   \todo constructors call config with default data
-*   \todo finish all config methods
-*   \todo finish all flags
-*   \todo use SHRT_MAX instead of 32767...
+*   \todo processor listener positions in config (2 bytes for processor base flags?)
 *   \todo test opera setup with different distance factors
 */
 
 int main () {
 
-    unsigned nPeriods = 100;
+    unsigned nPeriods = 200;
 
-/*  processor::ProcessorInput procInput;
-    processor::DistanceAttenuationConfigData procData;
-    generatePositions();
-    procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
-    procInput.motionSamplingRate = 240; //Hertz
-    procInput.periodSize = 2048;
-    procData.input = procInput; */
+    //********** No Operation processor example
+//    core.setProcessor(processor::types::NO_OPERATION);
+
+    //********** Distance Attenuation processor example
+//    processor::ProcessorInput procInput;
+//    generatePositions();
+//    procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
+//    procInput.motionSamplingRate = 240; //Hertz
+//    procInput.periodSize = 2048;
+//    processor::DistanceAttenuationConfigData procData;
+//    procData.flags = processor::distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
+//    procData.distanceExp = 1;
+//    procData.withInputPositions = false;
+//    procData.input = procInput;
     core.setProcessor(processor::types::DISTANCE_ATTENUATION);
 
-    core.setOutput(output::types::FILE);
+    //********** Acousticave processor example
+//    processor::AcousticaveConfigData aaveConfigData;
+//    aaveConfigData.flags = processor::acousticaveConfigFlags::ACOUSTICAVE_ALL;
+//    aaveConfigData.gain = 1;
+//    aaveConfigData.hrtf = 4;
+//    aaveConfigData.modelFilePath = "geometries/model.obj";
+//    aaveConfigData.reflections = 0;
+//    aaveConfigData.reverbActive = 1;
+//    aaveConfigData.area = 3000;
+//    aaveConfigData.volume = 3000;
+//    aaveConfigData.rt60 = 2000;
+//    core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
 
-    /*processor::AcousticaveConfigData aaveConfigData;
-    aaveConfigData.gain = 1;
-    aaveConfigData.hrtf = 1;
-    aaveConfigData.modelFilePath = "geometries/model.obj";
-    aaveConfigData.reflections = 0;
-    aaveConfigData.reverbActive = 0;
-    aaveConfigData.area = 3000;
-    aaveConfigData.volume = 4000;
-    aaveConfigData.rt60 = 5000;
-    core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData); */
+    //********** Memory output example
+//    core.setOutput(output::types::MEMORY);
 
-    core.addGenerator(generator::types::PRIMITIVE);
-    core.addSource();
+    //********** File output example
+//    output::FileOutputConfigData fileData;
+//    fileData.flags = output::fileConfigFlags::FILE_ALL;
+//    fileData.outputFilePath = "output_config.wav";
+//    core.setOutput(output::types::FILE, &fileData);
+
+    //********** Alsa output example
+    output::AlsaOutputConfigData alsaData;
+    alsaData.flags = output::alsaConfigFlags::ALSA_ALL;
+    alsaData.samplingRate = 44100;
+    alsaData.nChannels = 2;
+    alsaData.withPulseAudio = true;
+    core.setOutput(output::types::ALSA, &alsaData);
+
+    //********** Primitive generator example
+//    core.addGenerator(generator::types::PRIMITIVE);
+//    core.addSource();
 
     //********** Test generator example
-//    generator::TestConfigData testData;
-//    testData.flags = generator::primitiveConfigFlags::WAVEFORM;
-//    testData.waveform = generator::waveformType::SQUARE;
-//    core.addGenerator(generator::types::TEST, &testData);
-//    core.addSource();
+    generator::TestConfigData testData;
+    testData.flags = generator::primitiveConfigFlags::WAVEFORM;
+    testData.waveform = generator::waveformType::SQUARE;
+    core.addGenerator(generator::types::TEST, &testData);
+    core.addSource();
     
     //********** Noise generator example
 //    generator::NoiseConfigData noiseData;
+//    noiseData.flags = generator::noiseConfigFlags::NOISE_ALL;
+//    noiseData.amplitude = SHRT_MAX * 0.02;
 //    noiseData.distType = generator::distributionType::NORMAL;
 //    core.addGenerator(generator::types::NOISE, &noiseData);
 //    core.addSource();
 
     //********** Wave generator example
-    //generator::WaveConfigData waveData1;
-    //processor::SourceConfigData srcData1;
-    //srcData1.loc = Location(0., -5., 0.);
-    //waveData1.filename = "test.wav"; // input wav files should be placed in the audio/input directory
-    //core.addGenerator(generator::types::WAVE, &waveData1);
-    //core.addSource(&srcData1);
+//    generator::WaveConfigData waveData;
+//    waveData.flags = generator::waveConfigFlags::WAVE_ALL;
+//    waveData.filename = "audio/input/espiral.wav"; // input wav filepath must be fully set
+//    waveData.increment = 1.;
+//    waveData.position = 0;
+//    processor::SourceConfigData srcData1;
+//    srcData1.loc = Location(0., 5., 0.);
+//    core.addGenerator(generator::types::WAVE, &waveData);
+//    core.addSource(&srcData1);
 
     //loadOperaData();
 

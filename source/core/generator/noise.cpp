@@ -1,8 +1,5 @@
 #include "noise.h"
 
-#include <cmath>
-#include <climits>
-
 using namespace std;
 
 namespace aserver {
@@ -10,13 +7,22 @@ namespace generator {
 
 Noise::Noise(unsigned periodSize) : Generator(periodSize)
 {
-    amplitude = SHRT_MAX/5;
-    distType = distributionType::UNIFORM;
+    NoiseConfigData *cfgData = new NoiseConfigData();
+    cfgData->flags = noiseConfigFlags::NOISE_ALL;
+    config(cfgData);
 }
 
 void Noise::config(const ConfigData *configData)
 {
-    distType = ((NoiseConfigData *) configData)->distType;
+    NoiseConfigData *cfgData = (NoiseConfigData *) configData;
+
+    if (cfgData->flags & noiseConfigFlags::NOISE_AMPLITUDE) {
+        amplitude = cfgData->amplitude;
+    }
+
+    if (cfgData->flags & noiseConfigFlags::DISTRIBUTION) {
+        distType = cfgData->distType;
+    }
 }
 
 void Noise::render()

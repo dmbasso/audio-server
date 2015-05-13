@@ -19,7 +19,7 @@ enum class types : int {
 };
 
 struct ConfigData {
-
+    uint64_t flags;
 };
 
 class Output {

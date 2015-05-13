@@ -3,15 +3,20 @@
 
 #include "base.h"
 
-#include <string>
-
 using namespace std;
 
 namespace aserver{
 namespace generator {
 
+enum waveConfigFlags : uint64_t {
+    WAVE_FILENAME = 0x1,
+    INCREMENT =     0x2,
+    POSITION =      0x4,
+    WAVE_ALL =      0x7
+};
+
 struct WaveConfigData : ConfigData {
-    string filename;
+    const char *filename;
     float increment = 1;
     float position = 0;
 };
@@ -25,7 +30,7 @@ private:
 
 public:
     Wave(unsigned periodSize);
-    virtual ~Wave() override;
+    virtual ~Wave() {};
     virtual void config(const ConfigData *configData) override;
     virtual void render() override;
 };

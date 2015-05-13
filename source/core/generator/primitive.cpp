@@ -19,7 +19,7 @@ void Primitive::config(const ConfigData *configData)
 {
     PrimitiveConfigData* cfgData = (PrimitiveConfigData*) configData;
 
-    if (cfgData->flags & primitiveConfigFlags::AMPLITUDE) {
+    if (cfgData->flags & primitiveConfigFlags::PRIMITIVE_AMPLITUDE) {
         amplitude = cfgData->amplitude;
     }
     if (cfgData->flags & primitiveConfigFlags::FREQUENCY) {

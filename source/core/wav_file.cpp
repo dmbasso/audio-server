@@ -48,14 +48,14 @@ void writeWavHeader(fstream *fs, unsigned int currentSize) {
 }
 
     /** \brief Reads a wavfile names /c filename and returns a pointer to a SoundBuffer that contains
-     * sound data present in the wavfile.
+     *  sound data present in the wavfile.
      */
 
-SoundBuffer* loadWave(const string filename) {
+SoundBuffer* loadWave(const char *filename)
+{
     ifstream ifs;
-    string filePath = "audio/input/" + filename;
+    ifs.open(filename, ifstream::in);
 
-    ifs.open(filePath, ifstream::in);
     if (ifs.is_open()) {
         wavHeader wh;
         ifs.read(reinterpret_cast<char *>(&wh), sizeof(wavHeader));

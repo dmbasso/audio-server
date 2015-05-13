@@ -1,15 +1,5 @@
 #include <iostream>
-
 #include "core.h"
-#include "processor/distance_attenuation.h"
-#include "processor/acousticave.h"
-#include "processor/no_operation.h"
-#include "generator/primitive.h"
-#include "generator/test.h"
-#include "generator/wave.h"
-#include "output/file.h"
-#include "output/alsa.h"
-#include "output/memory.h"
 
 using namespace std;
 
@@ -70,7 +60,7 @@ int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData
     return 1;
 }
 
-int Core::setOutput(output::types outType)
+int Core::setOutput(output::types outType, output::ConfigData *cfgData)
 {
     switch(outType) {
         case output::types::FILE:
@@ -83,6 +73,10 @@ int Core::setOutput(output::types outType)
             out = new output::Memory();
             break;
     }
+    if (cfgData) {
+        out->config(cfgData);
+    }
+    return 1;
 }
 
 /** \brief Get the last generator added and place it in the processor source map.
@@ -116,7 +110,7 @@ void Core::render()
     out->write(*proc->buffer);
 }
 
-SoundBuffer* Core::getWave(const string filename)
+SoundBuffer* Core::getWave(const char *filename)
 {
     if (waves.find(filename) != waves.end()) {
         return waves[filename];

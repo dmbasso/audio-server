@@ -3,11 +3,6 @@
 namespace aserver {
 namespace processor {
 
-void NoOperation::config(ConfigData *configData)
-{
-
-}
-
 /** \brief Add a Source object to the Processor map.
 * This method takes a Generator object to allocate a new Source.
 * The new Source object is then added to the processors Source map.

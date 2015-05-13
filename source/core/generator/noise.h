@@ -3,6 +3,7 @@
 
 #include "base.h"
 #include <random>
+#include <climits>
 
 using namespace std;
 
@@ -14,8 +15,15 @@ enum class distributionType : int {
     UNIFORM = 2
 };
 
+enum noiseConfigFlags : uint64_t {
+    NOISE_AMPLITUDE =   0x1,
+    DISTRIBUTION =      0x2,
+    NOISE_ALL =         0X3
+};
+
 struct NoiseConfigData : ConfigData {
-    distributionType distType;
+    unsigned amplitude = SHRT_MAX * 0.2;
+    distributionType distType = distributionType::UNIFORM;
 };
 
 class Noise :public Generator {
