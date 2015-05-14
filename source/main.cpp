@@ -20,47 +20,56 @@ processor::SourceConfigData celloSourceData, clarinetSourceData, double_bassSour
 
 void loadOperaData()
 {
-    celloWaveData.filename = "cello.wav";
+    celloWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    celloWaveData.filename = "audio/input/cello.wav";
     celloSourceData.loc = Location(2., 4., 0.82);
     core.addGenerator(generator::types::WAVE, &celloWaveData);
     core.addSource(&celloSourceData);
 
-    clarinetWaveData.filename = "clarinet.wav";
+    clarinetWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    clarinetWaveData.filename = "audio/input/clarinet.wav";
     clarinetSourceData.loc = Location(-1.45, 6., 0.8);
     core.addGenerator(generator::types::WAVE, &clarinetWaveData);
     core.addSource(&clarinetSourceData);
 
-    double_bassWaveData.filename = "double_bass.wav";
+    double_bassWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    double_bassWaveData.filename = "audio/input/double_bass.wav";
     double_bassSourceData.loc = Location(4.13, 4., 0.86);
     core.addGenerator(generator::types::WAVE, &double_bassWaveData);
     core.addSource(&double_bassSourceData);
 
-    fluteWaveData.filename = "flute.wav";
+    fluteWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    fluteWaveData.filename = "audio/input/flute.wav";
     fluteSourceData.loc = Location(0., 6., 0.95);
     core.addGenerator(generator::types::WAVE, &fluteWaveData);
     core.addSource(&fluteSourceData);
 
-    harpWaveData.filename = "harp.wav";
+    harpWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    harpWaveData.filename = "audio/input/harp.wav";
     harpSourceData.loc = Location(-3.7, 4., 1.08);
     core.addGenerator(generator::types::WAVE, &fluteWaveData);
     core.addSource(&fluteSourceData);
 
-    oboeWaveData.filename = "oboe.wav";
+    oboeWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    oboeWaveData.filename = "audio/input/oboe.wav";
     oboeSourceData.loc = Location(2.13, 6., 0.63);
     core.addGenerator(generator::types::WAVE, &oboeWaveData);
     core.addSource(&oboeSourceData);
 
-    percussionWaveData.filename = "percussion.wav";
+    percussionWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    percussionWaveData.filename = "audio/input/percussion.wav";
     percussionSourceData.loc = Location(-3.5, 6., 0.64);
     core.addGenerator(generator::types::WAVE, &percussionWaveData);
     core.addSource(&percussionSourceData);
 
-    tromboneWaveData.filename = "trombone.wav";
+    tromboneWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    tromboneWaveData.filename = "audio/input/trombone.wav";
     tromboneSourceData.loc = Location(4.2, 6., 1.23);
     core.addGenerator(generator::types::WAVE, &tromboneWaveData);
     core.addSource(&tromboneSourceData);
 
-    violinWaveData.filename = "violin.wav";
+    violinWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
+    violinWaveData.filename = "audio/input/violin.wav";
     violinSourceData.loc = Location(-1.33, 4., .85);
     core.addGenerator(generator::types::WAVE, &violinWaveData);
     core.addSource(&violinSourceData);
@@ -72,23 +81,23 @@ void loadOperaData()
 
 int main () {
 
-    unsigned nPeriods = 200;
+    unsigned nPeriods = 3700;
 
     //********** No Operation processor example
 //    core.setProcessor(processor::types::NO_OPERATION);
 
     //********** Distance Attenuation processor example
-//    processor::ProcessorInput procInput;
-//    generatePositions();
-//    procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
-//    procInput.motionSamplingRate = 240; //Hertz
-//    procInput.periodSize = 2048;
-//    processor::DistanceAttenuationConfigData procData;
-//    procData.flags = processor::distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
-//    procData.distanceExp = 1;
-//    procData.withInputPositions = false;
-//    procData.input = procInput;
-    core.setProcessor(processor::types::DISTANCE_ATTENUATION);
+    processor::ProcessorInput procInput;
+    generatePositions();
+    procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
+    procInput.motionSamplingRate = 240; //Hertz
+    procInput.periodSize = 2048;
+    processor::DistanceAttenuationConfigData procData;
+    procData.flags = processor::distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
+    procData.distanceExp = 1;
+    procData.withInputPositions = true;
+    procData.input = procInput;
+    core.setProcessor(processor::types::DISTANCE_ATTENUATION, &procData);
 
     //********** Acousticave processor example
 //    processor::AcousticaveConfigData aaveConfigData;
@@ -107,29 +116,30 @@ int main () {
 //    core.setOutput(output::types::MEMORY);
 
     //********** File output example
-//    output::FileOutputConfigData fileData;
-//    fileData.flags = output::fileConfigFlags::FILE_ALL;
-//    fileData.outputFilePath = "output_config.wav";
-//    core.setOutput(output::types::FILE, &fileData);
+    output::FileOutputConfigData fileData;
+    fileData.flags = output::fileConfigFlags::FILE_ALL;
+    fileData.outputFilePath = "output.wav";
+    fileData.normalise_audio = true;
+    core.setOutput(output::types::FILE, &fileData);
 
     //********** Alsa output example
-    output::AlsaOutputConfigData alsaData;
-    alsaData.flags = output::alsaConfigFlags::ALSA_ALL;
-    alsaData.samplingRate = 44100;
-    alsaData.nChannels = 2;
-    alsaData.withPulseAudio = true;
-    core.setOutput(output::types::ALSA, &alsaData);
+//    output::AlsaOutputConfigData alsaData;
+//    alsaData.flags = output::alsaConfigFlags::ALSA_ALL;
+//    alsaData.samplingRate = 44100;
+//    alsaData.nChannels = 2;
+//    alsaData.withPulseAudio = true;
+//    core.setOutput(output::types::ALSA, &alsaData);
 
     //********** Primitive generator example
 //    core.addGenerator(generator::types::PRIMITIVE);
 //    core.addSource();
 
     //********** Test generator example
-    generator::TestConfigData testData;
-    testData.flags = generator::primitiveConfigFlags::WAVEFORM;
-    testData.waveform = generator::waveformType::SQUARE;
-    core.addGenerator(generator::types::TEST, &testData);
-    core.addSource();
+//    generator::TestConfigData testData;
+//    testData.flags = generator::primitiveConfigFlags::WAVEFORM;
+//    testData.waveform = generator::waveformType::SQUARE;
+//    core.addGenerator(generator::types::TEST, &testData);
+//    core.addSource();
     
     //********** Noise generator example
 //    generator::NoiseConfigData noiseData;
@@ -150,7 +160,7 @@ int main () {
 //    core.addGenerator(generator::types::WAVE, &waveData);
 //    core.addSource(&srcData1);
 
-    //loadOperaData();
+    loadOperaData();
 
     for (int i = 0; i < nPeriods; i++) {
         core.render();

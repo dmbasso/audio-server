@@ -86,10 +86,9 @@ void normalise(fstream *fs, unsigned int currentSize)
             max = abs(temp[i]);
         }
     }
-    temp *= SHRT_MAX / max;
-
     fs->seekg(sizeof(wavHeader));
     for (unsigned i = 0; i < currentSize/2; i++) {
+        temp[i] *= SHRT_MAX / max;
         fs->write(reinterpret_cast<char *>(&temp[i]), sizeof(int16_t));
     }
 }

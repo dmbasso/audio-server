@@ -21,13 +21,16 @@ void File::config(ConfigData *configData)
     if(cfgData->flags & fileConfigFlags::OUTPUT_FILEPATH) {
         outputFilePath = cfgData->outputFilePath;
     }
+    if(cfgData->flags & fileConfigFlags::NORMALISE) {
+        normalise_audio = cfgData->normalise_audio;
+    }
 }
 
 void File::write(SoundBuffer &buffer)
 {
-    if (!fs.good()) {
+    if (!fs.is_open()) {
         fs.open(outputFilePath, fstream::out | fstream::in | fstream::trunc);
-        if (fs.good()) {
+        if (fs.is_open()) {
             writeWavHeader(&fs, 0);
         }
         else {
@@ -42,7 +45,9 @@ void File::write(SoundBuffer &buffer)
 void File::close()
 {
     writeWavHeader(&fs, currentSize);
-    //normalise(&fs, currentSize);
+    if (normalise_audio) {
+        normalise(&fs, currentSize);
+    }
     fs.close();
 }
 
