@@ -13,7 +13,9 @@ File::File()
     FileOutputConfigData *cfgData = new FileOutputConfigData();
     cfgData->flags = fileConfigFlags::FILE_ALL;
     config(cfgData);
+    currentSize = 0;
 }
+
 void File::config(ConfigData *configData)
 {
     FileOutputConfigData *cfgData = (FileOutputConfigData *) configData;

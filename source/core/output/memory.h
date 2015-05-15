@@ -14,6 +14,7 @@ class Memory :public Output {
     public:
         void write(SoundBuffer &buffer) override;
         void close() override;
+        uint64_t get_output(int16_t **dest);
 };
 
 } //end namespace output
