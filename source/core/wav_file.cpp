@@ -76,7 +76,7 @@ SoundBuffer* loadWave(const char *filename)
 void normalise(fstream *fs, unsigned int currentSize)
 {
 
-    int16_t max = 0;
+    int16_t max = SHRT_MIN;
     valarray<int16_t> temp = valarray<int16_t>(currentSize);
 
     fs->seekp(sizeof(wavHeader));
@@ -85,6 +85,9 @@ void normalise(fstream *fs, unsigned int currentSize)
         if (abs(temp[i]) > max) {
             max = abs(temp[i]);
         }
+    }
+    if (!max) {
+        return;
     }
     fs->seekg(sizeof(wavHeader));
     for (unsigned i = 0; i < currentSize/2; i++) {
