@@ -9,7 +9,7 @@ namespace aserver {
 namespace generator {
 
 
-Test::Test(unsigned periodSize) : Primitive(periodSize)
+Test::Test(Core *core, unsigned periodSize) : Primitive(core, periodSize)
 {
     TestConfigData *cfgData = new TestConfigData(); // set flags for all data in the constructor
     cfgData->flags = testConfigFlags::TEST_ALL; // configure all data fields in constructor

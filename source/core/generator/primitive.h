@@ -43,7 +43,7 @@ class Primitive :public Generator {
         waveformType waveform;
 
     public:
-        Primitive(unsigned periodSize);
+        Primitive(Core *core, unsigned periodSize);
         ~Primitive() {};
         void config(const ConfigData *configData) override;
         void render() override;

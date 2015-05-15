@@ -47,7 +47,6 @@ class Core {
         void sourceConfig(int sid, processor::SourceConfigData *srcData);
         void outputConfig(output::ConfigData *outputData);
         //void setSourceGenerator(int sid, int gid);
-        int readWave(const char *filename); //static
         SoundBuffer* getWave(const char *filename);
         void shutdown();
 };

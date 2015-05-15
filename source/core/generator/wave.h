@@ -22,14 +22,14 @@ struct WaveConfigData : ConfigData {
 };
 
 class Wave :public Generator {
-private:
+protected:
     SoundBuffer *wave; //generator parent class has a buffer
     // playbackState playbackState = playbackState::STOPPED;
     float position;
     float increment; //step size to read buffer -> determines new frequency output
 
 public:
-    Wave(unsigned periodSize);
+    Wave(Core *core, unsigned periodSize);
     virtual ~Wave() {};
     virtual void config(const ConfigData *configData) override;
     virtual void render() override;

@@ -12,6 +12,8 @@ using namespace std;
 
 namespace aserver {
 
+class Core;
+
 /** \brief Contains classes for waveform generation.
  */
 
@@ -39,7 +41,7 @@ enum class playbackCommand : int {
     REVERSE = 5
 };
 
-enum class playbackState : int {
+enum class playbackState : int16_t {
     PLAYING = 1,
     STOPPED = 2,
     PAUSED = 3,
@@ -63,12 +65,15 @@ struct ConfigData {
 // This map will be used to update the location of each source when rendered (source.render)
 
 class Generator {
+    protected:
+        Core *core;
+        unsigned short playbackState;
 
-public:
+    public:
         map<unsigned, Location> locs;
         SoundBuffer *buffer;
 
-        Generator(unsigned periodSize);
+        Generator(Core *core, unsigned periodSize);
         virtual ~Generator() {};
         virtual void config(const ConfigData *configdata) =0;
         virtual void render() =0;

@@ -5,7 +5,7 @@ using namespace std;
 namespace aserver {
 namespace generator {
 
-Noise::Noise(unsigned periodSize) : Generator(periodSize)
+Noise::Noise(Core *core, unsigned periodSize) : Generator(core, periodSize)
 {
     NoiseConfigData *cfgData = new NoiseConfigData();
     cfgData->flags = noiseConfigFlags::NOISE_ALL;

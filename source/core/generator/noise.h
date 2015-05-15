@@ -33,7 +33,7 @@ class Noise :public Generator {
         default_random_engine generator;
 
     public:
-        Noise(unsigned periodSize);
+        Noise(Core *core, unsigned periodSize);
         ~Noise() {};
         void config(const ConfigData *configData) override;
         void render() override;

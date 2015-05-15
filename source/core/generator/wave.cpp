@@ -8,7 +8,7 @@ using namespace std;
 namespace aserver {
 namespace generator {
 
-Wave::Wave(unsigned periodSize) : Generator(periodSize)
+Wave::Wave(Core *core, unsigned periodSize) : Generator(core, periodSize)
 {
     WaveConfigData* cfgData = new WaveConfigData();
     cfgData->flags = waveConfigFlags::WAVE_ALL - waveConfigFlags::WAVE_FILENAME;
@@ -20,9 +20,10 @@ void Wave::config(const ConfigData *configData)
     WaveConfigData *cfgData = (WaveConfigData*) configData;
 
     if (cfgData->flags & waveConfigFlags::WAVE_FILENAME) {
+
         ifstream ifs(cfgData->filename);
         if (ifs.good()) {
-            wave = loadWave(cfgData->filename);
+            wave = loadWave(cfgData->filename); //////////////////////////search in the core.waves map.
         }
         else {
             cout << "Error opening input wave file = " << cfgData->filename << endl;

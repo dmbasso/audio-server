@@ -8,7 +8,7 @@ namespace aserver {
 namespace generator {
 
 
-Primitive::Primitive(unsigned periodSize) : Generator(periodSize)
+Primitive::Primitive(Core *core, unsigned periodSize) : Generator(core, periodSize)
 {
     PrimitiveConfigData *cfgData = new PrimitiveConfigData();
     cfgData->flags = primitiveConfigFlags::PRIMITIVE_ALL; //configure all data fields in constructor

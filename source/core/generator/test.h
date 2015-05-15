@@ -46,8 +46,7 @@ private:
     double currentAngle;
 
 public:
-    Test(unsigned periodSize);
-    ~Test() {};
+    Test(Core *core, unsigned periodSize);
     void config(const ConfigData *configData) override;
     virtual void render() override;
     Location computeTestPosition(float distance, float angle);

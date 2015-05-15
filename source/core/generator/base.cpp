@@ -5,8 +5,9 @@ using namespace std;
 namespace aserver {
 namespace generator {
 
-Generator::Generator(unsigned periodSize)
+Generator::Generator(Core *_core, unsigned periodSize)
 {
+    core = _core;
     buffer = new SoundBuffer(periodSize);
 }
 
