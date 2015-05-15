@@ -13,7 +13,7 @@ namespace processor {
 class NoOperation :public Processor {
     public:
         NoOperation(unsigned periodSize) : Processor(periodSize) {};
-        void config(ConfigData *configData) override;
+        void config(ConfigData *configData) {};
         void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
         void render() override;
 };

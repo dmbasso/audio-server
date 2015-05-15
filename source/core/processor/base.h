@@ -27,8 +27,8 @@ enum class types : int {
  * Parent class for all process configuration classes.
  */
 
-class ConfigData {
-    // info regarding configuration data for the processor.
+struct ConfigData {
+    uint64_t flags;
 };
 
 /** \brief Parent class for source configuration relative to a specific processor.
@@ -64,11 +64,10 @@ class Source {
 
     public:
         Source() : gen(nullptr) {}
-
         virtual void config(SourceConfigData *srcData);
         void setGenerator(generator::Generator* gen) {this->gen = gen;}
         generator::Generator* getGenerator() {return this->gen;}
-        void setLocation(Location _loc) {this->loc = _loc;}
+        void setLocation(Location loc) {this->loc = loc;}
         Location getLocation() {return this->loc;}
 };
 
@@ -89,7 +88,7 @@ class Processor {
     public:
         SoundBuffer *buffer;
         map<int, Source*> sources;
-        unsigned sourceCounter =0;
+        unsigned sourceCounter = 0;
         Location listenerPosition;
         ProcessorInput input;
 

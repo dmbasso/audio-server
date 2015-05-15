@@ -8,6 +8,49 @@ namespace output {
 
 Alsa::Alsa()
 {
+    AlsaOutputConfigData *cfgData = new AlsaOutputConfigData();
+    cfgData->flags = alsaConfigFlags::ALSA_ALL;
+    config(cfgData);
+}
+
+void Alsa::config(ConfigData *configData)
+{
+    AlsaOutputConfigData *cfgData = (AlsaOutputConfigData *) configData;
+
+    if(cfgData->flags & alsaConfigFlags::SAMPLING_RATE) {
+        samplingRate = cfgData->samplingRate;
+    }
+    if(cfgData->flags & alsaConfigFlags::N_CHANNELS) {
+        nChannels = cfgData->nChannels;
+    }
+    if(cfgData->flags & alsaConfigFlags::WITH_PULSEAUDIO) {
+        withPulseAudio = cfgData->withPulseAudio;
+        if (withPulseAudio) {
+            setupWithPulseAudio(samplingRate, nChannels);
+        }
+        else {
+            setupNoPulseAudio(samplingRate, nChannels, 8192);
+        }
+    }
+}
+
+void Alsa::write(SoundBuffer &buffer)
+{
+    int err;
+    err = snd_pcm_writei(alsa_handle, buffer.getData(), buffer.getPeriodSize());
+    if (err != buffer.getPeriodSize()) {
+        cout << "snd_pcm_writei: " << snd_strerror (err) << endl;
+        exit(1);
+    }
+}
+
+void Alsa::close()
+{
+    snd_pcm_close (alsa_handle);
+}
+
+void Alsa::setupWithPulseAudio(int rate, int channels)
+{
     const char device[] = "default";
     int err;
 
@@ -19,14 +62,14 @@ Alsa::Alsa()
     }
     err = snd_pcm_set_params(alsa_handle, SND_PCM_FORMAT_S16,
                              SND_PCM_ACCESS_RW_INTERLEAVED,
-                             2, 44100, 0, 100000); /* 100ms latency */
+                             channels, rate, 0, 100000); /* 100ms latency */
     if (err < 0) {
         cout << "snd_pcm_set_params: " << snd_strerror(err) << endl;
         return;
     }
 }
 
-void Alsa::setup(int rate, int channels, snd_pcm_uframes_t frames)
+void Alsa::setupNoPulseAudio(int rate, int channels, snd_pcm_uframes_t frames)
 {
     const char *device="default";
     snd_pcm_hw_params_t *hw_params;
@@ -90,21 +133,6 @@ void Alsa::setup(int rate, int channels, snd_pcm_uframes_t frames)
     }
 
     snd_pcm_hw_params_free (hw_params);
-}
-
-void Alsa::write(SoundBuffer &buffer)
-{
-    int err;
-    err = snd_pcm_writei(alsa_handle, buffer.getData(), buffer.getPeriodSize());
-    if (err != buffer.getPeriodSize()) {
-        cout << "snd_pcm_writei: " << snd_strerror (err) << endl;
-        exit(1);
-    }
-}
-
-void Alsa::close()
-{
-    snd_pcm_close (alsa_handle);
 }
 
 int Alsa::avail()

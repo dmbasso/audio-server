@@ -18,11 +18,23 @@ enum class aaveHrtf : unsigned short {
     IDENTITY = 5
 };
 
+enum acousticaveConfigFlags : uint64_t {
+    MODEL_FILEPATH =    0x1,
+    GAIN =              0x2,
+    REFLECTIONS =       0X4,
+    HRTF =              0x8,
+    REVERB_ACTIVE =    0x10,
+    RT60 =             0x20,
+    AREA =             0x40,
+    VOLUME =           0x80,
+    ACOUSTICAVE_ALL =  0xFF
+};
+
 struct AcousticaveConfigData : ConfigData {
-    string modelFilePath;
-    float gain;
+    const char *modelFilePath = "geometries/model.obj";
+    float gain = 1;
     unsigned short reflections = 0;
-    unsigned short hrtf = 1;
+    unsigned short hrtf = 1; // default hrtf set = MIT
     unsigned short reverbActive = 0;
     unsigned short rt60 = 3000;
     unsigned area = 3000;
@@ -51,7 +63,6 @@ struct ListenerOrientation {
 class Acousticave :public Processor {
     private:
         struct aave *aave;
-        struct aave_reverb *reverb;
         ListenerOrientation listenerOrientation;
 
     public:

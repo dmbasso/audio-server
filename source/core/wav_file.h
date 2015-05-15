@@ -9,7 +9,7 @@ using namespace std;
 namespace aserver {
 
 void writeWavHeader(fstream *fs, unsigned int currentSize);
-SoundBuffer* loadWave(const string filename);
+SoundBuffer* loadWave(const char *filename);
 void normalise(fstream *fs, unsigned int currentSize);
 
 } // end namespace aserver

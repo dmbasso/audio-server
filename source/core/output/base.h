@@ -1,8 +1,6 @@
 #ifndef OUTPUT_BASE_H
 #define OUTPUT_BASE_H
 
-#include <fstream>
-
 #include "../sound_buffer.h"
 
 using namespace std;
@@ -21,7 +19,7 @@ enum class types : int {
 };
 
 struct ConfigData {
-
+    uint64_t flags;
 };
 
 class Output {

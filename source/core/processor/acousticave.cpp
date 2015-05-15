@@ -1,3 +1,5 @@
+#include <fstream>
+#include <iostream>
 #include "acousticave.h"
 
 namespace aserver {
@@ -5,58 +7,78 @@ namespace processor {
 
 Acousticave::Acousticave(unsigned periodSize)  :Processor(periodSize)
 {
-    // Default listener orientation
+    aave = (struct aave *) malloc(sizeof *aave);
+
+    AcousticaveConfigData *cfgData = new AcousticaveConfigData();
+    cfgData->flags = acousticaveConfigFlags::ACOUSTICAVE_ALL;
+    config(cfgData);
+
+    // Default listener orientation: facing positive Y axis
     listenerOrientation.yaw = -M_PI/2.;
     listenerOrientation.pitch = 0;
     listenerOrientation.roll = 0;
-
-    aave = (struct aave *) malloc(sizeof *aave);
-    aave->gain = 1;
-    aave->reverb_active = 0;
-    aave->reflections = 0;
-
-    // Default hrtf set
-    aave_hrtf_mit(aave);
-
-    // Default geometry
-    aave_read_obj(aave, "geometries/model.obj");
 }
 
 void Acousticave::config(ConfigData *configData)
 {
-    auto aaveConfigData = (AcousticaveConfigData*) configData;
+    AcousticaveConfigData *cfgData = (AcousticaveConfigData*) configData;
 
-    aave_read_obj(aave, aaveConfigData->modelFilePath.c_str());
-    aave->reflections = aaveConfigData->reflections;
-
-    aave->gain = aaveConfigData->gain;
-
-    if (aaveConfigData->reverbActive) {
-        aave->reverb_active = 1;
-        aave_reverb_init(aave);
-        aave_reverb_set_area(aave, aaveConfigData->area);
-        aave_reverb_set_volume(aave, aaveConfigData->volume);
-        aave_reverb_set_rt60(aave, aaveConfigData->rt60);
-        aave_reverb_print_parameters(aave, aave->reverb);
+    if (cfgData->flags & acousticaveConfigFlags::MODEL_FILEPATH) {
+        ifstream ifs(cfgData->modelFilePath);
+        if (ifs.good()) {
+            aave_read_obj(aave, cfgData->modelFilePath);
+        }
+        else {
+            cout << "Error opening model geometry file = " << cfgData->modelFilePath << endl;
+            return;
+        }
     }
-
-    switch ((aaveHrtf) aaveConfigData->hrtf) {
-        case aaveHrtf::MIT:
-            aave_hrtf_mit(aave);
-            break;
-        case aaveHrtf::CIPIC:
-            aave_hrtf_cipic(aave);
-            break;
-        case aaveHrtf::LISTEN:
-            aave_hrtf_listen(aave);
-            break;
-        case aaveHrtf::TUB:
-            aave_hrtf_tub(aave);
-            break;
-        case aaveHrtf::IDENTITY:
-            aave_hrtf_identity(aave);
-            break;
-    };
+    if (cfgData->flags & acousticaveConfigFlags::GAIN) {
+        aave->gain = cfgData->gain;
+    }
+    if (cfgData->flags & acousticaveConfigFlags::REFLECTIONS) {
+        aave->reflections = cfgData->reflections;
+    }
+    if (cfgData->flags & acousticaveConfigFlags::HRTF) {
+        switch ((aaveHrtf) cfgData->hrtf) {
+            case aaveHrtf::MIT:
+                aave_hrtf_mit(aave);
+                break;
+            case aaveHrtf::CIPIC:
+                aave_hrtf_cipic(aave);
+                break;
+            case aaveHrtf::LISTEN:
+                aave_hrtf_listen(aave);
+                break;
+            case aaveHrtf::TUB:
+                aave_hrtf_tub(aave);
+                break;
+            case aaveHrtf::IDENTITY:
+                aave_hrtf_identity(aave);
+                break;
+        };
+    }
+    if (cfgData->flags & acousticaveConfigFlags::REVERB_ACTIVE) {
+        aave->reverb_active = cfgData->reverbActive;
+        if (aave->reverb_active) {
+            aave_reverb_init(aave);
+        }
+    }
+    if (cfgData->flags & acousticaveConfigFlags::RT60) {
+        if (aave->reverb_active) {
+            aave_reverb_set_rt60(aave, cfgData->rt60);
+        }
+    }
+    if (cfgData->flags & acousticaveConfigFlags::AREA) {
+        if (aave->reverb_active) {
+            aave_reverb_set_area(aave, cfgData->area);
+        }
+    }
+    if (cfgData->flags & acousticaveConfigFlags::VOLUME) {
+        if (aave->reverb_active) {
+            aave_reverb_set_volume(aave, cfgData->volume);
+        }
+    }
 }
 
 void Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)

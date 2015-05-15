@@ -44,6 +44,7 @@ doc/html
 # IO files
 audio
 data
+*.wav
 
 # Temporary tests
 tests

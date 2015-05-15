@@ -8,15 +8,23 @@
 namespace aserver {
 namespace output {
 
+enum fileConfigFlags : uint64_t {
+    OUTPUT_FILEPATH =   0x1,
+    NORMALISE =         0x2,
+    FILE_ALL =          0X3
+};
+
 struct FileOutputConfigData : ConfigData {
-    string outputFilePath;
+    const char *outputFilePath = "output.wav"; // default output file path
+    bool normalise_audio = false;
 };
 
 class File :public Output {
     public:
         unsigned currentSize;
         fstream fs;
-        string outputFilePath;
+        const char *outputFilePath;
+        bool normalise_audio;
 
         File();
         void config(ConfigData *cfgData);

@@ -1,8 +1,5 @@
 #include "generator.h"
 
-#include <cmath>
-#include <iostream>
-
 using namespace std;
 
 namespace aserver {

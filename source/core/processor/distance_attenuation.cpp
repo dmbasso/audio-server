@@ -1,17 +1,33 @@
 #include "distance_attenuation.h"
 
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
 namespace aserver {
 namespace processor {
 
+DistanceAttenuation::DistanceAttenuation(unsigned periodSize) : Processor(periodSize)
+{
+    DistanceAttenuationConfigData *cfgData = new DistanceAttenuationConfigData();
+    cfgData->flags = distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
+    config(cfgData);
+};
+
 void DistanceAttenuation::config(ConfigData *configData)
 {
     DistanceAttenuationConfigData *cfgData = (DistanceAttenuationConfigData *) configData;
 
-    input = cfgData->input;
+    if(cfgData->flags & distanceAttenuationConfigFlags::DISTANCE_EXP) {
+        distanceExp = cfgData->distanceExp;
+    }
+    if(cfgData->flags & distanceAttenuationConfigFlags::WITH_INPUT_POSITIONS) {
+        withInputPositions = cfgData->withInputPositions;
+        if (withInputPositions) {
+            input = cfgData->input;
+        }
+    }
 }
 
 /** \brief Add a Source object to the Processor map.
@@ -79,7 +95,7 @@ void DistanceAttenuation::process(Source *src)
         }
 
         distance = src->getLocation().distanceTo(listenerPosition);
-        attenuation = (1. / (distance + 1.));
+        attenuation = (1. / (pow(distance, distanceExp) + 1.));
 
         src->getGenerator()->buffer->readFrame(sams, i);
         sams[0] *= attenuation;

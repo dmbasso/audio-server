@@ -16,11 +16,11 @@ namespace generator {
 */
 
 enum primitiveConfigFlags : uint64_t{
-    AMPLITUDE = 0x1,
-    FREQUENCY = 0x2,
-    SQUARE_FACTOR = 0x4,
-    WAVEFORM = 0x8,
-    PRIMITIVE_ALL = 0xF
+    PRIMITIVE_AMPLITUDE =   0x1,
+    FREQUENCY =             0x2,
+    SQUARE_FACTOR =         0x4,
+    WAVEFORM =              0x8,
+    PRIMITIVE_ALL =         0xF
 };
 
 struct PrimitiveConfigData : ConfigData {
