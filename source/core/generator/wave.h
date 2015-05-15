@@ -15,11 +15,15 @@ enum waveConfigFlags : uint64_t {
     WAVE_ALL =      0x7
 };
 
+#pragma pack(1)  // force byte-alignment
+
 struct WaveConfigData : ConfigData {
-    const char *filename;
+    char filename[256] = {0};
     float increment = 1;
     float position = 0;
 };
+
+#pragma pack()
 
 class Wave :public Generator {
 private:

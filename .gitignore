@@ -47,7 +47,7 @@ data
 *.wav
 
 # Temporary tests
-tests
+#tests
 
 # CLION IDE files
 .idea

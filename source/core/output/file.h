@@ -14,20 +14,24 @@ enum fileConfigFlags : uint64_t {
     FILE_ALL =          0X3
 };
 
+#pragma pack(1)  // force byte-alignment
+
 struct FileOutputConfigData : ConfigData {
-    const char *outputFilePath = "output.wav"; // default output file path
+    char outputFilePath[256] = "output.wav"; // default output file path
     bool normalise_audio = false;
 };
+
+#pragma pack()
 
 class File :public Output {
     public:
         unsigned currentSize;
         fstream fs;
-        const char *outputFilePath;
+        string outputFilePath;
         bool normalise_audio;
 
         File();
-        void config(ConfigData *cfgData);
+        void config(ConfigData *cfgData) override;
         void write(SoundBuffer &buffer) override;
         void close() override;
 };

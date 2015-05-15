@@ -18,9 +18,13 @@ enum class types : int {
     MEMORY = 3
 };
 
+#pragma pack(1)  // force byte-alignment
+
 struct ConfigData {
     uint64_t flags;
 };
+
+#pragma pack()
 
 class Output {
     public:

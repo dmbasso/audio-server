@@ -21,10 +21,15 @@ enum noiseConfigFlags : uint64_t {
     NOISE_ALL =         0X3
 };
 
+#pragma pack(1)  // force byte-alignment
+
 struct NoiseConfigData : ConfigData {
     unsigned amplitude = SHRT_MAX * 0.2;
     distributionType distType = distributionType::UNIFORM;
 };
+
+#pragma pack()
+
 
 class Noise :public Generator {
     protected:
