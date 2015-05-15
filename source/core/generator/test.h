@@ -21,6 +21,8 @@ enum testConfigFlags : uint64_t {
 *   Bit flags for configuring data: (PrimitiveConfigData flags) + transitionPeriod + frequencyScaleFactor + distance + angleStep + initialAngle
 */
 
+#pragma pack(1)  // force byte-alignment
+
 struct TestConfigData : PrimitiveConfigData {
     unsigned transitionPeriod = 44100;
     float frequencyScaleFactor = 1.05946; //half tone scaling factor
@@ -28,6 +30,8 @@ struct TestConfigData : PrimitiveConfigData {
     double angleStep = M_PI/4.;
     double initialAngle = M_PI/2.;
 };
+
+#pragma pack()
 
 /**
  * Contains the script instructions for altering the properties of the primitive during playback.

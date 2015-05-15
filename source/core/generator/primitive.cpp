@@ -36,7 +36,7 @@ void Primitive::config(const ConfigData *configData)
 void Primitive::renderNFrames(unsigned start, unsigned end)
 {
     unsigned fs = 44100;
-    float T = 1./fs;
+    double T = 1./fs;
     int16_t sams[2];
 
     switch (waveform) {

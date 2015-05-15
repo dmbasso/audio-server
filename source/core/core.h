@@ -48,6 +48,8 @@ class Core {
         void outputConfig(output::ConfigData *outputData);
         //void setSourceGenerator(int sid, int gid);
         SoundBuffer* getWave(const char *filename);
+        void stop_output();
+        uint64_t get_output(int16_t **dest);
         void shutdown();
 };
 

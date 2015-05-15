@@ -23,6 +23,8 @@ enum primitiveConfigFlags : uint64_t{
     PRIMITIVE_ALL =         0xF
 };
 
+#pragma pack(1)  // force byte-alignment
+
 struct PrimitiveConfigData : ConfigData {
     unsigned amplitude = SHRT_MAX * 0.2;
     unsigned short frequency = 220;
@@ -30,13 +32,15 @@ struct PrimitiveConfigData : ConfigData {
     waveformType waveform = waveformType::SINE;
 };
 
+#pragma pack()
+
 /** \brief Generates a primitive waveform.
 *
 */
 
 class Primitive :public Generator {
     protected:
-        float phase = 1.;
+        double phase = 1.;
         unsigned amplitude;
         unsigned short frequency;
         unsigned short squareFactor;

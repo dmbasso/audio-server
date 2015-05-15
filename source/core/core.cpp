@@ -13,7 +13,6 @@ namespace aserver {
 int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
 {
     generator::Generator *gen;
-
     switch (genType) {
         case generator::types::PRIMITIVE:
             gen = new generator::Primitive(this, getPeriodSize());
@@ -31,14 +30,12 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
             gen = new generator::Noise(this, getPeriodSize());
             break;
     }
-
-    gens[generatorCounter++] = gen;
-
+    int gid = generatorCounter++;
+    gens[gid] = gen;
     if (cfgData) {
         gen->config(cfgData);
     }
-
-    return 1;
+    return gid;
 }
 
 int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData)
@@ -119,10 +116,31 @@ SoundBuffer* Core::getWave(const char *filename)
     return waves[filename];
 }
 
-void Core::shutdown()
+void Core::stop_output()
 {
     if (out) {
         out->close();
+    }
+}
+
+uint64_t Core::get_output(int16_t **dest)
+{
+    if (!out) {
+        return 0;
+    }
+    if (output::Memory *mem = dynamic_cast<output::Memory*>(out)) {
+        return mem->get_output(dest);
+    }
+    return 0;
+}
+
+void Core::shutdown()
+{
+    stop_output();
+    // todo: shutdown the rest of the system
+    if (out) {
+        delete out;
+        out = nullptr;
     }
 }
 

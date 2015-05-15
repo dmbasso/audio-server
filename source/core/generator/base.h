@@ -51,9 +51,13 @@ enum class playbackState : int16_t {
 /** \brief Base class for all data configuration classes.
  */
 
+#pragma pack(1)  // force byte-alignment
+
 struct ConfigData {
     uint64_t flags;
 };
+
+#pragma pack()
 
 /** \brief Generator is the abstract base class for all sound generators.
  *  Its concrete types are SoundBuffer and a Location.

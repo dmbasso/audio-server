@@ -16,36 +16,35 @@ int add_generator(core_t* core, int type)
     return AS_TYPE(Core*, core)->addGenerator(static_cast<generator::types>(type));
 }
 
-/*
-int configure_generator(core_t* core, int gid, generator_config_data_t* cfg)
+
+void configure_generator(core_t* core, int gid, generator_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->generatorConfig(gid, AS_TYPE(generator::ConfigData*, cfg));
 }
-*/
+
 
 int add_source(core_t* core)
 {
     return AS_TYPE(Core*, core)->addSource();
 }
 
-/*
-int configure_source(core_t* core, int sid, source_config_data_t* cfg)
+
+void configure_source(core_t* core, int sid, source_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->sourceConfig(sid, AS_TYPE(processor::SourceConfigData*, cfg));
 }
-*/
+
 
 void set_processor(core_t* core, int type)
 {
     AS_TYPE(Core*, core)->setProcessor(static_cast<processor::types>(type));
 }
 
-/*
-int configure_processor(core_t* core, processor_config_data_t* cfg)
+
+void configure_processor(core_t* core, processor_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->processorConfig(AS_TYPE(processor::ConfigData*, cfg));
 }
-*/
 
 
 void set_output(core_t* core, int type)
@@ -53,12 +52,12 @@ void set_output(core_t* core, int type)
     AS_TYPE(Core*, core)->setOutput(static_cast<output::types>(type));
 }
 
-/*
-int configure_output(core_t* core, output_config_data_t* cfg)
+
+void configure_output(core_t* core, output_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->outputConfig(AS_TYPE(output::ConfigData*, cfg));
 }
-*/
+
 
 void render(core_t* core, int periods)
 {
@@ -67,6 +66,23 @@ void render(core_t* core, int periods)
     }
 }
 
+
+void stop_output(core_t* core)
+{
+    AS_TYPE(Core*, core)->stop_output();
+}
+
+int16_t *get_output(core_t* core, uint64_t *size)
+{
+    int16_t *dest;
+    *size = AS_TYPE(Core*, core)->get_output(&dest);
+    return dest;
+}
+
+void free_output(core_t* core, int16_t *mem)
+{
+    delete [] mem;
+}
 
 void del_core(core_t* core)
 {
