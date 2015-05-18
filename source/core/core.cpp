@@ -110,10 +110,12 @@ void Core::render()
 
 SoundBuffer* Core::getWave(const char *filename)
 {
-    if (waves.find(filename) == waves.end()) { // wave already inserted
-        waves[filename] = loadWave(filename);
+    for (auto waveIt : waves) {
+        if (!strcmp(waveIt.first, filename)) {
+            return waveIt.second;
+        }
     }
-    return waves[filename];
+    return waves[filename] = loadWave(filename);
 }
 
 void Core::stop_output()

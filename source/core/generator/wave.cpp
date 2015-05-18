@@ -39,21 +39,26 @@ void Wave::config(const ConfigData *configData)
     }
 }
 
-void Wave::render()
+void Wave::renderNFrames(unsigned start, unsigned end)
 {
     int16_t sams[2];
 
     if (!wave) {
-        cout << "Wave generator rendering an empty wave sound buffer..." << endl;
+        cout << "Wave sound buffer is empty, rendering silence..." << endl;
         return;
     }
 
-    for (unsigned i = 0; i < buffer->getPeriodSize(); i++, position += increment) {
+    for (unsigned i = start; i < end; i++, position += increment) {
         if (position == wave->getPeriodSize()) { //currently looping all waves
             position = 0;
         }
         buffer->writeFrame(wave->readFrame(sams, position), i);
     }
+}
+
+void Wave::render()
+{
+    renderNFrames(0, buffer->getPeriodSize());
 }
 
 } //end generator namespace

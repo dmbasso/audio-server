@@ -9,18 +9,18 @@ namespace aserver {
 namespace generator {
 
 enum keyframeConfigFlags : uint64_t {
-    START =             0x1,
-    KEYFRAME_FILENAME = 0x2,
-    KEYFRAME_POSITION = 0X4,
-    NOTE_RATIO =        0X8,
-    KEYFRAME_ALL =      0XF
+    START =             0x10000,
+    KEYFRAME_FILENAME = 0x20000,
+    KEYFRAME_POSITION = 0X40000,
+    NOTE_RATIO =        0X80000,
+    KEYFRAME_ALL =      0XF0000
 };
 
 struct Keyframe {
     int flags;
     unsigned start;
-    const char *filename;
-    float position[3] = {0,0,0};
+    char filename[256];
+    float location[3];
     float noteRatio;
 };
 
@@ -30,20 +30,23 @@ enum scriptConfigFlags : uint64_t {
 };
 
 struct ScriptConfigData : WaveConfigData {
-    generator::playbackState playbackState = generator::playbackState::STOPPED;
+    generator::playbackState playbackState = generator::playbackState::PLAYING;
 };
 
 
 class Script :public Wave {
     private:
         map<unsigned, Keyframe> keyframes;
+        map<unsigned, Keyframe>::iterator keyframesIt;
         generator::playbackState playbackState;
         unsigned counter;
     public:
         Script(Core *core, unsigned periodSize);
         void config(const ConfigData *configData) override;
-        void addKeyframe(const Keyframe kf);
         void render() override;
+        // Temp methods for testing
+        void addKeyframe(const Keyframe kf);
+        void loadDefaultKeyframes();
 };
 
 } //end generator namespace

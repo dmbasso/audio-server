@@ -37,6 +37,7 @@ public:
     virtual ~Wave() {};
     virtual void config(const ConfigData *configData) override;
     virtual void render() override;
+    void renderNFrames(unsigned start, unsigned end);
 };
 
 } //end generator namespace
