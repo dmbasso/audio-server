@@ -76,28 +76,29 @@ void loadOperaData()
 }
 /**
 *   \todo processor listener positions in config (2 bytes for processor base flags?)
-*   \todo test opera setup with different distance factors
+*   \todo finish keyframe implementation and tests (playbackState != PLAYING)
+ *  \todo variable period size
 */
 
 int main () {
 
-    unsigned nPeriods = 3700;
+    unsigned nPeriods = 500;
 
     //********** No Operation processor example
 //    core.setProcessor(processor::types::NO_OPERATION);
 
     //********** Distance Attenuation processor example
-    processor::ProcessorInput procInput;
-    generatePositions();
-    procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
-    procInput.motionSamplingRate = 240; //Hertz
-    procInput.periodSize = 2048;
-    processor::DistanceAttenuationConfigData procData;
-    procData.flags = processor::distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
-    procData.distanceExp = 1;
-    procData.withInputPositions = true;
-    procData.input = procInput;
-    core.setProcessor(processor::types::DISTANCE_ATTENUATION, &procData);
+//    processor::ProcessorInput procInput;
+//    generatePositions();
+//    procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
+//    procInput.motionSamplingRate = 240; //Hertz
+//    procInput.periodSize = 2048;
+//    processor::DistanceAttenuationConfigData procData;
+//    procData.flags = processor::distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
+//    procData.distanceExp = 1;
+//    procData.withInputPositions = true;
+//    procData.input = procInput;
+    core.setProcessor(processor::types::DISTANCE_ATTENUATION);//, &procData);
 
     //********** Acousticave processor example
 //    processor::AcousticaveConfigData aaveConfigData;
@@ -118,7 +119,7 @@ int main () {
     //********** File output example
     output::FileOutputConfigData fileData;
     fileData.flags = output::fileConfigFlags::NORMALISE;
-    fileData.normalise_audio = true;
+    fileData.normalise_audio = false;
     core.setOutput(output::types::FILE, &fileData);
 
     //********** Alsa output example
@@ -159,7 +160,11 @@ int main () {
 //    core.addGenerator(generator::types::WAVE, &waveData);
 //    core.addSource(&srcData1);
 
-    loadOperaData();
+    //********** Script generator example
+    core.addGenerator(generator::types::SCRIPT);
+    core.addSource();
+
+//    loadOperaData();
 
     for (int i = 0; i < nPeriods; i++) {
         core.render();
