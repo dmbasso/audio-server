@@ -1,5 +1,6 @@
 #include "wave.h"
 #include "../wav_file.h"
+#include "../core.h"
 
 #include <iostream>
 
@@ -23,7 +24,7 @@ void Wave::config(const ConfigData *configData)
 
         ifstream ifs(cfgData->filename);
         if (ifs.good()) {
-            wave = loadWave(cfgData->filename); //////////////////////////search in the core.waves map.
+            wave = core->getWave(cfgData->filename);
         }
         else {
             cout << "Error opening input wave file = " << cfgData->filename << endl;
