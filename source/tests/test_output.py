@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import os
 import pytest
@@ -45,7 +44,7 @@ def test_file_configured(core):
     aserver.OutputType.FILE, aserver.OutputType.MEMORY
 ))
 @pytest.mark.parametrize("period", (default_period, custom_period))
-def test_period(output, period, core):
+def test_period_silence(output, period, core):
     if period != default_period:
         core.set_period(period)
     core.set_processor()
@@ -58,4 +57,22 @@ def test_period(output, period, core):
     # assert only silence was rendered:
     assert rendered[rendered != 0].shape[0] == 0
 
+
+@pytest.mark.parametrize("output", (
+    aserver.OutputType.FILE, aserver.OutputType.MEMORY
+))
+@pytest.mark.parametrize("period", (default_period, custom_period))
+def test_period_primitive(output, period, core):
+    if period != default_period:
+        core.set_period(period)
+    core.set_processor()
+    core.set_output(output)
+    core.add_generator(aserver.GeneratorType.PRIMITIVE)
+    core.add_source()
+    core.render(1)
+    core.stop_output()
+    rendered = core.get_output()
+    core.shutdown()
+    assert rendered.shape[0] == period
+    assert all(rendered[:, 0] == rendered[:, 1])
 
