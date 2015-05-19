@@ -24,7 +24,7 @@ enum noiseConfigFlags : uint64_t {
 #pragma pack(1)  // force byte-alignment
 
 struct NoiseConfigData : ConfigData {
-    unsigned amplitude = SHRT_MAX * 0.2;
+    unsigned amplitude = SHRT_MAX;
     distributionType distType = distributionType::UNIFORM;
 };
 

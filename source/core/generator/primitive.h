@@ -26,7 +26,7 @@ enum primitiveConfigFlags : uint64_t{
 #pragma pack(1)  // force byte-alignment
 
 struct PrimitiveConfigData : ConfigData {
-    unsigned amplitude = SHRT_MAX * 0.2;
+    unsigned amplitude = SHRT_MAX;
     unsigned short frequency = 220;
     unsigned short squareFactor = 10;
     waveformType waveform = waveformType::SINE;
