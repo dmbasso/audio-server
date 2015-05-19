@@ -9,11 +9,11 @@ namespace aserver {
 namespace generator {
 
 enum keyframeConfigFlags : uint64_t {
-    START =             0x10000,
-    KEYFRAME_FILENAME = 0x20000,
-    KEYFRAME_POSITION = 0X40000,
-    NOTE_RATIO =        0X80000,
-    KEYFRAME_ALL =      0XF0000
+    START =             0x1,
+    KEYFRAME_FILENAME = 0x2,
+    KEYFRAME_POSITION = 0X4,
+    NOTE_RATIO =        0X8,
+    KEYFRAME_ALL =      0XF
 };
 
 struct Keyframe {
@@ -29,7 +29,7 @@ enum scriptConfigFlags : uint64_t {
     SCRIPT_ALL =        0x1
 };
 
-struct ScriptConfigData : WaveConfigData {
+struct ScriptConfigData : ConfigData {
     generator::playbackState playbackState = generator::playbackState::PLAYING;
 };
 
@@ -45,7 +45,7 @@ class Script :public Wave {
         void config(const ConfigData *configData) override;
         void render() override;
         // Temp methods for testing
-        void addKeyframe(const Keyframe kf);
+        void addKeyframe(const Keyframe &kf);
         void loadDefaultKeyframes();
 };
 

@@ -53,7 +53,7 @@ def test_primitive(core, waveform):
     core.render(1)
     core.stop_output()
     rendered = core.get_output().astype(float)
-    assert all(rendered[0] == rendered[1])
+    assert all(rendered[:, 0] == rendered[:, 1])
     assert abs(fundamental_frequency(rendered[:, 0]) - 220) < 2
     instant_energy = energy(rendered[:, 0])
     l = instant_energy.shape[0]

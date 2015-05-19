@@ -56,8 +56,9 @@ void Script::render ()
                     wave = core->getWave(keyframesIt->second.filename);
                     increment = keyframesIt->second.noteRatio;
                     locs[i] = Location(keyframesIt->second.location[0], keyframesIt->second.location[1], keyframesIt->second.location[2]); //load source(generator) position from keyframe
-                    //position = 0; //start wave at the beginning (should this be set in the keyframes?)
-                    keyframesIt++; // go to the next keyframe
+                    position = 0;
+                    // go to the next keyframe
+                    keyframesIt++;
                 }
             }
             // render the remaining samples of this buffer
@@ -95,7 +96,7 @@ void Script::render ()
 
 }
 
-void Script::addKeyframe(const Keyframe kf)
+void Script::addKeyframe(const Keyframe &kf)
 {
     // using a map allows only one keyframe to be loaded at a specific time
     keyframes[kf.start] = kf;
@@ -106,17 +107,17 @@ void Script::loadDefaultKeyframes()
     Keyframe kf1, kf2, kf3;
 
     kf1.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf1.filename, "audio/input/harp.wav", 256);
+    strncpy(kf1.filename, "../audio/input/harp.wav", 256);
     kf1.noteRatio = 1;
     kf1.location[0] = 0.;
     kf1.location[1] = 0.;
     kf1.location[2] = 0.;
-    kf1.start = 0;
+    kf1.start = 2048;
 
     addKeyframe(kf1);
 
     kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf2.filename, "audio/input/espiral.wav", 256);
+    strncpy(kf2.filename, "../audio/input/harp.wav", 256);
     kf2.noteRatio = 1.5;
     kf2.location[0] = 0.;
     kf2.location[1] = 0.;
@@ -126,7 +127,7 @@ void Script::loadDefaultKeyframes()
     addKeyframe(kf2);
 
     kf3.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf3.filename, "audio/input/harp.wav", 256);
+    strncpy(kf3.filename, "../audio/input/harp.wav", 256);
     kf3.noteRatio = 1.;
     kf3.location[0] = 0.;
     kf3.location[1] = 0.;
@@ -140,7 +141,7 @@ void Script::loadDefaultKeyframes()
 //
 //    for (unsigned i = 0; i < 100; i++) {
 //        kfs[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-//        strncpy(kfs[i].filename, "audio/input/espiral.wav", 256);
+//        strncpy(kfs[i].filename, "../audio/input/espiral.wav", 256);
 //        kfs[i].noteRatio = i/100.;
 //        kfs[i].location[0] = 0.;
 //        kfs[i].location[1] = 0;
@@ -154,7 +155,7 @@ void Script::loadDefaultKeyframes()
 //
 //    for (unsigned i = 0; i < 100; i++) {
 //        kfs2[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-//        strncpy(kfs2[i].filename, "audio/input/espiral.wav", 256);
+//        strncpy(kfs2[i].filename, "../audio/input/espiral.wav", 256);
 //        kfs2[i].noteRatio = i/100.;
 //        kfs2[i].location[0] = 100./i;
 //        kfs2[i].location[1] = 0;

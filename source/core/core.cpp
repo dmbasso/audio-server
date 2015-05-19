@@ -7,7 +7,7 @@ using namespace std;
 namespace aserver {
 
 /** \brief Note: This method takes as input a specific ConfigData for the generator to be instantiated.
-*  \todo When does the core::waves map load the wave soundBuffer?
+*
 */
 
 int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)

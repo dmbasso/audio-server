@@ -74,11 +74,6 @@ void loadOperaData()
     core.addGenerator(generator::types::WAVE, &violinWaveData);
     core.addSource(&violinSourceData);
 }
-/**
-*   \todo processor listener positions in config (2 bytes for processor base flags?)
-*   \todo finish keyframe implementation and tests (playbackState != PLAYING)
- *  \todo variable period size
-*/
 
 int main () {
 
