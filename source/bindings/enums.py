@@ -20,6 +20,13 @@ class GeneratorType:
     SCRIPT = 4
 
 
+class PrimitiveFlags(ConfigFlags):
+    PRIMITIVE_AMPLITUDE =   0x1
+    FREQUENCY =             0x2
+    SQUARE_FACTOR =         0x4
+    WAVEFORM =              0x8
+
+
 class WaveformType:
     SINE = 1
     SQUARE = 2
