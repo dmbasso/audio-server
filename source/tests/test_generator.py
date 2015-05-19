@@ -26,9 +26,7 @@ def fundamental_frequency(signal):
 def core(request):
     retv = aserver.Core()
     retv.set_processor()    # NO_OPERATION
-    # retv.set_output()       # MEMORY
-    # TODO: use memory after it is fixed
-    retv.set_output(aserver.OutputType.FILE)
+    retv.set_output()       # MEMORY
 
     def fin():
         retv.shutdown()
@@ -59,5 +57,5 @@ def test_primitive(core, waveform):
     l = instant_energy.shape[0]
     # cut the endings (signal is periodic)
     mean_energy = instant_energy[l / 8:l / 8 * 6].mean()
-    assert mean_energy > 23000  # minimum mean energy (sawtooth)
+    assert mean_energy > 22800  # minimum mean energy (sawtooth)
 

@@ -9,7 +9,10 @@ core_t* new_core()
     return AS_TYPE(core_t*, retv);
 }
 
-// TODO: set_period_size
+void set_period(core_t* core, int size)
+{
+    AS_TYPE(Core*, core)->setPeriodSize(size);
+}
 
 int add_generator(core_t* core, int type)
 {

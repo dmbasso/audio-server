@@ -91,7 +91,7 @@ typedef struct file_cfg file_cfg_t;
 // Shim API *******************************************************************
 
 core_t* new_core();
-// TODO: set_period_size
+void set_period(core_t* core, int size);
 int add_generator(core_t* core, int type);
 void configure_generator(core_t* core, int gid, generator_cfg_t* cfg);
 int add_source(core_t* core);

@@ -58,15 +58,18 @@ def test_period_silence(output, period, core):
     assert rendered[rendered != 0].shape[0] == 0
 
 
+@pytest.mark.parametrize("point", ("before", "after"))
 @pytest.mark.parametrize("output", (
     aserver.OutputType.FILE, aserver.OutputType.MEMORY
 ))
 @pytest.mark.parametrize("period", (default_period, custom_period))
-def test_period_primitive(output, period, core):
-    if period != default_period:
+def test_period_primitive(point, output, period, core):
+    if point == "before":
         core.set_period(period)
     core.set_processor()
     core.set_output(output)
+    if point == "after":
+        core.set_period(period)
     core.add_generator(aserver.GeneratorType.PRIMITIVE)
     core.add_source()
     core.render(1)
