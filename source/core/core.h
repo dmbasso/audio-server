@@ -38,7 +38,7 @@ class Core {
         int setProcessor(processor::types procType, processor::ConfigData *cfgData = nullptr);
         int addGenerator(generator::types genType, generator::ConfigData *cfgData = nullptr);
         int setOutput(output::types outType, output::ConfigData *cfgData = nullptr);
-        void setPeriodSize(unsigned ps) {this->periodSize = ps;}
+        void setPeriodSize(unsigned periodSize);
         void setSamplingRate(unsigned samplingRate) {this->samplingRate = samplingRate;}
         int addSource(processor::SourceConfigData *srcData = nullptr);
         void render();

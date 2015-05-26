@@ -44,5 +44,10 @@ map<unsigned, Location> ProcessorInput::loadListenerPositions()
     return listenerPositions;
 }
 
+void Processor::setPeriodSize(unsigned periodSize)
+{
+    buffer = new SoundBuffer(periodSize);
+}
+
 } //end namespace processor
 } //end namespace aserver

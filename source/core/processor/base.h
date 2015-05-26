@@ -96,6 +96,7 @@ class Processor {
         virtual void config(ConfigData *configData) =0; // the class is abstract
         virtual void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) =0;
         virtual void render() =0;
+        void setPeriodSize(unsigned periodSize);
 };
 
 } //end namespace processor

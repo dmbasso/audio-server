@@ -172,4 +172,13 @@ void Core::outputConfig(output::ConfigData *outputData)
     out->config(outputData);
 }
 
+void Core::setPeriodSize(unsigned periodSize)
+{
+    for (auto gen : gens) {
+        gen.second->setPeriodSize(periodSize);
+    }
+
+    proc->setPeriodSize(periodSize);
+}
+
 } //end namespace aserver

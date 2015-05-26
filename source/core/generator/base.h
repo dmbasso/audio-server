@@ -81,6 +81,7 @@ class Generator {
         virtual ~Generator() {};
         virtual void config(const ConfigData *configdata) =0;
         virtual void render() =0;
+        void setPeriodSize(unsigned periodSize);
 };
 
 } //end generator namespace
