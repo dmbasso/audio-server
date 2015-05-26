@@ -17,7 +17,7 @@ namespace aserver {
 
 namespace processor {
 
-enum class types : int {
+enum class types : int32_t {
     NO_OPERATION = 1,
     ACOUSTICAVE = 2,
     DISTANCE_ATTENUATION = 3
@@ -46,9 +46,9 @@ struct ProcessorInput {
     vector<Location> inputListenerPositions;
     float motionSamplingRate;
     float periodicPositionRemainder;
-    unsigned periodSize;
+    uint32_t periodSize;
 
-    map<unsigned, Location> loadListenerPositions();
+    map<uint32_t, Location> loadListenerPositions();
 };
 
 /** \brief Container for the generators that will be used by a specific processor.
@@ -87,16 +87,16 @@ class Processor {
 
     public:
         SoundBuffer *buffer;
-        map<int, Source*> sources;
-        unsigned sourceCounter = 0;
+        map<int32_t, Source*> sources;
+        uint32_t sourceCounter = 0;
         Location listenerPosition;
         ProcessorInput input;
 
-        Processor(unsigned period);
+        Processor(uint32_t period);
         virtual void config(ConfigData *configData) =0; // the class is abstract
         virtual void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) =0;
         virtual void render() =0;
-        void setPeriodSize(unsigned periodSize);
+        void setPeriodSize(uint32_t periodSize);
 };
 
 } //end namespace processor

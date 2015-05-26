@@ -10,7 +10,7 @@ extern "C" {
 namespace aserver {
 namespace processor {
 
-enum class aaveHrtf : unsigned short {
+enum class aaveHrtf : int16_t {
     MIT = 1,
     CIPIC = 2,
     LISTEN = 3,
@@ -33,12 +33,12 @@ enum acousticaveConfigFlags : uint64_t {
 struct AcousticaveConfigData : ConfigData {
     const char *modelFilePath = "geometries/model.obj";
     float gain = 1;
-    unsigned short reflections = 0;
-    unsigned short hrtf = 1; // default hrtf set = MIT
-    unsigned short reverbActive = 0;
-    unsigned short rt60 = 3000;
-    unsigned area = 3000;
-    unsigned volume = 4000;
+    uint16_t reflections = 0;
+    uint16_t hrtf = 1; // default hrtf set = MIT
+    uint16_t reverbActive = 0;
+    uint16_t rt60 = 3000;
+    uint32_t area = 3000;
+    uint32_t volume = 4000;
 };
 
 /** \brief Contains extra info needed by the Acousticave processor to manage sources.
@@ -66,7 +66,7 @@ class Acousticave :public Processor {
         ListenerOrientation listenerOrientation;
 
     public:
-        Acousticave(unsigned periodSize);
+        Acousticave(uint32_t periodSize);
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
         void render() override;

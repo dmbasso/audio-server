@@ -12,7 +12,7 @@ namespace aserver {
  */
 namespace output {
 
-enum class types : int {
+enum class types : int32_t {
     FILE = 1,
     ALSA = 2,
     MEMORY = 3

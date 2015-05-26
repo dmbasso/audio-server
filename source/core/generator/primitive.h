@@ -26,9 +26,9 @@ enum primitiveConfigFlags : uint64_t{
 #pragma pack(1)  // force byte-alignment
 
 struct PrimitiveConfigData : ConfigData {
-    unsigned amplitude = SHRT_MAX;
-    unsigned short frequency = 220;
-    unsigned short squareFactor = 10;
+    uint32_t amplitude = SHRT_MAX;
+    uint16_t frequency = 220;
+    uint16_t squareFactor = 10;
     waveformType waveform = waveformType::SINE;
 };
 
@@ -41,17 +41,17 @@ struct PrimitiveConfigData : ConfigData {
 class Primitive :public Generator {
     protected:
         double phase = 1.;
-        unsigned amplitude;
-        unsigned short frequency;
-        unsigned short squareFactor;
+        uint32_t amplitude;
+        uint16_t frequency;
+        uint16_t squareFactor;
         waveformType waveform;
 
     public:
-        Primitive(Core *core, unsigned periodSize);
+        Primitive(Core *core, uint32_t periodSize);
         ~Primitive() {};
         void config(const ConfigData *configData) override;
         void render() override;
-        void renderNFrames(unsigned start, unsigned end);
+        void renderNFrames(uint32_t start, uint32_t end);
 };
 
 } //end generator namespace

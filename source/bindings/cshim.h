@@ -29,17 +29,17 @@ typedef struct generator_cfg generator_cfg_t;
 struct primitive_cfg {
     generator_cfg_t config;
     
-    unsigned amplitude;
-    unsigned short frequency;
-    unsigned short squareFactor;
-    int waveform;
+    uint32_t amplitude;
+    uint32_t int16_t frequency;
+    uint32_t int16_t squareFactor;
+    int32_t waveform;
 };
 typedef struct primitive_cfg primitive_cfg_t;
 
 struct test_cfg {
     primitive_cfg_t primitive;
 
-    unsigned transitionPeriod;
+    uint32_t transitionPeriod;
     float frequencyScaleFactor;
     double distance;
     double angleStep;
@@ -59,8 +59,8 @@ typedef struct wave_cfg wave_cfg_t;
 struct noise_cfg {
     generator_cfg_t config;
 
-    unsigned amplitude;
-    int distType;
+    uint32_t amplitude;
+    int32_t distType;
 };
 typedef struct noise_cfg noise_cfg_t;
 
@@ -92,15 +92,15 @@ typedef struct file_cfg file_cfg_t;
 
 core_t* new_core();
 // TODO: set_period_size
-int add_generator(core_t* core, int type);
-void configure_generator(core_t* core, int gid, generator_cfg_t* cfg);
+int add_generator(core_t* core, int32_t type);
+void configure_generator(core_t* core, int32_t gid, generator_cfg_t* cfg);
 int add_source(core_t* core);
-void configure_source(core_t* core, int sid, source_cfg_t* cfg);
-void set_processor(core_t* core, int type);
+void configure_source(core_t* core, int32_t sid, source_cfg_t* cfg);
+void set_processor(core_t* core, int32_t type);
 void configure_processor(core_t* core, processor_cfg_t* cfg);
-void set_output(core_t* core, int type);
+void set_output(core_t* core, int32_t type);
 void configure_output(core_t* core, output_cfg_t* cfg);
-void render(core_t* core, int periods);
+void render(core_t* core, int32_t periods);
 void stop_output(core_t* core);
 int16_t *get_output(core_t* core, uint64_t *size);
 void free_output(core_t* core, int16_t *mem);

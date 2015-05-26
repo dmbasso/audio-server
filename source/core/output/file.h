@@ -25,7 +25,7 @@ struct FileOutputConfigData : ConfigData {
 
 class File :public Output {
     public:
-        unsigned currentSize;
+        uint32_t currentSize;
         fstream fs;
         string outputFilePath;
         bool normalise_audio;

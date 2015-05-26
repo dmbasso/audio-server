@@ -5,7 +5,7 @@
 namespace aserver {
 namespace processor {
 
-Acousticave::Acousticave(unsigned periodSize)  :Processor(periodSize)
+Acousticave::Acousticave(uint32_t periodSize)  :Processor(periodSize)
 {
     aave = (struct aave *) malloc(sizeof *aave);
 
@@ -121,7 +121,7 @@ void Acousticave::render()
 
     for (auto const &it : sources) {
         if (it.second->getGenerator()->buffer->getFrameSize() == 2) { //aave input are always mono sources
-            for (int i = 0; i < buffer->getPeriodSize(); i++) {
+            for (int32_t i = 0; i < buffer->getPeriodSize(); i++) {
                 it.second->getGenerator()->buffer->getData()[i] = ((int16_t) it.second->getGenerator()->buffer->getData()[i * 2] + it.second->getGenerator()->buffer->getData()[i * 2 + 1]) >> 2;
             }
         }

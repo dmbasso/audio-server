@@ -15,7 +15,7 @@ fstream fs;
  */
 void generatePositions()
 {
-    unsigned n;
+    uint32_t n;
     float x=0., y=0., z=0.;
 
     n = 24000; // number of positions in file
@@ -29,7 +29,7 @@ void generatePositions()
 
     fs << n << " ";
 
-    for (unsigned i = 0; i < n; i++) {
+    for (uint32_t i = 0; i < n; i++) {
         y = i * 0.00416666666;
         fs << x << " " << y << " " << z << " ";
     }
@@ -46,7 +46,7 @@ vector<aserver::Location> readPositions(const string filename)
     }
 
     float x, y, z;
-    unsigned n, i=0;
+    uint32_t n, i=0;
 
     fs >> n;
     vector<aserver::Location> pos = vector<aserver::Location>(n);

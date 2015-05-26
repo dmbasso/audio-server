@@ -9,7 +9,7 @@ using namespace std;
 namespace aserver {
 namespace generator {
 
-Wave::Wave(Core *core, unsigned periodSize) : Generator(core, periodSize)
+Wave::Wave(Core *core, uint32_t periodSize) : Generator(core, periodSize)
 {
     WaveConfigData* cfgData = new WaveConfigData();
     cfgData->flags = waveConfigFlags::WAVE_ALL - waveConfigFlags::WAVE_FILENAME;
@@ -41,7 +41,7 @@ void Wave::config(const ConfigData *configData)
     }
 }
 
-void Wave::renderNFrames(unsigned start, unsigned end)
+void Wave::renderNFrames(uint32_t start, uint32_t end)
 {
     int16_t sams[2];
 
@@ -50,7 +50,7 @@ void Wave::renderNFrames(unsigned start, unsigned end)
         return;
     }
 
-    for (unsigned i = start; i < end; i++, position += increment) {
+    for (uint32_t i = start; i < end; i++, position += increment) {
         if (position == wave->getPeriodSize()) { //currently looping all waves
             position = 0;
         }

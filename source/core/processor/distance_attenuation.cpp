@@ -8,7 +8,7 @@ using namespace std;
 namespace aserver {
 namespace processor {
 
-DistanceAttenuation::DistanceAttenuation(unsigned periodSize) : Processor(periodSize)
+DistanceAttenuation::DistanceAttenuation(uint32_t periodSize) : Processor(periodSize)
 {
     DistanceAttenuationConfigData *cfgData = new DistanceAttenuationConfigData();
     cfgData->flags = distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
@@ -80,10 +80,10 @@ void DistanceAttenuation::process(Source *src)
     float distance, attenuation;
     int16_t sams[2];
 
-    map<unsigned, Location>::iterator sourceLocationsIt = src->getGenerator()->locs.begin();
-    map<unsigned, Location>::iterator listenerLocationsIt = listenerPositions.begin();
+    map<uint32_t, Location>::iterator sourceLocationsIt = src->getGenerator()->locs.begin();
+    map<uint32_t, Location>::iterator listenerLocationsIt = listenerPositions.begin();
 
-    for (int i = 0; i < buffer->getPeriodSize(); i++) { // process a moving source
+    for (int32_t i = 0; i < buffer->getPeriodSize(); i++) { // process a moving source
         if(sourceLocationsIt != src->getGenerator()->locs.end()  && sourceLocationsIt->first == i) {
             src->setLocation(sourceLocationsIt->second);
             sourceLocationsIt++;

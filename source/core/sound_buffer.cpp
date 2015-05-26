@@ -6,7 +6,7 @@ using namespace std;
 
 namespace aserver {
 
-SoundBuffer::SoundBuffer(unsigned _periodSize, unsigned short _frameSize)
+SoundBuffer::SoundBuffer(uint32_t _periodSize, uint16_t _frameSize)
 {
     frameSize = _frameSize;
     periodSize = _periodSize;
@@ -17,12 +17,12 @@ SoundBuffer::SoundBuffer(unsigned _periodSize, unsigned short _frameSize)
 
 void SoundBuffer::reset()
 {
-    for (unsigned i = 0; i < frameSize * periodSize; i++) {
+    for (uint32_t i = 0; i < frameSize * periodSize; i++) {
         data[i] = 0;
     }
 }
 
-int16_t* SoundBuffer::readFrame(int16_t *sams, unsigned i)
+int16_t* SoundBuffer::readFrame(int16_t *sams, uint32_t i)
 {
     if (frameSize == 1) {  // IMPORTANT: here we assume our output is always going to be stereo
         sams[0] = data[i];
@@ -35,7 +35,7 @@ int16_t* SoundBuffer::readFrame(int16_t *sams, unsigned i)
     return sams;
 }
 
-void SoundBuffer::writeFrame(int16_t *sams, unsigned i)
+void SoundBuffer::writeFrame(int16_t *sams, uint32_t i)
 {
     if (i >= periodSize) {
         cout << "index out of range" << endl;
@@ -50,7 +50,7 @@ void SoundBuffer::writeFrame(int16_t *sams, unsigned i)
     }
 }
 
-void SoundBuffer::mixFrame(int16_t *sams, unsigned i)
+void SoundBuffer::mixFrame(int16_t *sams, uint32_t i)
 {
     if (i >= periodSize) {
         cout << "index out of range" << endl;

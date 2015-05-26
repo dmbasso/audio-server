@@ -9,7 +9,7 @@ namespace aserver {
 namespace generator {
 
 
-Test::Test(Core *core, unsigned periodSize) : Primitive(core, periodSize)
+Test::Test(Core *core, uint32_t periodSize) : Primitive(core, periodSize)
 {
     TestConfigData *cfgData = new TestConfigData(); // set flags for all data in the constructor
     cfgData->flags = testConfigFlags::TEST_ALL; // configure all data fields in constructor
@@ -46,12 +46,12 @@ void Test::config(const ConfigData *configData)
 
 void Test::render()
 {
-    unsigned startIndex = 0;
+    uint32_t startIndex = 0;
 
     locs.clear();
     buffer->reset();
 
-    for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
+    for (uint32_t i = 0; i < buffer->getPeriodSize(); i++) {
         if (remainingFrames == 0) {
             if ((-2. * M_PI) + initialAngle  - currentAngle > 0) { // one clockwise rotation...
                 return;
@@ -76,7 +76,7 @@ void Test::render()
 
 Location Test::computeTestPosition(float distance, float angle)
 {
-    unsigned decimalCases = 1000000;
+    uint32_t decimalCases = 1000000;
     float x = (round(cos(angle) * decimalCases) / decimalCases) * distance;
     float y = (round(sin(angle) * decimalCases) / decimalCases) * distance;
 

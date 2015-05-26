@@ -10,7 +10,7 @@ using namespace std;
 namespace aserver{
 namespace generator {
 
-enum class distributionType : int {
+enum class distributionType : int32_t {
     NORMAL = 1,
     UNIFORM = 2
 };
@@ -24,7 +24,7 @@ enum noiseConfigFlags : uint64_t {
 #pragma pack(1)  // force byte-alignment
 
 struct NoiseConfigData : ConfigData {
-    unsigned amplitude = SHRT_MAX;
+    uint32_t amplitude = SHRT_MAX;
     distributionType distType = distributionType::UNIFORM;
 };
 
@@ -33,12 +33,12 @@ struct NoiseConfigData : ConfigData {
 
 class Noise :public Generator {
     protected:
-        unsigned amplitude;
+        uint32_t amplitude;
         distributionType distType;
         default_random_engine generator;
 
     public:
-        Noise(Core *core, unsigned periodSize);
+        Noise(Core *core, uint32_t periodSize);
         ~Noise() {};
         void config(const ConfigData *configData) override;
         void render() override;

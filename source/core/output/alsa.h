@@ -17,27 +17,27 @@ enum alsaConfigFlags : uint64_t {
 
 struct AlsaOutputConfigData : ConfigData {
     bool withPulseAudio = true;
-    unsigned samplingRate = 44100;
-    unsigned short nChannels = 2;
+    uint32_t samplingRate = 44100;
+    uint16_t nChannels = 2;
 };
 
 class Alsa :public Output {
     private:
         bool withPulseAudio;
-        unsigned samplingRate;
-        unsigned short nChannels;
+        uint32_t samplingRate;
+        uint16_t nChannels;
         snd_pcm_t *alsa_handle = nullptr;
 
     public:
         Alsa();
-        void setupWithPulseAudio(int rate, int channels);
-        void setupNoPulseAudio(int rate, int channels, snd_pcm_uframes_t frames);
+        void setupWithPulseAudio(int rate, int32_t channels);
+        void setupNoPulseAudio(int rate, int32_t channels, snd_pcm_uframes_t frames);
         operator bool () {return alsa_handle != nullptr;}
         void write(SoundBuffer &buffer) override;
         void config(ConfigData *cfgData);
         void close() override;
-        int  avail();
-        int  delay();
+        int32_t  avail();
+        int32_t  delay();
 };
 
 } //end namespace output

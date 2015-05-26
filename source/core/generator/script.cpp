@@ -7,7 +7,7 @@ using namespace std;
 namespace aserver {
 namespace generator {
 
-Script::Script(Core *core, unsigned periodSize) : Wave(core, periodSize)
+Script::Script(Core *core, uint32_t periodSize) : Wave(core, periodSize)
 {
     ScriptConfigData *cfgData = new ScriptConfigData(); // set flags for all data in the constructor
     cfgData->flags = scriptConfigFlags::SCRIPT_ALL ; // configure all data fields in constructor
@@ -41,9 +41,9 @@ void Script::render ()
                 playbackState = generator::playbackState::PLAYING;
             }
 
-            unsigned startIndex = 0;
+            uint32_t startIndex = 0;
 
-            for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
+            for (uint32_t i = 0; i < buffer->getPeriodSize(); i++) {
                 if (keyframes.size() && i + counter == keyframesIt->first * core->getSamplingRate() * 0.001) {
 
                     // first we render the samples with the previous data settings
@@ -138,7 +138,7 @@ void Script::loadDefaultKeyframes()
     // progressively raise the input frequency during the first 20 secs rendered
     vector<Keyframe> kfs = vector<Keyframe>(100);
 
-    for (unsigned i = 0; i < 100; i++) {
+    for (uint32_t i = 0; i < 100; i++) {
         kfs[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
         strncpy(kfs[i].filename, "audio/input/espiral.wav", 256);
         kfs[i].increment = i/100.;
@@ -152,7 +152,7 @@ void Script::loadDefaultKeyframes()
 //    // progressively decrease the distance during the first 20 secs rendered
 //    vector<Keyframe> kfs2 = vector<Keyframe>(100);
 //
-//    for (unsigned i = 0; i < 100; i++) {
+//    for (uint32_t i = 0; i < 100; i++) {
 //        kfs2[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
 //        strncpy(kfs2[i].filename, "../audio/input/espiral.wav", 256);
 //        kfs2[i].noteRatio = i/100.;

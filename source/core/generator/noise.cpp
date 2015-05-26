@@ -5,7 +5,7 @@ using namespace std;
 namespace aserver {
 namespace generator {
 
-Noise::Noise(Core *core, unsigned periodSize) : Generator(core, periodSize)
+Noise::Noise(Core *core, uint32_t periodSize) : Generator(core, periodSize)
 {
     NoiseConfigData *cfgData = new NoiseConfigData();
     cfgData->flags = noiseConfigFlags::NOISE_ALL;
@@ -32,8 +32,8 @@ void Noise::render()
     
     switch (distType) {
         case distributionType::UNIFORM: {
-            uniform_int_distribution<int> uniform(-amplitude, amplitude); 
-            for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {                
+            uniform_int_distribution<int32_t> uniform(-amplitude, amplitude);
+            for (uint32_t i = 0; i < buffer->getPeriodSize(); i++) {
                 val = uniform(generator);
                 sams[0] = sams[1] = (int16_t) val;
                 buffer->writeFrame(sams, i);
@@ -42,7 +42,7 @@ void Noise::render()
             }
         case distributionType::NORMAL: {
             normal_distribution<double> normal(0, amplitude);
-            for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
+            for (uint32_t i = 0; i < buffer->getPeriodSize(); i++) {
                 val = normal(generator);
                 sams[0] = sams[1] = (int16_t) val;
                 buffer->writeFrame(sams, i);

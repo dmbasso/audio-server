@@ -36,7 +36,7 @@ void Alsa::config(ConfigData *configData)
 
 void Alsa::write(SoundBuffer &buffer)
 {
-    int err;
+    int32_t err;
     err = snd_pcm_writei(alsa_handle, buffer.getData(), buffer.getPeriodSize());
     if (err != buffer.getPeriodSize()) {
         cout << "snd_pcm_writei: " << snd_strerror (err) << endl;
@@ -49,10 +49,10 @@ void Alsa::close()
     snd_pcm_close (alsa_handle);
 }
 
-void Alsa::setupWithPulseAudio(int rate, int channels)
+void Alsa::setupWithPulseAudio(int32_t rate, int32_t channels)
 {
     const char device[] = "default";
-    int err;
+    int32_t err;
 
     /* Open the ALSA audio device. Use default system sound output. */
     err = snd_pcm_open(&alsa_handle, device, SND_PCM_STREAM_PLAYBACK, 0);
@@ -69,12 +69,12 @@ void Alsa::setupWithPulseAudio(int rate, int channels)
     }
 }
 
-void Alsa::setupNoPulseAudio(int rate, int channels, snd_pcm_uframes_t frames)
+void Alsa::setupNoPulseAudio(int rate, int32_t channels, snd_pcm_uframes_t frames)
 {
     const char *device="default";
     snd_pcm_hw_params_t *hw_params;
     snd_pcm_sw_params_t *sw_params;
-    int err, dir;
+    int32_t err, dir;
 
     if ((err = snd_pcm_open (&alsa_handle, device, SND_PCM_STREAM_PLAYBACK, 0)) < 0) {
         fprintf (stderr, "cannot open audio device %s (%s)\n",
@@ -107,7 +107,7 @@ void Alsa::setupNoPulseAudio(int rate, int channels, snd_pcm_uframes_t frames)
         exit (1);
     }
 
-    if ((err = snd_pcm_hw_params_set_rate_near (alsa_handle, hw_params, (unsigned int *) &rate, &dir)) < 0) {
+    if ((err = snd_pcm_hw_params_set_rate_near (alsa_handle, hw_params, (uint32_t *) &rate, &dir)) < 0) {
         fprintf (stderr, "cannot set sample rate (%s)\n",
                  snd_strerror (err));
         exit (1);
@@ -142,7 +142,7 @@ int Alsa::avail()
 
 int Alsa::delay()
 {
-    int err;
+    int32_t err;
     snd_pcm_sframes_t frames;
     if ((err = snd_pcm_delay(alsa_handle, &frames)) < 0) {
         cout << "snd_pcm_writei: " << snd_strerror (err) << endl;

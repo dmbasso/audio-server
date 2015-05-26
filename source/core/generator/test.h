@@ -24,7 +24,7 @@ enum testConfigFlags : uint64_t {
 #pragma pack(1)  // force byte-alignment
 
 struct TestConfigData : PrimitiveConfigData {
-    unsigned transitionPeriod = 44100;
+    uint32_t transitionPeriod = 44100;
     float frequencyScaleFactor = 1.05946; //half tone scaling factor
     double distance = 10.;
     double angleStep = M_PI/4.;
@@ -40,8 +40,8 @@ struct TestConfigData : PrimitiveConfigData {
 
 class Test :public Primitive {
 private:
-    unsigned transitionPeriod;
-    unsigned remainingFrames = 0;
+    uint32_t transitionPeriod;
+    uint32_t remainingFrames = 0;
     float frequencyScaleFactor;
 
     double distance; // overrides source location...
@@ -50,7 +50,7 @@ private:
     double currentAngle;
 
 public:
-    Test(Core *core, unsigned periodSize);
+    Test(Core *core, uint32_t periodSize);
     void config(const ConfigData *configData) override;
     virtual void render() override;
     Location computeTestPosition(float distance, float angle);

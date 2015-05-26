@@ -26,7 +26,7 @@ typedef struct {
 
 namespace aserver {
 
-void writeWavHeader(fstream *fs, unsigned int currentSize) {
+void writeWavHeader(fstream *fs, uint32_t currentSize) {
     wavHeader header;
 
     strncpy(header.chunkId, "RIFF", 4);
@@ -73,14 +73,14 @@ SoundBuffer* loadWave(const char *filename)
     }
 }
 
-void normalise(fstream *fs, unsigned int currentSize)
+void normalise(fstream *fs, uint32_t currentSize)
 {
 
     int16_t max = SHRT_MIN;
     valarray<int16_t> temp = valarray<int16_t>(currentSize);
 
     fs->seekp(sizeof(wavHeader));
-    for (unsigned i = 0; i < currentSize/2; i++) {
+    for (uint32_t i = 0; i < currentSize/2; i++) {
         fs->read(reinterpret_cast<char *>(&temp[i]), sizeof(int16_t));
         if (abs(temp[i]) > max) {
             max = abs(temp[i]);
@@ -90,7 +90,7 @@ void normalise(fstream *fs, unsigned int currentSize)
         return;
     }
     fs->seekg(sizeof(wavHeader));
-    for (unsigned i = 0; i < currentSize/2; i++) {
+    for (uint32_t i = 0; i < currentSize/2; i++) {
         temp[i] *= SHRT_MAX / max;
         fs->write(reinterpret_cast<char *>(&temp[i]), sizeof(int16_t));
     }

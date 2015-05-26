@@ -19,7 +19,7 @@ class Core;
 
 namespace generator {
 
-enum class types : int {
+enum class types : int32_t {
     PRIMITIVE = 1,
     WAVE = 2,
     TEST = 3,
@@ -27,13 +27,13 @@ enum class types : int {
     NOISE = 5
 };
 
-enum class waveformType : int {
+enum class waveformType : int32_t {
     SINE = 1,
     SQUARE = 2,
     SAWTOOTH = 3
 };
 
-enum class playbackCommand : int {
+enum class playbackCommand : int32_t {
     PLAY = 1,
     STOP = 2,
     PAUSE = 3,
@@ -65,23 +65,23 @@ struct ConfigData {
  *  render the next period (this base class only renders silence).
  */
 
-// Locations is a map<unsigned bufferIndex, Location loc> that stores location changes in each buffer.
+// Locations is a map<uint32_t bufferIndex, Location loc> that stores location changes in each buffer.
 // This map will be used to update the location of each source when rendered (source.render)
 
 class Generator {
     protected:
         Core *core;
-        unsigned short playbackState;
+        uint16_t playbackState;
 
     public:
-        map<unsigned, Location> locs;
+        map<uint32_t, Location> locs;
         SoundBuffer *buffer;
 
-        Generator(Core *core, unsigned periodSize);
+        Generator(Core *core, uint32_t periodSize);
         virtual ~Generator() {};
         virtual void config(const ConfigData *configdata) =0;
         virtual void render() =0;
-        void setPeriodSize(unsigned periodSize);
+        void setPeriodSize(uint32_t periodSize);
 };
 
 } //end generator namespace

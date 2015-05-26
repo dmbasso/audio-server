@@ -11,13 +11,13 @@ core_t* new_core()
 
 // TODO: set_period_size
 
-int add_generator(core_t* core, int type)
+int add_generator(core_t* core, int32_t type)
 {
     return AS_TYPE(Core*, core)->addGenerator(static_cast<generator::types>(type));
 }
 
 
-void configure_generator(core_t* core, int gid, generator_cfg_t* cfg)
+void configure_generator(core_t* core, int32_t gid, generator_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->generatorConfig(gid, AS_TYPE(generator::ConfigData*, cfg));
 }
@@ -29,13 +29,13 @@ int add_source(core_t* core)
 }
 
 
-void configure_source(core_t* core, int sid, source_cfg_t* cfg)
+void configure_source(core_t* core, int32_t sid, source_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->sourceConfig(sid, AS_TYPE(processor::SourceConfigData*, cfg));
 }
 
 
-void set_processor(core_t* core, int type)
+void set_processor(core_t* core, int32_t type)
 {
     AS_TYPE(Core*, core)->setProcessor(static_cast<processor::types>(type));
 }
@@ -47,7 +47,7 @@ void configure_processor(core_t* core, processor_cfg_t* cfg)
 }
 
 
-void set_output(core_t* core, int type)
+void set_output(core_t* core, int32_t type)
 {
     AS_TYPE(Core*, core)->setOutput(static_cast<output::types>(type));
 }
@@ -59,7 +59,7 @@ void configure_output(core_t* core, output_cfg_t* cfg)
 }
 
 
-void render(core_t* core, int periods)
+void render(core_t* core, int32_t periods)
 {
     for (int i = 0; i < periods; i++) {
         AS_TYPE(Core*, core)->render();

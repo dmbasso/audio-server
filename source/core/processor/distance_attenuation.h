@@ -15,7 +15,7 @@ enum distanceAttenuationConfigFlags : uint64_t {
 
 struct DistanceAttenuationConfigData : ConfigData {
     ProcessorInput input;
-    unsigned short distanceExp = 1;
+    uint16_t distanceExp = 1;
     bool withInputPositions = false;
 };
 
@@ -25,13 +25,13 @@ struct DistanceAttenuationConfigData : ConfigData {
 
 class DistanceAttenuation :public Processor {
     private:
-        unsigned short distanceExp;
+        uint16_t distanceExp;
         bool withInputPositions;
 
     public:
-        map<unsigned, Location> listenerPositions;
+        map<uint32_t, Location> listenerPositions;
 
-        DistanceAttenuation(unsigned periodSize);
+        DistanceAttenuation(uint32_t periodSize);
         void config(ConfigData *configData) override;
         void addSource(generator::Generator *gen, SourceConfigData *srcData =nullptr) override;
         void render() override;

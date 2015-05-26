@@ -17,7 +17,7 @@ enum keyframeConfigFlags : uint64_t {
 };
 
 struct Keyframe : WaveConfigData {
-    unsigned start;
+    uint32_t start;
     float location[3];
 };
 
@@ -33,12 +33,12 @@ struct ScriptConfigData : ConfigData {
 
 class Script :public Wave {
     private:
-        map<unsigned, Keyframe> keyframes;
-        map<unsigned, Keyframe>::iterator keyframesIt;
+        map<uint32_t, Keyframe> keyframes;
+        map<uint32_t, Keyframe>::iterator keyframesIt;
         generator::playbackState playbackState;
-        unsigned counter;
+        uint32_t counter;
     public:
-        Script(Core *core, unsigned periodSize);
+        Script(Core *core, uint32_t periodSize);
         void config(const ConfigData *configData) override;
         void render() override;
         // Temp methods for testing

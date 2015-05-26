@@ -30,7 +30,7 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
             gen = new generator::Noise(this, getPeriodSize());
             break;
     }
-    int gid = generatorCounter++;
+    int32_t gid = generatorCounter++;
     gens[gid] = gen;
     if (cfgData) {
         gen->config(cfgData);
@@ -84,7 +84,7 @@ int Core::setOutput(output::types outType, output::ConfigData *cfgData)
 int Core::addSource(processor::SourceConfigData *srcData)
 {
     if (proc) {
-        map<int, generator::Generator*>::reverse_iterator it = gens.rbegin();
+        map<int32_t, generator::Generator*>::reverse_iterator it = gens.rbegin();
         // TODO: return the source id
         // return proc->addSource(it->second, srcData);
         proc->addSource(it->second, srcData);
@@ -146,7 +146,7 @@ void Core::shutdown()
     }
 }
 
-void Core::generatorConfig(int gid, generator::ConfigData *configData)
+void Core::generatorConfig(int32_t gid, generator::ConfigData *configData)
 {
     if (gens.find(gid) != gens.end()) {
         gens[gid]->config(configData);
@@ -160,7 +160,7 @@ void Core::processorConfig(processor::ConfigData *configData)
 {
     proc->config(configData);
 }
-void Core::sourceConfig(int sid, processor::SourceConfigData *srcData)
+void Core::sourceConfig(int32_t sid, processor::SourceConfigData *srcData)
 {
     if (proc->sources.find(sid) != proc->sources.end()) {
         proc->sources[sid]->config(srcData);
@@ -172,7 +172,7 @@ void Core::outputConfig(output::ConfigData *outputData)
     out->config(outputData);
 }
 
-void Core::setPeriodSize(unsigned periodSize)
+void Core::setPeriodSize(uint32_t periodSize)
 {
     for (auto gen : gens) {
         gen.second->setPeriodSize(periodSize);

@@ -12,22 +12,22 @@ void Source::config(SourceConfigData *srcData)
     loc = srcData->loc;
 }
 
-Processor::Processor(unsigned period)
+Processor::Processor(uint32_t period)
 {
     buffer = new SoundBuffer(period);
     listenerPosition = Location(0., 0., 0.);
 }
 
-map<unsigned, Location> ProcessorInput::loadListenerPositions()
+map<uint32_t, Location> ProcessorInput::loadListenerPositions()
 {
-    map<unsigned, Location> listenerPositions;
+    map<uint32_t, Location> listenerPositions;
     float motionSamplingStep = 44100./motionSamplingRate;
 
     if (inputListenerPositions.size() == 0) {
         return listenerPositions;
     }
 
-    unsigned i;
+    uint32_t i;
 
     for (i = 0; (i*motionSamplingStep + periodicPositionRemainder) < periodSize; i++) {
         if (inputListenerPositions.size() == 0) {
@@ -44,7 +44,7 @@ map<unsigned, Location> ProcessorInput::loadListenerPositions()
     return listenerPositions;
 }
 
-void Processor::setPeriodSize(unsigned periodSize)
+void Processor::setPeriodSize(uint32_t periodSize)
 {
     buffer = new SoundBuffer(periodSize);
 }

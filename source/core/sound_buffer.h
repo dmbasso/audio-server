@@ -18,21 +18,19 @@ namespace aserver {
 
 class SoundBuffer {
     private:
-        unsigned short frameSize;
-        unsigned periodSize;
+        uint16_t frameSize;
+        uint32_t periodSize;
         int16_t *data;
 
     public:
-        SoundBuffer(unsigned _periodSize, unsigned short _frameSize=2);
-
-        unsigned getPeriodSize() {return periodSize;}
+        SoundBuffer(uint32_t _periodSize, uint16_t _frameSize=2);
+        uint32_t getPeriodSize() {return periodSize;}
         int16_t *getData() {return this->data;}
         void reset();
-        void writeFrame(int16_t *sams, unsigned i);
-        int16_t* readFrame(int16_t *sams, unsigned i);
-        void mixFrame(int16_t *sams, unsigned i);
-
-        unsigned short getFrameSize() const {return frameSize;}
+        void writeFrame(int16_t *sams, uint32_t i);
+        int16_t* readFrame(int16_t *sams, uint32_t i);
+        void mixFrame(int16_t *sams, uint32_t i);
+        uint16_t getFrameSize() const {return frameSize;}
 };
 
 } //end namespace aserver

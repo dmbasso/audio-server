@@ -33,11 +33,11 @@ protected:
     float increment; //step size to read buffer -> determines new frequency output
 
 public:
-    Wave(Core *core, unsigned periodSize);
+    Wave(Core *core, uint32_t periodSize);
     virtual ~Wave() {};
     virtual void config(const ConfigData *configData) override;
     virtual void render() override;
-    void renderNFrames(unsigned start, unsigned end);
+    void renderNFrames(uint32_t start, uint32_t end);
 };
 
 } //end generator namespace

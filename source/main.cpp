@@ -77,7 +77,7 @@ void loadOperaData()
 
 int main () {
 
-    unsigned nPeriods = 500;
+    uint32_t nPeriods = 500;
 
     //********** No Operation processor example
 //    core.setProcessor(processor::types::NO_OPERATION);
@@ -162,6 +162,9 @@ int main () {
 //    loadOperaData();
 
     for (int i = 0; i < nPeriods; i++) {
+//        if (i==250) {
+//            core.setPeriodSize(666);
+//        }
         core.render();
     }
 
