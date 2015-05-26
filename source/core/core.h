@@ -39,6 +39,7 @@ class Core {
         int setOutput(output::types outType, output::ConfigData *cfgData = nullptr);
         unsigned getPeriodSize() {return periodSize;}
         void setPeriodSize(unsigned periodSize);
+        unsigned getSamplingRate() {return samplingRate;}
         void setSamplingRate(unsigned samplingRate) {this->samplingRate = samplingRate;}
         int addSource(processor::SourceConfigData *srcData = nullptr);
         void render();

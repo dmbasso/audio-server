@@ -44,7 +44,7 @@ void Script::render ()
             unsigned startIndex = 0;
 
             for (unsigned i = 0; i < buffer->getPeriodSize(); i++) {
-                if (keyframes.size() && i + counter == keyframesIt->first) {
+                if (keyframes.size() && i + counter == keyframesIt->first * core->getSamplingRate() * 0.001) {
 
                     // first we render the samples with the previous data settings
                     if (startIndex != i) {
@@ -111,7 +111,7 @@ void Script::loadDefaultKeyframes()
 //    kf1.location[0] = 0.;
 //    kf1.location[1] = 0.;
 //    kf1.location[2] = 0.;
-//    kf1.start = 2048;
+//    kf1.start = 0;
 //
 //    addKeyframe(kf1);
 //
@@ -121,7 +121,7 @@ void Script::loadDefaultKeyframes()
 //    kf2.location[0] = 0.;
 //    kf2.location[1] = 0.;
 //    kf2.location[2] = 0.;
-//    kf2.start = 44100*2;
+//    kf2.start = 2000;
 //
 //    addKeyframe(kf2);
 //
@@ -131,7 +131,7 @@ void Script::loadDefaultKeyframes()
 //    kf3.location[0] = 0.;
 //    kf3.location[1] = 0.;
 //    kf3.location[2] = 0.;
-//    kf3.start = 44100*10;
+//    kf3.start = 10000;
 //
 //    addKeyframe(kf3);
 
@@ -145,7 +145,7 @@ void Script::loadDefaultKeyframes()
         kfs[i].location[0] = 0.;
         kfs[i].location[1] = 0;
         kfs[i].location[2] = 0.;
-        kfs[i].start = i * 44100./5;
+        kfs[i].start = i * 200;
         addKeyframe(kfs[i]);
     }
 //
@@ -159,7 +159,7 @@ void Script::loadDefaultKeyframes()
 //        kfs2[i].location[0] = 100./i;
 //        kfs2[i].location[1] = 0;
 //        kfs2[i].location[2] = 0.;
-//        kfs2[i].start = i * 44100./5;
+//        kfs2[i].start = i * 200;
 //        addKeyframe(kfs2[i]);
 //    }
 }
