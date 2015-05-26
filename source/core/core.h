@@ -33,11 +33,11 @@ class Core {
 
     public:
         Core() : periodSize(2048), samplingRate(44100), generatorCounter(0), out(nullptr) {};
-        unsigned getPeriodSize() {return this->periodSize;}
 
         int setProcessor(processor::types procType, processor::ConfigData *cfgData = nullptr);
         int addGenerator(generator::types genType, generator::ConfigData *cfgData = nullptr);
         int setOutput(output::types outType, output::ConfigData *cfgData = nullptr);
+        unsigned getPeriodSize() {return periodSize;}
         void setPeriodSize(unsigned periodSize);
         void setSamplingRate(unsigned samplingRate) {this->samplingRate = samplingRate;}
         int addSource(processor::SourceConfigData *srcData = nullptr);

@@ -53,10 +53,9 @@ void Script::render ()
                     }
 
                     //then we load the keyframe info:
-                    wave = core->getWave(keyframesIt->second.filename);
-                    increment = keyframesIt->second.noteRatio;
+                    Wave::config((ConfigData *)&(keyframesIt->second));
                     locs[i] = Location(keyframesIt->second.location[0], keyframesIt->second.location[1], keyframesIt->second.location[2]); //load source(generator) position from keyframe
-                    position = 0;
+
                     // go to the next keyframe
                     keyframesIt++;
                 }
@@ -106,49 +105,49 @@ void Script::loadDefaultKeyframes()
 {
     Keyframe kf1, kf2, kf3;
 
-    kf1.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf1.filename, "../audio/input/harp.wav", 256);
-    kf1.noteRatio = 1;
-    kf1.location[0] = 0.;
-    kf1.location[1] = 0.;
-    kf1.location[2] = 0.;
-    kf1.start = 2048;
-
-    addKeyframe(kf1);
-
-    kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf2.filename, "../audio/input/harp.wav", 256);
-    kf2.noteRatio = 1.5;
-    kf2.location[0] = 0.;
-    kf2.location[1] = 0.;
-    kf2.location[2] = 0.;
-    kf2.start = 44100*2;
-
-    addKeyframe(kf2);
-
-    kf3.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf3.filename, "../audio/input/harp.wav", 256);
-    kf3.noteRatio = 1.;
-    kf3.location[0] = 0.;
-    kf3.location[1] = 0.;
-    kf3.location[2] = 0.;
-    kf3.start = 44100*10;
-
-    addKeyframe(kf3);
+//    kf1.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
+//    strncpy(kf1.filename, "audio/input/espiral.wav", 256);
+//    kf1.noteRatio = 1;
+//    kf1.location[0] = 0.;
+//    kf1.location[1] = 0.;
+//    kf1.location[2] = 0.;
+//    kf1.start = 2048;
+//
+//    addKeyframe(kf1);
+//
+//    kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
+//    strncpy(kf2.filename, "audio/input/espiral.wav", 256);
+//    kf2.noteRatio = 1.5;
+//    kf2.location[0] = 0.;
+//    kf2.location[1] = 0.;
+//    kf2.location[2] = 0.;
+//    kf2.start = 44100*2;
+//
+//    addKeyframe(kf2);
+//
+//    kf3.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
+//    strncpy(kf3.filename, "audio/input/espiral.wav", 256);
+//    kf3.noteRatio = 1.;
+//    kf3.location[0] = 0.;
+//    kf3.location[1] = 0.;
+//    kf3.location[2] = 0.;
+//    kf3.start = 44100*10;
+//
+//    addKeyframe(kf3);
 
     // progressively raise the input frequency during the first 20 secs rendered
-//    vector<Keyframe> kfs = vector<Keyframe>(100);
-//
-//    for (unsigned i = 0; i < 100; i++) {
-//        kfs[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-//        strncpy(kfs[i].filename, "../audio/input/espiral.wav", 256);
-//        kfs[i].noteRatio = i/100.;
-//        kfs[i].location[0] = 0.;
-//        kfs[i].location[1] = 0;
-//        kfs[i].location[2] = 0.;
-//        kfs[i].start = i * 44100./5;
-//        addKeyframe(kfs[i]);
-//    }
+    vector<Keyframe> kfs = vector<Keyframe>(100);
+
+    for (unsigned i = 0; i < 100; i++) {
+        kfs[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
+        strncpy(kfs[i].filename, "audio/input/espiral.wav", 256);
+        kfs[i].increment = i/100.;
+        kfs[i].location[0] = 0.;
+        kfs[i].location[1] = 0;
+        kfs[i].location[2] = 0.;
+        kfs[i].start = i * 44100./5;
+        addKeyframe(kfs[i]);
+    }
 //
 //    // progressively decrease the distance during the first 20 secs rendered
 //    vector<Keyframe> kfs2 = vector<Keyframe>(100);

@@ -9,24 +9,21 @@ namespace aserver {
 namespace generator {
 
 enum keyframeConfigFlags : uint64_t {
-    START =             0x1,
-    KEYFRAME_FILENAME = 0x2,
-    KEYFRAME_POSITION = 0X4,
-    NOTE_RATIO =        0X8,
-    KEYFRAME_ALL =      0XF
+    START =             0x10000,
+    KEYFRAME_FILENAME = 0x1,
+    KEYFRAME_LOCATION = 0X20000,
+    NOTE_RATIO =        0X2,
+    KEYFRAME_ALL =      0X30003
 };
 
-struct Keyframe {
-    int flags;
+struct Keyframe : WaveConfigData {
     unsigned start;
-    char filename[256];
     float location[3];
-    float noteRatio;
 };
 
 enum scriptConfigFlags : uint64_t {
-    PLAYBACK_STATE =    0x1,
-    SCRIPT_ALL =        0x1
+    PLAYBACK_STATE =    0x10000,
+    SCRIPT_ALL =        0x10000
 };
 
 struct ScriptConfigData : ConfigData {

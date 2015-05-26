@@ -21,14 +21,16 @@ void Wave::config(const ConfigData *configData)
     WaveConfigData *cfgData = (WaveConfigData*) configData;
 
     if (cfgData->flags & waveConfigFlags::WAVE_FILENAME) {
-
-        ifstream ifs(cfgData->filename);
-        if (ifs.good()) {
-            wave = core->getWave(cfgData->filename);
-        }
-        else {
-            cout << "Error opening input wave file = " << cfgData->filename << endl;
-            return;
+        if (wave != core->getWave(cfgData->filename)) {
+            ifstream ifs(cfgData->filename);
+            if (ifs.good()) {
+                wave = core->getWave(cfgData->filename);
+                position = 0;
+            }
+            else {
+                cout << "Error opening input wave file = " << cfgData->filename << endl;
+                return;
+            }
         }
     }
     if (cfgData->flags & waveConfigFlags::INCREMENT) {
