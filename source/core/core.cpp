@@ -111,7 +111,7 @@ void Core::render()
 SoundBuffer* Core::getWave(const char *filename)
 {
     for (auto waveIt : waves) {
-        if (!strcmp(waveIt.first, filename)) {
+        if (!waveIt.first.compare(filename)) {
             return waveIt.second;
         }
     }

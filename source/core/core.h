@@ -26,7 +26,7 @@ class Core {
         uint32_t samplingRate;
         uint16_t generatorCounter;
 
-        std::map<const char *, SoundBuffer*> waves; //string = filename, static
+        std::map<string, SoundBuffer*> waves; //string = filename, static
         std::map<int32_t, generator::Generator*> gens;
         processor::Processor *proc;
         output::Output *out;
