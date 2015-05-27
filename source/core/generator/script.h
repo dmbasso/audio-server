@@ -41,8 +41,11 @@ class Script :public Wave {
         Script(Core *core, uint32_t periodSize);
         void config(const ConfigData *configData) override;
         void render() override;
-        // Temp methods for testing
+        void renderPlaying();
         void addKeyframe(const Keyframe &kf);
+        uint32_t msecsToSams(uint32_t msecs);
+
+        // Temp methods for testing
         void loadDefaultKeyframes();
 };
 
