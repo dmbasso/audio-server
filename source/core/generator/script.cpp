@@ -78,12 +78,13 @@ void Script::render ()
     if (keyframesIt != keyframes.end()) {
         for (; msecsToSams(keyframesIt->first) < scriptPosition + buffer->getPeriodSize() && keyframesIt != keyframes.end(); keyframesIt++) {
             // first we render the samples with the previous data settings
-            Wave::renderNFrames(startIndex, msecsToSams(keyframesIt->first) - scriptPosition);
-            startIndex = msecsToSams(keyframesIt->first) - scriptPosition;
-
+            if (startIndex != msecsToSams(keyframesIt->first) - scriptPosition) {
+                Wave::renderNFrames(startIndex, msecsToSams(keyframesIt->first) - scriptPosition);
+                startIndex = msecsToSams(keyframesIt->first) - scriptPosition;
+            }
             //then we load the keyframe info:
             Script::config((ConfigData *) &(keyframesIt->second));
-            //load source(generator) wavePosition from keyframe
+            //load source(generator) location from keyframe
             locs[msecsToSams(keyframesIt->first) - scriptPosition] = Location(keyframesIt->second.location[0],
                                                                        keyframesIt->second.location[1],
                                                                        keyframesIt->second.location[2]);
@@ -116,33 +117,33 @@ void Script::loadDefaultKeyframes()
     kf1.playbackCommand = generator::playbackCommand::PLAY_LOOP;
     kf1.frequencyRatio = 1;
     kf1.location[0] = 0.;
-    kf1.location[1] = 0.;
+    kf1.location[1] = 1.;
     kf1.location[2] = 0.;
     kf1.start = 0;
 
     addKeyframe(kf1);
 
-    kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf2.filename, "audio/input/espiral_seg.wav", 256);
-    kf2.playbackCommand = generator::playbackCommand::PAUSE;
-    kf2.frequencyRatio = 1;
-    kf2.location[0] = 0.;
-    kf2.location[1] = 0.;
-    kf2.location[2] = 0.;
-    kf2.start = 8000;
+//    kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
+//    strncpy(kf2.filename, "audio/input/espiral_seg.wav", 256);
+//    kf2.playbackCommand = generator::playbackCommand::PAUSE;
+//    kf2.frequencyRatio = 1;
+//    kf2.location[0] = 0.;
+//    kf2.location[1] = 1.;
+//    kf2.location[2] = 0.;
+//    kf2.start = 8000;
+//
+//    addKeyframe(kf2);
 
-    addKeyframe(kf2);
-
-    kf3.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf3.filename, "audio/input/espiral_seg.wav", 256);
-    kf3.playbackCommand = generator::playbackCommand::REVERSE;
-    kf3.frequencyRatio = 1;
-    kf3.location[0] = 0.;
-    kf3.location[1] = 0.;
-    kf3.location[2] = 0.;
-    kf3.start = 10000;
-
-    addKeyframe(kf3);
+//    kf3.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
+//    strncpy(kf3.filename, "audio/input/espiral_seg.wav", 256);
+//    kf3.playbackCommand = generator::playbackCommand::PLAY_LOOP;
+//    kf3.frequencyRatio = 1;
+//    kf3.location[0] = 0.;
+//    kf3.location[1] = 1.;
+//    kf3.location[2] = 0.;
+//    kf3.start = 10000;
+//
+//    addKeyframe(kf3);
 
     // progressively raise the input frequency during the first 20 secs rendered
 //    vector<Keyframe> kfs = vector<Keyframe>(100);

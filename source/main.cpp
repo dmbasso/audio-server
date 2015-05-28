@@ -77,8 +77,6 @@ void loadOperaData()
 
 int main () {
 
-    uint32_t nPeriods = 500;
-
     //********** No Operation processor example
 //    core.setProcessor(processor::types::NO_OPERATION);
 
@@ -88,25 +86,25 @@ int main () {
 //    procInput.inputListenerPositions = readPositions("data/input/listenerLocations.txt");
 //    procInput.motionSamplingRate = 240; //Hertz
 //    procInput.periodSize = 2048;
-//    processor::DistanceAttenuationConfigData procData;
-//    procData.flags = processor::distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
-//    procData.distanceExp = 1;
-//    procData.withInputPositions = true;
-//    procData.input = procInput;
-    core.setProcessor(processor::types::DISTANCE_ATTENUATION);//, &procData);
+//    processor::DistanceAttenuationConfigData distanceAtProcData;
+//    distanceAtProcData.flags = processor::distanceAttenuationConfigFlags::DISTANCEATTENUATION_ALL;
+//    distanceAtProcData.distanceExp = 1;
+//    distanceAtProcData.withInputPositions = true;
+//    distanceAtProcData.input = procInput;
+//    core.setProcessor(processor::types::DISTANCE_ATTENUATION);//, &procData);
 
     //********** Acousticave processor example
-//    processor::AcousticaveConfigData aaveConfigData;
-//    aaveConfigData.flags = processor::acousticaveConfigFlags::ACOUSTICAVE_ALL;
-//    aaveConfigData.gain = 1;
-//    aaveConfigData.hrtf = 4;
-//    aaveConfigData.modelFilePath = "geometries/model.obj";
-//    aaveConfigData.reflections = 0;
-//    aaveConfigData.reverbActive = 1;
-//    aaveConfigData.area = 3000;
-//    aaveConfigData.volume = 3000;
-//    aaveConfigData.rt60 = 2000;
-//    core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
+    processor::AcousticaveConfigData aaveConfigData;
+    aaveConfigData.flags = processor::acousticaveConfigFlags::ACOUSTICAVE_ALL;
+    aaveConfigData.gain = 10;
+    aaveConfigData.hrtf = 1;
+    aaveConfigData.modelFilePath = "geometries/model.obj";
+    aaveConfigData.reflections = 0;
+    aaveConfigData.reverbActive = 1;
+    aaveConfigData.area = 3000;
+    aaveConfigData.volume = 3000;
+    aaveConfigData.rt60 = 4000;
+    core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
 
     //********** Memory output example
 //    core.setOutput(output::types::MEMORY);
@@ -161,10 +159,19 @@ int main () {
 
 //    loadOperaData();
 
-    for (int i = 0; i < nPeriods; i++) {
-//        if (i==250) {
-//            core.setPeriodSize(666);
-//        }
+    for (int i = 0; i < 1000; i++) {
+
+        if (i == 55) {
+            core.setPeriodSize(666);
+        }
+        if (i == 200) {
+            core.setPeriodSize(6666);
+            core.setProcessor(processor::types::DISTANCE_ATTENUATION);
+        }
+        if (i == 500) {
+            core.setPeriodSize(4096);
+            core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
+        }
         core.render();
     }
 

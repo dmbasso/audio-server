@@ -27,8 +27,8 @@ enum keyframeConfigFlags : uint64_t {
 };
 
 struct Keyframe : ScriptConfigData {
-    uint32_t start;
-    float location[3];
+    uint32_t start = 0;
+    float location[3] = {0., 0., 0.};
 };
 
 class Script :public Wave {
