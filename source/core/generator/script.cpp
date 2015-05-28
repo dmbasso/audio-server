@@ -12,7 +12,7 @@ Script::Script(Core *core, uint32_t periodSize) : Wave(core, periodSize)
     ScriptConfigData *cfgData = new ScriptConfigData(); // set flags for all data in the constructor
     cfgData->flags = scriptConfigFlags::SCRIPT_ALL ; // configure all data fields in constructor
     config(cfgData);
-    counter = 0;
+    scriptPosition = 0;
 
     //temp: load keyframes for testing:
     loadDefaultKeyframes();
@@ -76,15 +76,15 @@ void Script::render ()
     uint32_t startIndex = 0;
 
     if (keyframesIt != keyframes.end()) {
-        for (; msecsToSams(keyframesIt->first) < counter + buffer->getPeriodSize() && keyframesIt != keyframes.end(); keyframesIt++) {
+        for (; msecsToSams(keyframesIt->first) < scriptPosition + buffer->getPeriodSize() && keyframesIt != keyframes.end(); keyframesIt++) {
             // first we render the samples with the previous data settings
-            Wave::renderNFrames(startIndex, msecsToSams(keyframesIt->first) - counter);
-            startIndex = msecsToSams(keyframesIt->first) - counter;
+            Wave::renderNFrames(startIndex, msecsToSams(keyframesIt->first) - scriptPosition);
+            startIndex = msecsToSams(keyframesIt->first) - scriptPosition;
 
             //then we load the keyframe info:
             Script::config((ConfigData *) &(keyframesIt->second));
-            //load source(generator) position from keyframe
-            locs[msecsToSams(keyframesIt->first) - counter] = Location(keyframesIt->second.location[0],
+            //load source(generator) wavePosition from keyframe
+            locs[msecsToSams(keyframesIt->first) - scriptPosition] = Location(keyframesIt->second.location[0],
                                                                        keyframesIt->second.location[1],
                                                                        keyframesIt->second.location[2]);
         }
@@ -94,7 +94,7 @@ void Script::render ()
     if (startIndex != buffer->getPeriodSize()) {
         Wave::renderNFrames(startIndex, buffer->getPeriodSize());
     }
-    counter += buffer->getPeriodSize();
+    scriptPosition += buffer->getPeriodSize();
 }
 
 void Script::addKeyframe(const Keyframe &kf)
@@ -114,7 +114,7 @@ void Script::loadDefaultKeyframes()
     kf1.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
     strncpy(kf1.filename, "audio/input/espiral_seg.wav", 256);
     kf1.playbackCommand = generator::playbackCommand::PLAY_LOOP;
-    kf1.increment = 1;
+    kf1.frequencyRatio = 1;
     kf1.location[0] = 0.;
     kf1.location[1] = 0.;
     kf1.location[2] = 0.;
@@ -125,7 +125,7 @@ void Script::loadDefaultKeyframes()
     kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
     strncpy(kf2.filename, "audio/input/espiral_seg.wav", 256);
     kf2.playbackCommand = generator::playbackCommand::PAUSE;
-    kf2.increment = 1;
+    kf2.frequencyRatio = 1;
     kf2.location[0] = 0.;
     kf2.location[1] = 0.;
     kf2.location[2] = 0.;
@@ -136,7 +136,7 @@ void Script::loadDefaultKeyframes()
     kf3.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
     strncpy(kf3.filename, "audio/input/espiral_seg.wav", 256);
     kf3.playbackCommand = generator::playbackCommand::REVERSE;
-    kf3.increment = 1;
+    kf3.frequencyRatio = 1;
     kf3.location[0] = 0.;
     kf3.location[1] = 0.;
     kf3.location[2] = 0.;
@@ -152,7 +152,7 @@ void Script::loadDefaultKeyframes()
 //        strncpy(kfs[i].filename, "audio/input/espiral.wav", 256);
 //        kfs[i].playbackCommand = generator::playbackCommand::PLAY;
 //        if (i>49 && i<90) kfs[i].playbackCommand = generator::playbackCommand::STOP;
-//        kfs[i].increment = i/100.;
+//        kfs[i].frequencyRatio = i/100.;
 //        kfs[i].location[0] = 0.;
 //        kfs[i].location[1] = 0;
 //        kfs[i].location[2] = 0.;
@@ -168,7 +168,7 @@ void Script::loadDefaultKeyframes()
 //        strncpy(kfs2[i].filename, "audio/input/espiral.wav", 256);
 //        kfs2[i].playbackCommand = generator::playbackCommand::PLAY;
 //        if (i>=20) kfs2[i].playbackCommand = generator::playbackCommand::REVERSE;
-//        kfs2[i].increment = 0.527;
+//        kfs2[i].frequencyRatio = 0.527;
 //        kfs2[i].location[0] = 0;
 //        kfs2[i].location[1] = 0;
 //        kfs2[i].location[2] = 0.;

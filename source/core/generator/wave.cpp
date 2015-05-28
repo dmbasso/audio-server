@@ -34,10 +34,10 @@ void Wave::config(const ConfigData *configData)
         }
     }
     if (cfgData->flags & waveConfigFlags::FREQUENCY_RATIO) {
-        frequencyRatio = cfgData->increment;
+        frequencyRatio = cfgData->frequencyRatio;
     }
     if (cfgData->flags & waveConfigFlags::POSITION) {
-        wavePosition = cfgData->position;
+        wavePosition = cfgData->wavePosition;
     }
 }
 

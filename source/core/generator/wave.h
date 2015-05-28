@@ -19,8 +19,8 @@ enum waveConfigFlags : uint64_t {
 
 struct WaveConfigData : ConfigData {
     char filename[256] = {0};
-    float increment = 1;
-    float position = 0;
+    float frequencyRatio = 1;
+    float wavePosition = 0;
 };
 
 #pragma pack()

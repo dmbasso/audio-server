@@ -148,8 +148,8 @@ int main () {
 //    generator::WaveConfigData waveData;
 //    waveData.flags = generator::waveConfigFlags::WAVE_ALL;
 //    strncpy(waveData.filename, "audio/input/espiral.wav", 256); // input wav filepath must be fully set
-//    waveData.increment = 1.;
-//    waveData.position = 0;
+//    waveData.frequencyRatio = 1.;
+//    waveData.wavePosition = 0;
 //    processor::SourceConfigData srcData1;
 //    srcData1.loc = Location(0., 5., 0.);
 //    core.addGenerator(generator::types::WAVE, &waveData);

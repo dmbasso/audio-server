@@ -35,7 +35,7 @@ class Script :public Wave {
     private:
         map<uint32_t, Keyframe> keyframes;
         map<uint32_t, Keyframe>::iterator keyframesIt;
-        uint32_t counter;
+        uint32_t scriptPosition;
     public:
         Script(Core *core, uint32_t periodSize);
         void config(const ConfigData *configData) override;

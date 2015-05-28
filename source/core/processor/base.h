@@ -39,7 +39,7 @@ struct SourceConfigData {
     Location loc;
 };
 
-/** This is a temporary class, created for loading the position file data.
+/** This is a temporary class, created for loading the wavePosition file data.
 */
 
 struct ProcessorInput {
@@ -74,13 +74,13 @@ class Source {
 /** \brief Abstract base class for the audio processors.
  *  This class declares the virtual methods required for basic processor functionality.
  *  It contains a \c map of Source, that are processed by calling the \c render method,
- *  a SoundBuffer \c buffer, where the result of processing each period is stored, and a source counter.
+ *  a SoundBuffer \c buffer, where the result of processing each period is stored, and a source scriptPosition.
  *
  *  \c config is used to configure the processor beyond its default values.
  *  \c addSource adds a Source based on the input Generator data.
  *  \c render renders all sources and stores the result on the processors buffer.
  *
- *  Default listener position = (0,0,0)
+ *  Default listener wavePosition = (0,0,0)
  */
 
 class Processor {
