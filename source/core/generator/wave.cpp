@@ -25,7 +25,7 @@ void Wave::config(const ConfigData *configData)
             ifstream ifs(cfgData->filename);
             if (ifs.good()) {
                 wave = core->getWave(cfgData->filename);
-                position = 0;
+                wavePosition = 0;
             }
             else {
                 cout << "Error opening input wave file = " << cfgData->filename << endl;
@@ -33,11 +33,11 @@ void Wave::config(const ConfigData *configData)
             }
         }
     }
-    if (cfgData->flags & waveConfigFlags::INCREMENT) {
-        increment = cfgData->increment;
+    if (cfgData->flags & waveConfigFlags::FREQUENCY_RATIO) {
+        frequencyRatio = cfgData->increment;
     }
     if (cfgData->flags & waveConfigFlags::POSITION) {
-        position = cfgData->position;
+        wavePosition = cfgData->position;
     }
 }
 
@@ -50,11 +50,48 @@ void Wave::renderNFrames(uint32_t start, uint32_t end)
         return;
     }
 
-    for (uint32_t i = start; i < end; i++, position += increment) {
-        if (position == wave->getPeriodSize()) { //currently looping all waves
-            position = 0;
+    switch (playbackState) {
+        case generator::playbackState::PLAYING : {
+            if (wavePosition < wave->getPeriodSize()) {
+                for (uint32_t i = start; i < end; i++, wavePosition += frequencyRatio) {
+                    if (wavePosition == wave->getPeriodSize()) {
+                        break;
+                    }
+                    buffer->writeFrame(wave->readFrame(sams, wavePosition), i);
+                }
+            }
+            break;
         }
-        buffer->writeFrame(wave->readFrame(sams, position), i);
+        case generator::playbackState::PLAYING_LOOP : {
+            for (uint32_t i = start; i < end; i++, wavePosition += frequencyRatio) {
+                if (wavePosition == wave->getPeriodSize()) {
+                    wavePosition = 0;
+                }
+                buffer->writeFrame(wave->readFrame(sams, wavePosition), i);
+            }
+            break;
+        }
+        case generator::playbackState::STOPPED : {
+
+            break;
+        }
+        case generator::playbackState::PAUSED : {
+
+            break;
+        }
+        case generator::playbackState::REWINDING : {
+            //rewinding stops when the start of the sound is reached
+            if (wavePosition > 0) {
+                for (uint32_t i = start; i < end; i++, wavePosition -= frequencyRatio) {
+                    if (wavePosition <= 0) {
+                        wavePosition = 0;
+                        break;
+                    }
+                    buffer->writeFrame(wave->readFrame(sams, wavePosition), i);
+                }
+            }
+            break;
+        }
     }
 }
 

@@ -9,10 +9,10 @@ namespace aserver{
 namespace generator {
 
 enum waveConfigFlags : uint64_t {
-    WAVE_FILENAME = 0x1,
-    INCREMENT =     0x2,
-    POSITION =      0x4,
-    WAVE_ALL =      0x7
+    WAVE_FILENAME =     0x1,
+    FREQUENCY_RATIO =   0x2,
+    POSITION =          0x4,
+    WAVE_ALL =          0x7
 };
 
 #pragma pack(1)  // force byte-alignment
@@ -28,9 +28,9 @@ struct WaveConfigData : ConfigData {
 class Wave :public Generator {
 protected:
     SoundBuffer *wave; //generator parent class has a buffer
-    // playbackState playbackState = playbackState::STOPPED;
-    float position;
-    float increment; //step size to read buffer -> determines new frequency output
+    generator::playbackState playbackState;
+    float wavePosition;
+    float frequencyRatio; //step size to read buffer -> determines new frequency output
 
 public:
     Wave(Core *core, uint32_t periodSize);

@@ -24,9 +24,48 @@ void Script::config(const ConfigData *configData)
 {
     ScriptConfigData *cfgData = (ScriptConfigData *) configData;
 
-    if (cfgData->flags & scriptConfigFlags::PLAYBACK_STATE) {
-        playbackState = cfgData->playbackState;
+    if (cfgData->flags & scriptConfigFlags::SCRIPT_PLAYBACK_CMD) {
+        switch (cfgData->playbackCommand) {
+            case generator::playbackCommand::PLAY : {
+                if (playbackState != generator::playbackState::PLAYING) {
+                    playbackState = generator::playbackState::PLAYING;
+                    cout << "playback state is now playing" << endl;
+                }
+                break;
+            }
+            case generator::playbackCommand::STOP : {
+                if (playbackState != generator::playbackState::STOPPED) {
+                    playbackState = generator::playbackState::STOPPED;
+                    cout << "playback state is now stopped" << endl;
+                    wavePosition = 0;
+                }
+                break;
+            }
+            case generator::playbackCommand::PAUSE : {
+                if (playbackState != generator::playbackState::PAUSED) {
+                    playbackState = generator::playbackState::PAUSED;
+                    cout << "playback state is now paused" << endl;
+                }
+                break;
+            }
+            case generator::playbackCommand::PLAY_LOOP : {
+                if (playbackState != generator::playbackState::PLAYING_LOOP) {
+                    playbackState = generator::playbackState::PLAYING_LOOP;
+                    cout << "playback state is now playing looped" << endl;
+                }
+                break;
+            }
+            case generator::playbackCommand::REVERSE : {
+                if (playbackState != generator::playbackState::REWINDING) {
+                    cout << "playback state is now rewinding" << endl;
+                    playbackState = generator::playbackState::REWINDING;
+                }
+                break;
+            }
+        }
     }
+
+    Wave::config(configData);
 }
 
 void Script::render ()
@@ -34,45 +73,6 @@ void Script::render ()
     locs.clear();
     buffer->reset();
 
-    switch (playbackState) {
-        case generator::playbackState::PLAYING : {
-            //manage previous state
-            if (playbackState != generator::playbackState::PLAYING) {
-                playbackState = generator::playbackState::PLAYING;
-            }
-            renderPlaying();
-            break;
-        }
-        case generator::playbackState::STOPPED : {
-
-            cout << "Script generator state = STOPPED" << endl;
-
-            //manage previous state
-            if (playbackState != generator::playbackState::STOPPED) {
-                playbackState = generator::playbackState::STOPPED;
-                counter = 0;
-            }
-
-            break;
-        }
-        case generator::playbackState::PAUSED : {
-
-            cout << "Script generator state = PAUSED" << endl;
-
-            break;
-        }
-        case generator::playbackState::REWINDING : {
-
-            cout << "Script generator state = REWINDING" << endl;
-
-            break;
-        }
-    }
-
-}
-
-void Script::renderPlaying()
-{
     uint32_t startIndex = 0;
 
     if (keyframesIt != keyframes.end()) {
@@ -82,11 +82,11 @@ void Script::renderPlaying()
             startIndex = msecsToSams(keyframesIt->first) - counter;
 
             //then we load the keyframe info:
-            Wave::config((ConfigData *) &(keyframesIt->second));
+            Script::config((ConfigData *) &(keyframesIt->second));
             //load source(generator) position from keyframe
             locs[msecsToSams(keyframesIt->first) - counter] = Location(keyframesIt->second.location[0],
-                                                          keyframesIt->second.location[1],
-                                                          keyframesIt->second.location[2]);
+                                                                       keyframesIt->second.location[1],
+                                                                       keyframesIt->second.location[2]);
         }
     }
 
@@ -112,7 +112,8 @@ void Script::loadDefaultKeyframes()
     Keyframe kf1, kf2, kf3;
 
     kf1.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf1.filename, "audio/input/Olson.wav", 256);
+    strncpy(kf1.filename, "audio/input/espiral_seg.wav", 256);
+    kf1.playbackCommand = generator::playbackCommand::PLAY_LOOP;
     kf1.increment = 1;
     kf1.location[0] = 0.;
     kf1.location[1] = 0.;
@@ -122,18 +123,20 @@ void Script::loadDefaultKeyframes()
     addKeyframe(kf1);
 
     kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf2.filename, "audio/input/espiral.wav", 256);
-    kf2.increment = 1.5;
+    strncpy(kf2.filename, "audio/input/espiral_seg.wav", 256);
+    kf2.playbackCommand = generator::playbackCommand::PAUSE;
+    kf2.increment = 1;
     kf2.location[0] = 0.;
     kf2.location[1] = 0.;
     kf2.location[2] = 0.;
-    kf2.start = 2000;
+    kf2.start = 8000;
 
     addKeyframe(kf2);
 
     kf3.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-    strncpy(kf3.filename, "audio/input/harp.wav", 256);
-    kf3.increment = 1.;
+    strncpy(kf3.filename, "audio/input/espiral_seg.wav", 256);
+    kf3.playbackCommand = generator::playbackCommand::REVERSE;
+    kf3.increment = 1;
     kf3.location[0] = 0.;
     kf3.location[1] = 0.;
     kf3.location[2] = 0.;
@@ -143,10 +146,12 @@ void Script::loadDefaultKeyframes()
 
     // progressively raise the input frequency during the first 20 secs rendered
 //    vector<Keyframe> kfs = vector<Keyframe>(100);
-//
+
 //    for (uint32_t i = 0; i < 100; i++) {
 //        kfs[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
 //        strncpy(kfs[i].filename, "audio/input/espiral.wav", 256);
+//        kfs[i].playbackCommand = generator::playbackCommand::PLAY;
+//        if (i>49 && i<90) kfs[i].playbackCommand = generator::playbackCommand::STOP;
 //        kfs[i].increment = i/100.;
 //        kfs[i].location[0] = 0.;
 //        kfs[i].location[1] = 0;
@@ -158,11 +163,13 @@ void Script::loadDefaultKeyframes()
 //    // progressively decrease the distance during the first 20 secs rendered
 //    vector<Keyframe> kfs2 = vector<Keyframe>(100);
 //
-//    for (uint32_t i = 0; i < 100; i++) {
+//    for (uint32_t i = 0; i < 20; i++) {
 //        kfs2[i].flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
-//        strncpy(kfs2[i].filename, "../audio/input/espiral.wav", 256);
-//        kfs2[i].increment = i/100.;
-//        kfs2[i].location[0] = 100./i;
+//        strncpy(kfs2[i].filename, "audio/input/espiral.wav", 256);
+//        kfs2[i].playbackCommand = generator::playbackCommand::PLAY;
+//        if (i>=20) kfs2[i].playbackCommand = generator::playbackCommand::REVERSE;
+//        kfs2[i].increment = 0.527;
+//        kfs2[i].location[0] = 0;
 //        kfs2[i].location[1] = 0;
 //        kfs2[i].location[2] = 0.;
 //        kfs2[i].start = i * 200;

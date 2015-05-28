@@ -43,9 +43,10 @@ enum class playbackCommand : int32_t {
 
 enum class playbackState : int16_t {
     PLAYING = 1,
-    STOPPED = 2,
-    PAUSED = 3,
-    REWINDING = 4
+    PLAYING_LOOP = 2,
+    STOPPED = 3,
+    PAUSED = 4,
+    REWINDING = 5
 };
 
 /** \brief Base class for all data configuration classes.
