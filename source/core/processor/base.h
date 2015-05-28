@@ -29,6 +29,7 @@ enum class types : int32_t {
 
 struct ConfigData {
     uint64_t flags;
+    float location[3] = {0., 0., 0.};
 };
 
 /** \brief Parent class for source configuration relative to a specific processor.
@@ -93,7 +94,7 @@ class Processor {
         ProcessorInput input;
 
         Processor(uint32_t period);
-        virtual void config(ConfigData *configData) =0; // the class is abstract
+        virtual void config(ConfigData *configData) =0;
         virtual void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) =0;
         virtual void render() =0;
         void setPeriodSize(uint32_t periodSize);

@@ -19,15 +19,26 @@ enum class aaveHrtf : int16_t {
 };
 
 enum acousticaveConfigFlags : uint64_t {
-    MODEL_FILEPATH =    0x1,
-    GAIN =              0x2,
-    REFLECTIONS =       0X4,
-    HRTF =              0x8,
-    REVERB_ACTIVE =    0x10,
-    RT60 =             0x20,
-    AREA =             0x40,
-    VOLUME =           0x80,
-    ACOUSTICAVE_ALL =  0xFF
+    AAVE_LISTENER_POSITION =          0x1,
+    MODEL_FILEPATH =              0x10000,
+    GAIN =                        0x20000,
+    REFLECTIONS =                 0X40000,
+    HRTF =                        0x80000,
+    REVERB_ACTIVE =              0x100000,
+    RT60 =                       0x200000,
+    AREA =                       0x400000,
+    VOLUME =                     0x800000,
+    AAVE_LISTENER_ORIENTATION = 0x1000000,
+    ACOUSTICAVE_ALL =           0x1FF0001
+};
+
+/** \brief Listener orientation is set by default facing the positive Y axis.
+*/
+
+struct ListenerOrientation {
+    float yaw = -M_PI/2.;
+    float pitch = 0.;
+    float roll = 0.;
 };
 
 struct AcousticaveConfigData : ConfigData {
@@ -39,9 +50,10 @@ struct AcousticaveConfigData : ConfigData {
     uint16_t rt60 = 3000;
     uint32_t area = 3000;
     uint32_t volume = 4000;
+    ListenerOrientation listenerOrientation;
 };
 
-/** \brief Contains extra info needed by the Acousticave processor to manage sources.
+/** \brief Contains data needed by the Acousticave processor to manage sources.
 *
 */
 
@@ -50,14 +62,7 @@ class AcousticaveSource :public Source {
         struct aave_source *aaveSource;
 };
 
-struct ListenerOrientation {
-    float yaw;
-    float pitch;
-    float roll;
-};
-
 /** \brief A processor that uses the AcousticAVE auralization engine to process all sources.
-*
 */
 
 class Acousticave :public Processor {

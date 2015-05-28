@@ -19,6 +19,9 @@ void DistanceAttenuation::config(ConfigData *configData)
 {
     DistanceAttenuationConfigData *cfgData = (DistanceAttenuationConfigData *) configData;
 
+    if(cfgData->flags & distanceAttenuationConfigFlags::DISTANCEATTENUATION_LISTENER_POSITION) {
+        listenerPosition = Location(cfgData->location[0], cfgData->location[1], cfgData->location[2]);
+    }
     if(cfgData->flags & distanceAttenuationConfigFlags::DISTANCE_EXP) {
         distanceExp = cfgData->distanceExp;
     }

@@ -8,9 +8,10 @@ namespace aserver {
 namespace processor {
 
 enum distanceAttenuationConfigFlags : uint64_t {
-    DISTANCE_EXP =              0x1,
-    WITH_INPUT_POSITIONS =      0x2,
-    DISTANCEATTENUATION_ALL =   0X3
+    DISTANCEATTENUATION_LISTENER_POSITION =     0x1,
+    DISTANCE_EXP =                          0x10000,
+    WITH_INPUT_POSITIONS =                  0x20000,
+    DISTANCEATTENUATION_ALL =               0X30001
 };
 
 struct DistanceAttenuationConfigData : ConfigData {

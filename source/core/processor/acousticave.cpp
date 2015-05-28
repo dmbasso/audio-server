@@ -12,17 +12,20 @@ Acousticave::Acousticave(uint32_t periodSize)  :Processor(periodSize)
     AcousticaveConfigData *cfgData = new AcousticaveConfigData();
     cfgData->flags = acousticaveConfigFlags::ACOUSTICAVE_ALL;
     config(cfgData);
-
-    // Default listener orientation: facing positive Y axis
-    listenerOrientation.yaw = -M_PI/2.;
-    listenerOrientation.pitch = 0;
-    listenerOrientation.roll = 0;
 }
 
 void Acousticave::config(ConfigData *configData)
 {
     AcousticaveConfigData *cfgData = (AcousticaveConfigData*) configData;
 
+    if (cfgData->flags & acousticaveConfigFlags::AAVE_LISTENER_POSITION) {
+        listenerPosition = Location(cfgData->location[0], cfgData->location[1], cfgData->location[2]);
+    }
+    if (cfgData->flags & acousticaveConfigFlags::AAVE_LISTENER_ORIENTATION) {
+        listenerOrientation.yaw = cfgData->listenerOrientation.yaw;
+        listenerOrientation.pitch = cfgData->listenerOrientation.pitch;
+        listenerOrientation.roll = cfgData->listenerOrientation.roll;
+    }
     if (cfgData->flags & acousticaveConfigFlags::MODEL_FILEPATH) {
         ifstream ifs(cfgData->modelFilePath);
         if (ifs.good()) {
