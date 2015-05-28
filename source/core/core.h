@@ -32,7 +32,7 @@ class Core {
         output::Output *out;
 
     public:
-        Core() : periodSize(2048), samplingRate(44100), generatorCounter(0), out(nullptr) {};
+        Core() : periodSize(2048), samplingRate(44100), generatorCounter(0), proc(nullptr), out(nullptr) {};
 
         int32_t setProcessor(processor::types procType, processor::ConfigData *cfgData = nullptr);
         int32_t addGenerator(generator::types genType, generator::ConfigData *cfgData = nullptr);

@@ -30,8 +30,10 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
             gen = new generator::Noise(this, getPeriodSize());
             break;
     }
+
     int32_t gid = generatorCounter++;
     gens[gid] = gen;
+
     if (cfgData) {
         gen->config(cfgData);
     }
@@ -40,6 +42,12 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
 
 int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData)
 {
+    map<int32_t, processor::Source *> tempSources;
+    // in case we are changing processor, store the existing sources
+    if (proc) {
+        tempSources = proc->sources;
+    }
+
     switch (procType) {
         case processor::types::NO_OPERATION:
             proc = new processor::NoOperation(periodSize);
@@ -54,6 +62,17 @@ int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData
 
     if (cfgData) {
         proc->config(cfgData);
+    }
+
+    // in case we are changing processor, load the existing sources
+    if (!tempSources.empty()) {
+        proc->sources = tempSources;
+        if (procType == processor::types::ACOUSTICAVE) {
+            for (auto it : tempSources) {
+                // add sources to the new aave instance
+                ((processor::Acousticave *) proc)->addAaveSource(it.second);
+            }
+        }
     }
     return 1;
 }
@@ -174,6 +193,7 @@ void Core::outputConfig(output::ConfigData *outputData)
 
 void Core::setPeriodSize(uint32_t periodSize)
 {
+    this->periodSize = periodSize;
     for (auto gen : gens) {
         gen.second->setPeriodSize(periodSize);
     }
