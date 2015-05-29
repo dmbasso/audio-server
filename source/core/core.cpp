@@ -104,7 +104,13 @@ int Core::setOutput(output::types outType, output::ConfigData *cfgData)
 int Core::addSource(processor::SourceConfigData *srcData)
 {
     if (proc) {
-        return proc->addSource(nullptr, srcData);
+        if (!gens.empty()) {
+            map<int32_t, generator::Generator *>::reverse_iterator it = gens.rbegin();
+            return proc->addSource(it->second, srcData);
+        }
+        else {
+            return proc->addSource(nullptr, srcData);
+        }
     }
     return -1;
 }
