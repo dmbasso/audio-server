@@ -21,6 +21,12 @@ void Primitive::config(const ConfigData *configData)
     PrimitiveConfigData* cfgData = (PrimitiveConfigData*) configData;
 
     if (cfgData->flags & primitiveConfigFlags::PRIMITIVE_AMPLITUDE) {
+        if (cfgData->amplitude > 1) {
+            cfgData->amplitude = 1;
+        }
+        if (cfgData->amplitude < 0) {
+            cfgData->amplitude = 0;
+        }
         amplitude = cfgData->amplitude;
     }
     if (cfgData->flags & primitiveConfigFlags::FREQUENCY) {
@@ -44,21 +50,21 @@ void Primitive::renderNFrames(uint32_t start, uint32_t end)
         case waveformType::SINE:
             for (uint32_t i = start; i < end; i++) {
                 phase += 2. * M_PI * frequency * T;
-                sams[0] = sams[1] = (int16_t) (amplitude * cos(phase));
+                sams[0] = sams[1] = (int16_t) (SHRT_MAX * amplitude * cos(phase));
                 buffer->writeFrame(sams, i);
             }
             break;
         case waveformType::SQUARE:
             for (uint32_t i = start; i < end; i++) {
                 phase += 2. * M_PI * frequency * T;
-                sams[0] = sams[1] = (int16_t) (amplitude * tanh(sin(phase) * squareFactor));
+                sams[0] = sams[1] = (int16_t) (SHRT_MAX * amplitude * tanh(sin(phase) * squareFactor));
                 buffer->writeFrame(sams, i);
             }
             break;
         case waveformType::SAWTOOTH:
             for (uint32_t i = start; i < end; i++) {
                 phase = fmod(phase + (2. * frequency * T), 2.);
-                sams[0] = sams[1] = (int16_t) (amplitude * (phase - 1.));
+                sams[0] = sams[1] = (int16_t) (SHRT_MAX * amplitude * (phase - 1.));
                 buffer->writeFrame(sams, i);
             }
             break;

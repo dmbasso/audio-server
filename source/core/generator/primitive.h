@@ -26,7 +26,7 @@ enum primitiveConfigFlags : uint64_t{
 #pragma pack(1)  // force byte-alignment
 
 struct PrimitiveConfigData : ConfigData {
-    uint32_t amplitude = SHRT_MAX;
+    float amplitude = 1;
     uint16_t frequency = 220;
     uint16_t squareFactor = 10;
     waveformType waveform = waveformType::SINE;
@@ -41,7 +41,7 @@ struct PrimitiveConfigData : ConfigData {
 class Primitive :public Generator {
     protected:
         double phase = 1.;
-        uint32_t amplitude;
+        float amplitude;
         uint16_t frequency;
         uint16_t squareFactor;
         waveformType waveform;
