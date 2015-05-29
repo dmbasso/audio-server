@@ -54,7 +54,7 @@ void Wave::renderNFrames(uint32_t start, uint32_t end)
         case generator::playbackState::PLAYING : {
             if (wavePosition < wave->getPeriodSize()) {
                 for (uint32_t i = start; i < end; i++, wavePosition += frequencyRatio) {
-                    if (wavePosition == wave->getPeriodSize()) {
+                    if (wavePosition >= wave->getPeriodSize()) {
                         break;
                     }
                     buffer->writeFrame(wave->readFrame(sams, wavePosition), i);
@@ -64,7 +64,7 @@ void Wave::renderNFrames(uint32_t start, uint32_t end)
         }
         case generator::playbackState::PLAYING_LOOP : {
             for (uint32_t i = start; i < end; i++, wavePosition += frequencyRatio) {
-                if (wavePosition == wave->getPeriodSize()) {
+                if (wavePosition >= wave->getPeriodSize()) {
                     wavePosition = 0;
                 }
                 buffer->writeFrame(wave->readFrame(sams, wavePosition), i);
