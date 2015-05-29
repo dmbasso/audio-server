@@ -28,7 +28,7 @@ typedef struct generator_cfg generator_cfg_t;
 
 struct primitive_cfg {
     generator_cfg_t config;
-    uint32_t amplitude;
+    float amplitude;
     uint16_t frequency;
     uint16_t squareFactor;
     int32_t waveform;
@@ -50,8 +50,8 @@ struct wave_cfg {
     generator_cfg_t config;
 
     char filename[256];
-    float increment;
-    float position;
+    float frequencyRatio;
+    float wavePosition;
 };
 typedef struct wave_cfg wave_cfg_t;
 
@@ -91,10 +91,10 @@ typedef struct file_cfg file_cfg_t;
 
 core_t* new_core();
 // TODO: set_period_size
-int add_generator(core_t* core, int32_t type);
-void configure_generator(core_t* core, int32_t gid, generator_cfg_t* cfg);
-int add_source(core_t* core);
-void configure_source(core_t* core, int32_t sid, source_cfg_t* cfg);
+uint16_t add_generator(core_t* core, int32_t type);
+void configure_generator(core_t* core, uint16_t gid, generator_cfg_t* cfg);
+uint16_t add_source(core_t* core);
+void configure_source(core_t* core, uint16_t sid, source_cfg_t* cfg);
 void set_processor(core_t* core, int32_t type);
 void configure_processor(core_t* core, processor_cfg_t* cfg);
 void set_output(core_t* core, int32_t type);

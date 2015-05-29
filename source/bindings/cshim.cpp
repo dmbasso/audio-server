@@ -11,25 +11,25 @@ core_t* new_core()
 
 // TODO: set_period_size
 
-int add_generator(core_t* core, int32_t type)
+uint16_t add_generator(core_t* core, int32_t type)
 {
     return AS_TYPE(Core*, core)->addGenerator(static_cast<generator::types>(type));
 }
 
 
-void configure_generator(core_t* core, int32_t gid, generator_cfg_t* cfg)
+void configure_generator(core_t* core, uint16_t gid, generator_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->generatorConfig(gid, AS_TYPE(generator::ConfigData*, cfg));
 }
 
 
-int add_source(core_t* core)
+uint16_t add_source(core_t* core)
 {
     return AS_TYPE(Core*, core)->addSource();
 }
 
 
-void configure_source(core_t* core, int32_t sid, source_cfg_t* cfg)
+void configure_source(core_t* core, uint16_t sid, source_cfg_t* cfg)
 {
     AS_TYPE(Core*, core)->sourceConfig(sid, AS_TYPE(processor::SourceConfigData*, cfg));
 }
