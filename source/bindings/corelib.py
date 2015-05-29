@@ -30,7 +30,8 @@ class Core:
         self.core = lib.new_core()
         self.output_path = "output.wav"
 
-    # TODO: set_period_size
+    def set_period(self, size):
+        return lib.set_period(self.core, size)
 
     def new_config(self, cfg_type):
         return ffi.new(cfg_type + "_cfg_t *")
@@ -79,10 +80,11 @@ class Core:
             srate, signal = wavfile.read(self.output_path)
             return signal
         elif self.output_type == enums.OutputType.MEMORY:
+            import numpy as np
             size = ffi.new("uint64_t *")
             mem = lib.get_output(self.core, size)
-            import numpy as np
-            signal = np.array(ffi.buffer(mem[0:size[0] / 2]), dtype=np.int16)
+            mem2 = str(ffi.buffer(mem, size[0] * 2))
+            signal = np.fromstring(mem2, dtype=np.int16)
             lib.free_output(self.core, mem)
             return signal.reshape((-1, 2))
         else:
