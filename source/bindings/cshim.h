@@ -28,10 +28,9 @@ typedef struct generator_cfg generator_cfg_t;
 
 struct primitive_cfg {
     generator_cfg_t config;
-    
     uint32_t amplitude;
-    uint32_t int16_t frequency;
-    uint32_t int16_t squareFactor;
+    uint16_t frequency;
+    uint16_t squareFactor;
     int32_t waveform;
 };
 typedef struct primitive_cfg primitive_cfg_t;
