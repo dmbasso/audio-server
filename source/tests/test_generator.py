@@ -48,8 +48,9 @@ def test_primitive(core, waveform):
     cfg.config.flags = aserver.PrimitiveFlags.WAVEFORM
     cfg.waveform = waveform
     core.configure_generator(gid, cfg)
+    sid = core.add_source()
+    core.set_source_generator(sid, gid)
 
-    core.add_source()
     core.render(1)
     core.stop_output()
     rendered = core.get_output().astype(float)
