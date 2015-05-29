@@ -35,6 +35,12 @@ void configure_source(core_t* core, uint16_t sid, source_cfg_t* cfg)
 }
 
 
+void set_source_generator(core_t* core, uint16_t sid, uint16_t gid)
+{
+    AS_TYPE(Core*, core)->setSourceGenerator(sid, gid);
+}
+
+
 void set_processor(core_t* core, int32_t type)
 {
     AS_TYPE(Core*, core)->setProcessor(static_cast<processor::types>(type));

@@ -95,6 +95,7 @@ uint16_t add_generator(core_t* core, int32_t type);
 void configure_generator(core_t* core, uint16_t gid, generator_cfg_t* cfg);
 uint16_t add_source(core_t* core);
 void configure_source(core_t* core, uint16_t sid, source_cfg_t* cfg);
+void set_source_generator(core_t* core, uint16_t sid, uint16_t gid);
 void set_processor(core_t* core, int32_t type);
 void configure_processor(core_t* core, processor_cfg_t* cfg);
 void set_output(core_t* core, int32_t type);

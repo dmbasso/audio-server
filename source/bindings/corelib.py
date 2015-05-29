@@ -51,6 +51,9 @@ class Core:
             self.core, gid, ffi.cast("source_cfg_t *", cfg)
         )
 
+    def set_source_generator(self, gid, sid):
+        return lib.set_source_generator(self.core, sid, gid)
+
     def set_processor(self, processor_type=enums.ProcessorType.NO_OPERATION):
         lib.set_processor(self.core, processor_type)
 
