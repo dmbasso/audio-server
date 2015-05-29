@@ -29,10 +29,12 @@ void NoOperation::render()
     buffer->reset();
 
     for (auto const &it : sources) {
-        SoundBuffer *sb = it.second->getGenerator()->buffer;
-        for (int i = 0; i < buffer->getPeriodSize(); i++) {
-            sb->readFrame(sams, i);
-            buffer->mixFrame(sams, i);
+        if (it.second->getGenerator()) {
+            SoundBuffer *sb = it.second->getGenerator()->buffer;
+            for (int i = 0; i < buffer->getPeriodSize(); i++) {
+                sb->readFrame(sams, i);
+                buffer->mixFrame(sams, i);
+            }
         }
     }
 }
