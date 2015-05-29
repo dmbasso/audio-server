@@ -9,7 +9,7 @@ namespace processor {
 */
 //\todo Source parent implements noOperationSource processor
 
-void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData)
+uint16_t NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
     auto source = new processor::Source();
     source->setGenerator(gen);
@@ -17,7 +17,9 @@ void NoOperation::addSource(generator::Generator *gen, SourceConfigData *srcData
     if (srcData) {
         source->setLocation(srcData->loc);
     }
-    sources[sourceCounter++] = source;
+    uint16_t sid = sourceCounter++;
+    sources[sid] = source;
+    return sid;
 }
 
 void NoOperation::render()

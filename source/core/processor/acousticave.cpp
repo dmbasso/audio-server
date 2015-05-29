@@ -84,7 +84,7 @@ void Acousticave::config(ConfigData *configData)
     }
 }
 
-void Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)
+uint16_t Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
     auto source = new processor::AcousticaveSource();
     source->setGenerator(gen);
@@ -93,8 +93,9 @@ void Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData
     if (srcData) {
         source->setLocation(srcData->loc);
     }
-    //sourceCounter is not being used...
-    sources[sourceCounter++] = source;
+    uint16_t sid = sourceCounter++;
+    sources[sid] = source;
+    return sid;
 }
 
 void Acousticave::addAaveSource(Source *src)
@@ -115,8 +116,10 @@ void Acousticave::updateGeometry()
     // update sources position
     for (auto const &it : sources) {
         AcousticaveSource *aaveSrc = (AcousticaveSource *) it.second;
-        if (!aaveSrc->getGenerator()->locs.empty()) {
-            aaveSrc->setLocation(aaveSrc->getGenerator()->locs.rbegin()->second);
+        if (aaveSrc->getGenerator()) {
+            if (!aaveSrc->getGenerator()->locs.empty()) {
+                aaveSrc->setLocation(aaveSrc->getGenerator()->locs.rbegin()->second);
+            }
         }
         aave_set_source_position(aaveSrc->aaveSource, aaveSrc->getLocation().getX(),
                                                       aaveSrc->getLocation().getY(),
@@ -133,15 +136,19 @@ void Acousticave::render()
     updateGeometry();
 
     for (auto const &it : sources) {
-        if (it.second->getGenerator()->buffer->getFrameSize() == 2) {
-            //aave input are always mono sources...
-            for (int32_t i = 0; i < buffer->getPeriodSize(); i++) {
-                it.second->getGenerator()->buffer->getData()[i] = ((int16_t) it.second->getGenerator()->buffer->getData()[i * 2] + it.second->getGenerator()->buffer->getData()[i * 2 + 1]) >> 2;
+        if (it.second->getGenerator()) {
+            if (it.second->getGenerator()->buffer->getFrameSize() == 2) {
+                //aave input are always mono sources...
+                for (int32_t i = 0; i < buffer->getPeriodSize(); i++) {
+                    it.second->getGenerator()->buffer->getData()[i] =
+                            ((int16_t) it.second->getGenerator()->buffer->getData()[i * 2] +
+                             it.second->getGenerator()->buffer->getData()[i * 2 + 1]) >> 2;
+                }
             }
+            aave_put_audio(((AcousticaveSource *) it.second)->aaveSource,
+                           it.second->getGenerator()->buffer->getData(),
+                           buffer->getPeriodSize());
         }
-        aave_put_audio(((AcousticaveSource *) it.second)->aaveSource,
-                        it.second->getGenerator()->buffer->getData(),
-                                            buffer->getPeriodSize());
     }
     aave_get_audio(aave, buffer->getData(), buffer->getPeriodSize());
 }

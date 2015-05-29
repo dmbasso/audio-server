@@ -35,7 +35,7 @@ class Core {
         Core() : periodSize(2048), samplingRate(44100), generatorCounter(0), proc(nullptr), out(nullptr) {};
 
         int32_t setProcessor(processor::types procType, processor::ConfigData *cfgData = nullptr);
-        int32_t addGenerator(generator::types genType, generator::ConfigData *cfgData = nullptr);
+        uint16_t addGenerator(generator::types genType, generator::ConfigData *cfgData = nullptr);
         int32_t setOutput(output::types outType, output::ConfigData *cfgData = nullptr);
         uint32_t getPeriodSize() {return periodSize;}
         void setPeriodSize(uint32_t periodSize);
@@ -47,7 +47,7 @@ class Core {
         void processorConfig(processor::ConfigData *configData);         //optional, in case one wishes to alter the generators default values
         void sourceConfig(int sid, processor::SourceConfigData *srcData);
         void outputConfig(output::ConfigData *outputData);
-        //void setSourceGenerator(int sid, int32_t gid);
+        void setSourceGenerator(int16_t sid, int16_t gid);
         SoundBuffer* getWave(const char *filename);
         void stop_output();
         uint64_t get_output(int16_t **dest);

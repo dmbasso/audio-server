@@ -95,7 +95,7 @@ class Processor {
 
         Processor(uint32_t period);
         virtual void config(ConfigData *configData) =0;
-        virtual void addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) =0;
+        virtual uint16_t addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) =0;
         virtual void render() =0;
         void setPeriodSize(uint32_t periodSize);
 };

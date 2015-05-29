@@ -38,7 +38,7 @@ void DistanceAttenuation::config(ConfigData *configData)
 * The new Source object is then added to the processors Source map.
 */
 
-void DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData *srcData)
+uint16_t DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
     auto source = new processor::Source();
     source->setGenerator(gen);
@@ -46,7 +46,9 @@ void DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData 
     if (srcData) {
         source->setLocation(srcData->loc);
     }
-    sources[sourceCounter++] = source;
+    uint16_t sid = sourceCounter++;
+    sources[sid] = source;
+    return sid;
 }
 
 /** \brief Calculates distance attenuation according to the inverse distance law (used for sound pressure measurements).
@@ -66,7 +68,9 @@ void DistanceAttenuation::render()
     }
 
     for (auto const &it : sources) {
-        process(it.second);
+        if (it.second->getGenerator()){
+            process(it.second);
+        }
     }
 
     listenerPositions.clear();

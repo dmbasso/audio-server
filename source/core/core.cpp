@@ -10,7 +10,7 @@ namespace aserver {
 *
 */
 
-int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
+uint16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
 {
     generator::Generator *gen;
     switch (genType) {
@@ -31,12 +31,13 @@ int Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
             break;
     }
 
-    int32_t gid = generatorCounter++;
+    uint16_t gid = generatorCounter++;
     gens[gid] = gen;
 
     if (cfgData) {
         gen->config(cfgData);
     }
+
     return gid;
 }
 
@@ -103,12 +104,15 @@ int Core::setOutput(output::types outType, output::ConfigData *cfgData)
 int Core::addSource(processor::SourceConfigData *srcData)
 {
     if (proc) {
-        map<int32_t, generator::Generator*>::reverse_iterator it = gens.rbegin();
-        // TODO: return the source id
-        // return proc->addSource(it->second, srcData);
-        proc->addSource(it->second, srcData);
+        return proc->addSource(nullptr, srcData);
     }
     return -1;
+}
+
+
+void Core::setSourceGenerator(int16_t sid, int16_t gid)
+{
+    proc->sources[sid]->setGenerator(gens[gid]);
 }
 
 /** \brief Renders \c n periods to file.
