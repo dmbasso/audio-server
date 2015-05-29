@@ -204,11 +204,14 @@ void Core::outputConfig(output::ConfigData *outputData)
 void Core::setPeriodSize(uint32_t periodSize)
 {
     this->periodSize = periodSize;
+
     for (auto gen : gens) {
         gen.second->setPeriodSize(periodSize);
     }
 
-    proc->setPeriodSize(periodSize);
+    if (proc) {
+        proc->setPeriodSize(periodSize);
+    }
 }
 
 } //end namespace aserver

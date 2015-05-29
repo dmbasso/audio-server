@@ -46,6 +46,7 @@ map<uint32_t, Location> ProcessorInput::loadListenerPositions()
 
 void Processor::setPeriodSize(uint32_t periodSize)
 {
+    delete buffer;
     buffer = new SoundBuffer(periodSize);
 }
 

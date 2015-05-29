@@ -9,7 +9,7 @@ core_t* new_core()
     return AS_TYPE(core_t*, retv);
 }
 
-void set_period(core_t* core, int size)
+void set_period(core_t* core, int32_t size)
 {
     AS_TYPE(Core*, core)->setPeriodSize(size);
 }
