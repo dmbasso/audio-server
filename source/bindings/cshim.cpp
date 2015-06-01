@@ -111,10 +111,10 @@ void del_core(core_t* core)
     delete AS_TYPE(Core*, core);
 }
 
+
 void reset(core_t* core, bool reset_output)
 {
     AS_TYPE(Core*, core)->reset(reset_output);
 }
-
 
 } // extern "C"
