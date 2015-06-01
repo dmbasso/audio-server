@@ -214,6 +214,7 @@ void Core::reset(bool clearOutput)
         delete it.second;
     }
     gens.clear();
+    generatorCounter = 0;
 
     for (auto it : waves) {
         delete it.second;
