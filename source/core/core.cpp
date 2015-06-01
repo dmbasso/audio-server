@@ -151,14 +151,30 @@ void Core::render()
     }
 }
 
-SoundBuffer* Core::getWave(const char *filename)
+SoundBuffer* Core::getWave(string filename)
 {
-    for (auto waveIt : waves) {
-        if (!waveIt.first.compare(filename)) {
-            return waveIt.second;
-        }
+    if (!waves.count(filename)) {
+        waveIndices[filename] = ++lastWaveIndex;
+        auto newsb = loadWave(filename.c_str());
+        waveByIndex[lastWaveIndex] = waves[filename] = newsb;
     }
-    return waves[filename] = loadWave(filename);
+    return waves[filename];
+}
+
+SoundBuffer* Core::getWave(int16_t waveIndex)
+{
+    if (!waveByIndex.count(waveIndex)) {
+        return nullptr;
+    }
+    return waveByIndex[waveIndex];
+}
+
+int16_t Core::getWaveIndex(string filename)
+{
+    if (!waveIndices.count(filename)) {
+        getWave(filename);
+    }
+    return waveIndices[filename];
 }
 
 void Core::stop_output()

@@ -27,38 +27,44 @@ void Script::config(const ConfigData *configData)
     if (cfgData->flags & scriptConfigFlags::SCRIPT_PLAYBACK_CMD) {
         switch (cfgData->playbackCommand) {
             case generator::playbackCommand::PLAY : {
-                if (playbackState != generator::playbackState::PLAYING) {
-                    playbackState = generator::playbackState::PLAYING;
+                /*
+                TODO: fix this
+                NOTE: you must not use the state from the ancestor Wave,
+                the Wave may be stopped while the Script is playing, they
+                are completely independent.
+                */
+                if (state != generator::playbackState::PLAYING) {
+                    state = generator::playbackState::PLAYING;
                     cout << "playback state is now playing" << endl;
                 }
                 break;
             }
             case generator::playbackCommand::STOP : {
-                if (playbackState != generator::playbackState::STOPPED) {
-                    playbackState = generator::playbackState::STOPPED;
+                if (state != generator::playbackState::STOPPED) {
+                    state = generator::playbackState::STOPPED;
                     cout << "playback state is now stopped" << endl;
                     wavePosition = 0;
                 }
                 break;
             }
             case generator::playbackCommand::PAUSE : {
-                if (playbackState != generator::playbackState::PAUSED) {
-                    playbackState = generator::playbackState::PAUSED;
+                if (state != generator::playbackState::PAUSED) {
+                    state = generator::playbackState::PAUSED;
                     cout << "playback state is now paused" << endl;
                 }
                 break;
             }
             case generator::playbackCommand::PLAY_LOOP : {
-                if (playbackState != generator::playbackState::PLAYING_LOOP) {
-                    playbackState = generator::playbackState::PLAYING_LOOP;
+                if (state != generator::playbackState::PLAYING_LOOP) {
+                    state = generator::playbackState::PLAYING_LOOP;
                     cout << "playback state is now playing looped" << endl;
                 }
                 break;
             }
             case generator::playbackCommand::REVERSE : {
-                if (playbackState != generator::playbackState::REWINDING) {
+                if (state != generator::playbackState::REWINDING) {
                     cout << "playback state is now rewinding" << endl;
-                    playbackState = generator::playbackState::REWINDING;
+                    state = generator::playbackState::REWINDING;
                 }
                 break;
             }
@@ -110,7 +116,7 @@ uint32_t Script::msecsToSams(uint32_t msecs)
 
 void Script::loadDefaultKeyframes()
 {
-    Keyframe kf1, kf2, kf3;
+/*    Keyframe kf1, kf2, kf3;
 
     kf1.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
     strncpy(kf1.filename, "audio/input/espiral_seg.wav", 256);
@@ -122,7 +128,7 @@ void Script::loadDefaultKeyframes()
     kf1.start = 0;
 
     addKeyframe(kf1);
-
+*/
 //    kf2.flags = generator::keyframeConfigFlags::KEYFRAME_ALL;
 //    strncpy(kf2.filename, "audio/input/espiral_seg.wav", 256);
 //    kf2.playbackCommand = generator::playbackCommand::PAUSE;

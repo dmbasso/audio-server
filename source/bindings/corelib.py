@@ -33,6 +33,9 @@ class Core:
     def set_period(self, size):
         return lib.set_period(self.core, size)
 
+    def get_wave_index(self, filename):
+        return lib.get_wave_index(self.core, filename)
+
     def new_config(self, cfg_type):
         return ffi.new(cfg_type + "_cfg_t *")
 

@@ -34,6 +34,13 @@ class WaveformType:
     SAWTOOTH = 3
 
 
+class WaveFlags(ConfigFlags):
+    WAVE_INDEX =        0x1
+    FREQUENCY_RATIO =   0x2
+    POSITION =          0x4
+    PLAYBACK_COMMAND =  0x8
+
+
 class PlaybackCommand:
     PLAY = 1
     STOP = 2

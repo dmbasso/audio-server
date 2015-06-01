@@ -26,7 +26,10 @@ class Core {
         uint32_t samplingRate;
         uint16_t generatorCounter;
 
-        std::map<string, SoundBuffer*> waves; //string = filename, static
+        std::map<string, SoundBuffer*> waves;
+        std::map<int16_t, SoundBuffer*> waveByIndex;
+        std::map<string, int16_t> waveIndices;
+        int16_t lastWaveIndex = 0;
         std::map<int32_t, generator::Generator*> gens;
         processor::Processor *proc;
         output::Output *out;
@@ -48,7 +51,9 @@ class Core {
         void sourceConfig(int sid, processor::SourceConfigData *srcData);
         void outputConfig(output::ConfigData *outputData);
         void setSourceGenerator(int16_t sid, int16_t gid);
-        SoundBuffer* getWave(const char *filename);
+        SoundBuffer* getWave(string filename);
+        SoundBuffer* getWave(int16_t waveIndex);
+        int16_t getWaveIndex(string filename);
         void stop_output();
         void reset(bool clearOutput =false);
         uint64_t get_output(int16_t **dest);

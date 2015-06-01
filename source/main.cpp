@@ -21,55 +21,55 @@ processor::SourceConfigData celloSourceData, clarinetSourceData, double_bassSour
 void loadOperaData()
 {
     celloWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(celloWaveData.filename, "audio/input/cello.wav", 256);
+    celloWaveData.waveIndex = core.getWaveIndex("audio/input/cello.wav");
     celloSourceData.loc = Location(2., 4., 0.82);
     core.addGenerator(generator::types::WAVE, &celloWaveData);
     core.addSource(&celloSourceData);
 
     clarinetWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(clarinetWaveData.filename, "audio/input/clarinet.wav", 256);
+    clarinetWaveData.waveIndex = core.getWaveIndex("audio/input/clarinet.wav");
     clarinetSourceData.loc = Location(-1.45, 6., 0.8);
     core.addGenerator(generator::types::WAVE, &clarinetWaveData);
     core.addSource(&clarinetSourceData);
 
     double_bassWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(double_bassWaveData.filename, "audio/input/double_bass.wav", 256);
+    double_bassWaveData.waveIndex = core.getWaveIndex("audio/input/double_bass.wav");
     double_bassSourceData.loc = Location(4.13, 4., 0.86);
     core.addGenerator(generator::types::WAVE, &double_bassWaveData);
     core.addSource(&double_bassSourceData);
 
     fluteWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(fluteWaveData.filename, "audio/input/flute.wav", 256);
+    fluteWaveData.waveIndex = core.getWaveIndex("audio/input/flute.wav");
     fluteSourceData.loc = Location(0., 6., 0.95);
     core.addGenerator(generator::types::WAVE, &fluteWaveData);
     core.addSource(&fluteSourceData);
 
     harpWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(harpWaveData.filename, "audio/input/harp.wav", 256);
+    harpWaveData.waveIndex = core.getWaveIndex("audio/input/harp.wav");
     harpSourceData.loc = Location(-3.7, 4., 1.08);
     core.addGenerator(generator::types::WAVE, &fluteWaveData);
     core.addSource(&fluteSourceData);
 
     oboeWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(oboeWaveData.filename, "audio/input/oboe.wav", 256);
+    oboeWaveData.waveIndex = core.getWaveIndex("audio/input/oboe.wav");
     oboeSourceData.loc = Location(2.13, 6., 0.63);
     core.addGenerator(generator::types::WAVE, &oboeWaveData);
     core.addSource(&oboeSourceData);
 
     percussionWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(percussionWaveData.filename, "audio/input/percussion.wav", 256);
+    percussionWaveData.waveIndex = core.getWaveIndex("audio/input/percussion.wav");
     percussionSourceData.loc = Location(-3.5, 6., 0.64);
     core.addGenerator(generator::types::WAVE, &percussionWaveData);
     core.addSource(&percussionSourceData);
 
     tromboneWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(tromboneWaveData.filename, "audio/input/trombone.wav", 256);
+    tromboneWaveData.waveIndex = core.getWaveIndex("audio/input/trombone.wav");
     tromboneSourceData.loc = Location(4.2, 6., 1.23);
     core.addGenerator(generator::types::WAVE, &tromboneWaveData);
     core.addSource(&tromboneSourceData);
 
     violinWaveData.flags = generator::waveConfigFlags::WAVE_ALL;
-    strncpy(violinWaveData.filename, "audio/input/violin.wav", 256);
+    violinWaveData.waveIndex = core.getWaveIndex("audio/input/violin.wav");
     violinSourceData.loc = Location(-1.33, 4., .85);
     core.addGenerator(generator::types::WAVE, &violinWaveData);
     core.addSource(&violinSourceData);
@@ -145,7 +145,7 @@ int main () {
     //********** Wave generator example
 //    generator::WaveConfigData waveData;
 //    waveData.flags = generator::waveConfigFlags::WAVE_ALL;
-//    strncpy(waveData.filename, "audio/input/espiral.wav", 256); // input wav filepath must be fully set
+//    waveData.waveIndex = core.getWaveIndex("audio/input/espiral.wav"); // input wav filepath must be fully set
 //    waveData.frequencyRatio = 1.;
 //    waveData.wavePosition = 0;
 //    processor::SourceConfigData srcData1;
@@ -188,3 +188,4 @@ core.processor->listenerPositions[(int)((i * 1. / 240 - f) * 44100)] = *it;
 f += 2048. / 44100;
 core.render();
 }*/
+

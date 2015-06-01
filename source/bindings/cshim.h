@@ -49,9 +49,10 @@ typedef struct test_cfg test_cfg_t;
 struct wave_cfg {
     generator_cfg_t config;
 
-    char filename[256];
+    int16_t waveIndex;
     float frequencyRatio;
     float wavePosition;
+    int32_t command;
 };
 typedef struct wave_cfg wave_cfg_t;
 
@@ -91,6 +92,7 @@ typedef struct file_cfg file_cfg_t;
 
 core_t* new_core();
 void set_period(core_t* core, int32_t size);
+int16_t get_wave_index(core_t* core, const char* filename);
 int16_t add_generator(core_t* core, int32_t type);
 void configure_generator(core_t* core, uint16_t gid, generator_cfg_t* cfg);
 uint16_t add_source(core_t* core);
