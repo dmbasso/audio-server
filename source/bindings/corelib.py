@@ -100,6 +100,9 @@ class Core:
         lib.del_core(self.core)
         self.core = None
 
+    def reset(self, reset_output):
+        lib.reset(self.core, reset_output)
+
 
 if __name__ == '__main__':
     c = Core()
@@ -112,7 +115,7 @@ if __name__ == '__main__':
     cfg.frequency = 2
     #gid = c.add_generator(ct.GeneratorType.TEST)
     gid = c.add_generator(ct.GeneratorType.PRIMITIVE)
-    c.configure_generator(gid, cfg);
+    c.configure_generator(gid, cfg)
     sid = c.add_source()  # RETURN VALUE NOT YET IMPLEMENTED
     c.render(200)
     c.shutdown()
