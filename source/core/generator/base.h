@@ -72,7 +72,6 @@ struct ConfigData {
 class Generator {
     protected:
         Core *core;
-        uint16_t playbackState;
 
     public:
         map<uint32_t, Location> locs;
