@@ -106,7 +106,7 @@ void stop_output(core_t* core);
 int16_t *get_output(core_t* core, uint64_t *size);
 void free_output(core_t* core, int16_t *mem);
 void del_core(core_t* core);
-
+void reset(core_t* core, bool reset_output);
 #ifdef __cplusplus
 }
 #endif
