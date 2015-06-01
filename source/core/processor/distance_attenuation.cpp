@@ -38,7 +38,7 @@ void DistanceAttenuation::config(ConfigData *configData)
 * The new Source object is then added to the processors Source map.
 */
 
-uint16_t DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData *srcData)
+int16_t DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
     auto source = new processor::Source();
     source->setGenerator(gen);
@@ -46,7 +46,7 @@ uint16_t DistanceAttenuation::addSource(generator::Generator *gen, SourceConfigD
     if (srcData) {
         source->setLocation(srcData->loc);
     }
-    uint16_t sid = sourceCounter++;
+    int16_t sid = sourceCounter++;
     sources[sid] = source;
     return sid;
 }

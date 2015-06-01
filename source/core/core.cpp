@@ -10,7 +10,7 @@ namespace aserver {
 *
 */
 
-uint16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
+int16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
 {
     generator::Generator *gen;
     switch (genType) {
@@ -31,7 +31,7 @@ uint16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfg
             break;
     }
 
-    uint16_t gid = generatorCounter++;
+    int16_t gid = generatorCounter++;
     gens[gid] = gen;
 
     if (cfgData) {
@@ -101,7 +101,7 @@ int Core::setOutput(output::types outType, output::ConfigData *cfgData)
 *
 */
 
-int Core::addSource(processor::SourceConfigData *srcData)
+int16_t Core::addSource(processor::SourceConfigData *srcData)
 {
     if (proc) {
         if (!gens.empty()) {

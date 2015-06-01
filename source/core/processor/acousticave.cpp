@@ -84,7 +84,7 @@ void Acousticave::config(ConfigData *configData)
     }
 }
 
-uint16_t Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)
+int16_t Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
     auto source = new processor::AcousticaveSource();
     source->setGenerator(gen);
@@ -93,7 +93,7 @@ uint16_t Acousticave::addSource(generator::Generator *gen, SourceConfigData *src
     if (srcData) {
         source->setLocation(srcData->loc);
     }
-    uint16_t sid = sourceCounter++;
+    int16_t sid = sourceCounter++;
     sources[sid] = source;
     return sid;
 }

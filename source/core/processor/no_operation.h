@@ -14,7 +14,7 @@ class NoOperation :public Processor {
     public:
         NoOperation(uint32_t periodSize) : Processor(periodSize) {};
         void config(ConfigData *configData) {};
-        uint16_t addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
+        int16_t addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
         void render() override;
 };
 

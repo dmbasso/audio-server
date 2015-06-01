@@ -73,7 +73,7 @@ class Acousticave :public Processor {
     public:
         Acousticave(uint32_t periodSize);
         void config(ConfigData *configData) override;
-        uint16_t addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
+        int16_t addSource(generator::Generator *gen, SourceConfigData *sourceConfig=nullptr) override;
         void addAaveSource(Source *src);
         void render() override;
 

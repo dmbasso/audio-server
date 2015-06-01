@@ -34,7 +34,7 @@ class DistanceAttenuation :public Processor {
 
         DistanceAttenuation(uint32_t periodSize);
         void config(ConfigData *configData) override;
-        uint16_t addSource(generator::Generator *gen, SourceConfigData *srcData =nullptr) override;
+        int16_t addSource(generator::Generator *gen, SourceConfigData *srcData =nullptr) override;
         void render() override;
         void process(Source *src);
 };
