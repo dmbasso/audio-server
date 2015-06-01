@@ -28,7 +28,7 @@ class SoundBuffer {
         int16_t *getData() {return this->data;}
         void reset();
         void writeFrame(int16_t *sams, uint32_t i);
-        int16_t* readFrame(int16_t *sams, uint32_t i);
+        int16_t* readFrame(int16_t *sams, float position);
         void mixFrame(int16_t *sams, uint32_t i);
         uint16_t getFrameSize() const {return frameSize;}
 };

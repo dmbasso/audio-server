@@ -22,15 +22,17 @@ void SoundBuffer::reset()
     }
 }
 
-int16_t* SoundBuffer::readFrame(int16_t *sams, uint32_t i)
+int16_t* SoundBuffer::readFrame(int16_t *sams, float position)
 {
-    if (frameSize == 1) {  // IMPORTANT: here we assume our output is always going to be stereo
-        sams[0] = data[i];
-        sams[1] = data[i];
+    int32_t p = (int32_t) position;
+    float f = position - p;
+
+    if (frameSize == 1) {
+        sams[0] = sams[1] = (int16_t)((1 - f) * data[p] + f * data[p + 1]);
     }
     if (frameSize == 2) {
-        sams[0] = data[i * 2];
-        sams[1] = data[i * 2 + 1];
+        sams[0] = (int16_t) ((1 - f) * data[p * 2] + f * data[p * 2 + 2]);
+        sams[1] = (int16_t) ((1 - f) * data[p * 2 + 1] + f * data[p * 2 + 3]);
     }
     return sams;
 }
