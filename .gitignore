@@ -1,3 +1,5 @@
+.cache
+
 # CPP Compiled Object files
 *.o
 

@@ -94,6 +94,7 @@ int main () {
 //    core.setProcessor(processor::types::DISTANCE_ATTENUATION);//, &procData);
 
     //********** Acousticave processor example
+    #ifdef WITH_AAVE
     processor::AcousticaveConfigData aaveConfigData;
     aaveConfigData.flags = processor::acousticaveConfigFlags::ACOUSTICAVE_ALL;
     aaveConfigData.gain = 10;
@@ -105,6 +106,7 @@ int main () {
     aaveConfigData.volume = 3000;
     aaveConfigData.rt60 = 4000;
     core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
+    #endif
 
     //********** Memory output example
 //    core.setOutput(output::types::MEMORY);
@@ -133,7 +135,7 @@ int main () {
 //    testData.waveform = generator::waveformType::SQUARE;
 //    core.addGenerator(generator::types::TEST, &testData);
 //    core.addSource();
-    
+
     //********** Noise generator example
 //    generator::NoiseConfigData noiseData;
 //    noiseData.flags = generator::noiseConfigFlags::NOISE_ALL;
@@ -168,10 +170,12 @@ int main () {
             core.setPeriodSize(6666);
             core.setProcessor(processor::types::DISTANCE_ATTENUATION);
         }
+        #ifdef WITH_AAVE
         if (i == 500) {
             core.setPeriodSize(4096);
             core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
         }
+        #endif
         core.render();
     }
 
@@ -188,4 +192,3 @@ core.processor->listenerPositions[(int)((i * 1. / 240 - f) * 44100)] = *it;
 f += 2048. / 44100;
 core.render();
 }*/
-

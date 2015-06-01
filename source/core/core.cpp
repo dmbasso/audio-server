@@ -46,18 +46,24 @@ int16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfgD
 
 int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData)
 {
-    map<int32_t, processor::Source *> tempSources;
+    /*map<int32_t, processor::Source *> tempSources;
     // in case we are changing processor, store the existing sources
     if (proc) {
         tempSources = proc->sources;
-    }
+    }*/
 
     switch (procType) {
         case processor::types::NO_OPERATION:
             proc = new processor::NoOperation(periodSize);
             break;
         case processor::types::ACOUSTICAVE:
-            proc = new processor::Acousticave(periodSize);
+            #ifdef WITH_AAVE
+                proc = new processor::Acousticave(periodSize);
+            #else
+                cout << "Compiled without Acousticave support,"
+                        "falling back to NoOperation processor." << endl;
+                proc = new processor::NoOperation(periodSize);
+            #endif
             break;
         case processor::types::DISTANCE_ATTENUATION:
             proc = new processor::DistanceAttenuation(periodSize);
@@ -67,6 +73,7 @@ int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData
     if (cfgData) {
         proc->config(cfgData);
     }
+    /* TODO: plan a proper way to do the following, if it's really needed:
 
     // in case we are changing processor, load the existing sources
     if (!tempSources.empty()) {
@@ -77,7 +84,7 @@ int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData
                 ((processor::Acousticave *) proc)->addAaveSource(it.second);
             }
         }
-    }
+    }*/
     return 1;
 }
 

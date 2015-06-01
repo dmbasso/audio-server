@@ -6,11 +6,21 @@ set(PROCESSOR_SOURCES
     processor.h
     no_operation.cpp
     no_operation.h
-    acousticave.cpp
-    acousticave.h
     distance_attenuation.cpp
     distance_attenuation.h
 )
 
+if(WITH_AAVE)
+    set(PROCESSOR_SOURCES
+        ${PROCESSOR_SOURCES}
+        acousticave.cpp
+        acousticave.h
+    )
+endif(WITH_AAVE)
+
+
 add_library(processor ${PROCESSOR_SOURCES})
-target_link_libraries(processor ${AAVE_LIBRARY})
+
+if(WITH_AAVE)
+    target_link_libraries(processor ${AAVE_LIBRARY})
+endif(WITH_AAVE)
