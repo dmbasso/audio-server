@@ -13,6 +13,7 @@ namespace aserver {
 int16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfgData)
 {
     generator::Generator *gen;
+
     switch (genType) {
         case generator::types::PRIMITIVE:
             gen = new generator::Primitive(this, getPeriodSize());
@@ -29,6 +30,8 @@ int16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfgD
         case generator::types::NOISE:
             gen = new generator::Noise(this, getPeriodSize());
             break;
+        default:
+            return -1;
     }
 
     int16_t gid = generatorCounter++;
@@ -37,8 +40,8 @@ int16_t Core::addGenerator(generator::types genType, generator::ConfigData *cfgD
     if (cfgData) {
         gen->config(cfgData);
     }
-
     return gid;
+
 }
 
 int Core::setProcessor(processor::types procType, processor::ConfigData *cfgData)

@@ -91,7 +91,7 @@ typedef struct file_cfg file_cfg_t;
 
 core_t* new_core();
 void set_period(core_t* core, int32_t size);
-uint16_t add_generator(core_t* core, int32_t type);
+int16_t add_generator(core_t* core, int32_t type);
 void configure_generator(core_t* core, uint16_t gid, generator_cfg_t* cfg);
 uint16_t add_source(core_t* core);
 void configure_source(core_t* core, uint16_t sid, source_cfg_t* cfg);

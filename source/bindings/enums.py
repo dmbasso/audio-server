@@ -18,6 +18,7 @@ class GeneratorType:
     WAVE = 2
     TEST = 3
     SCRIPT = 4
+    NOISE = 5
 
 
 class PrimitiveFlags(ConfigFlags):

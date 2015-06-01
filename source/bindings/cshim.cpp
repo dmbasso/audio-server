@@ -14,7 +14,7 @@ void set_period(core_t* core, int32_t size)
     AS_TYPE(Core*, core)->setPeriodSize(size);
 }
 
-uint16_t add_generator(core_t* core, int32_t type)
+int16_t add_generator(core_t* core, int32_t type)
 {
     return AS_TYPE(Core*, core)->addGenerator(static_cast<generator::types>(type));
 }
