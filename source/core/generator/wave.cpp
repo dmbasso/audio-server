@@ -69,6 +69,7 @@ void Wave::performCommand(playbackCommand command)
 void Wave::renderNFrames(uint32_t start, uint32_t end)
 {
     int16_t sams[2];
+    buffer->reset();
 
     if (!wave) {
         cout << "Wave sound buffer is empty, rendering silence..." << endl;

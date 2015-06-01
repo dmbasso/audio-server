@@ -83,7 +83,46 @@ def test_wave(core):
 
     core.render(1)
     core.stop_output()
-    rendered = core.get_output().astype(float)
+    rendered = core.get_output().astype(np.int16)
     assert all(rendered[:, 0] == rendered[:, 1])  # mono in two channels
     # assert the rendered data is exactly equal to the original wave
     assert all(rendered[:, 0] == data[:rendered.shape[0]].astype(np.int16))
+
+
+def test_wave_playback_commands(core):
+    filename = "/tmp/test_wave.wav"
+    data = write_test_wavefile(filename).astype(np.int16)
+    gid = core.add_generator(aserver.GeneratorType.WAVE)
+    cfg = core.new_config("wave")
+    cfg.config.flags = aserver.WaveFlags.WAVE_INDEX
+    cfg.waveIndex = core.get_wave_index(filename)
+    core.configure_generator(gid, cfg)
+    core.add_source()
+
+    cfg.config.flags = aserver.WaveFlags.PLAYBACK_COMMAND
+    core.render(1)  # silence
+    cfg.command = aserver.PlaybackCommand.PLAY
+    core.configure_generator(gid, cfg)
+    core.render(1)  # test_wave
+    cfg.command = aserver.PlaybackCommand.PAUSE
+    core.configure_generator(gid, cfg)
+    core.render(1)  # silence
+    cfg.command = aserver.PlaybackCommand.PLAY
+    core.configure_generator(gid, cfg)
+    core.render(1)  # test_wave continued
+    cfg.command = aserver.PlaybackCommand.STOP
+    core.configure_generator(gid, cfg)
+    cfg.command = aserver.PlaybackCommand.PLAY
+    core.configure_generator(gid, cfg)
+    core.render(1)  # test_wave from the beginning
+
+    core.stop_output()
+    rendered = core.get_output().astype(np.int16)
+
+    # silences
+    assert all(rendered[:2048, 0] == 0)
+    assert all(rendered[4096:4096 + 2048, 0] == 0)
+    # assert the non silence parts
+    assert all(rendered[2048:4096, 0] == data[:2048])
+    assert all(rendered[4096 + 2048:4096 + 4096, 0] == data[2048:4096])
+    assert all(rendered[4096 + 4096:, 0] == data[:2048])
