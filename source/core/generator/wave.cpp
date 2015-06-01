@@ -19,7 +19,6 @@ Wave::Wave(Core *core, uint32_t periodSize) : Generator(core, periodSize)
 void Wave::config(const ConfigData *configData)
 {
     WaveConfigData *cfgData = (WaveConfigData*) configData;
-
     if (cfgData->flags & waveConfigFlags::WAVE_INDEX) {
         wave = core->getWave(cfgData->waveIndex);
         wavePosition = 0;
@@ -33,13 +32,10 @@ void Wave::config(const ConfigData *configData)
     if (cfgData->flags & waveConfigFlags::PLAYBACK_COMMAND) {
         performCommand((playbackCommand) cfgData->command);
     }
-
-    cout << "configuring wave " << wave << " " <<  (int)cfgData->command << "\n";
 }
 
 void Wave::performCommand(playbackCommand command)
 {
-    cout << "performCommand " << (int)command << endl;
     switch (command) {
         case playbackCommand::PLAY: {
             state = playbackState::PLAYING;

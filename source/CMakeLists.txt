@@ -18,6 +18,5 @@ add_subdirectory(bindings)
 
 add_custom_target(
     tests py.test -xv --lf tests
-    DEPENDS bindings
+    DEPENDS cshim
 )
-

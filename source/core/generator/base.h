@@ -19,7 +19,7 @@ class Core;
 
 namespace generator {
 
-enum class types : int32_t {
+enum class types : uint8_t {
     PRIMITIVE = 1,
     WAVE = 2,
     TEST = 3,
@@ -27,13 +27,13 @@ enum class types : int32_t {
     NOISE = 5
 };
 
-enum class waveformType : int32_t {
+enum class waveformType : uint8_t {
     SINE = 1,
     SQUARE = 2,
     SAWTOOTH = 3
 };
 
-enum class playbackCommand : int32_t {
+enum class playbackCommand : uint8_t {
     PLAY = 1,
     STOP = 2,
     PAUSE = 3,
@@ -41,7 +41,7 @@ enum class playbackCommand : int32_t {
     REVERSE = 5
 };
 
-enum class playbackState : int16_t {
+enum class playbackState : uint8_t {
     PLAYING = 1,
     PLAYING_LOOP = 2,
     STOPPED = 3,
@@ -88,4 +88,3 @@ class Generator {
 } //end aserver namespace
 
 #endif
-

@@ -19,10 +19,10 @@ enum waveConfigFlags : uint64_t {
 #pragma pack(1)  // force byte-alignment
 
 struct WaveConfigData : ConfigData {
-    int32_t waveIndex = -1;
+    playbackCommand command = playbackCommand::STOP;
+    int16_t waveIndex = -1;
     float frequencyRatio = 1;
     float wavePosition = 0;
-    int32_t command = 2; //playbackCommand::STOP;
 };
 
 #pragma pack()

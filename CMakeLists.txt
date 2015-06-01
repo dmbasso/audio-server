@@ -15,9 +15,6 @@ ELSE()
     SET(WITH_AAVE OFF)
 ENDIF(AAVE_LIBRARY)
 
-message("moo ${WITH_AAVE} ${AAVE_LIBRARY}")
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
 
 add_subdirectory(source)
-

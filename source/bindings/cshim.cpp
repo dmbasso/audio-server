@@ -9,15 +9,18 @@ core_t* new_core()
     return AS_TYPE(core_t*, retv);
 }
 
+
 void set_period(core_t* core, int32_t size)
 {
     AS_TYPE(Core*, core)->setPeriodSize(size);
 }
 
+
 int16_t get_wave_index(core_t* core, const char* filename)
 {
     return AS_TYPE(Core*, core)->getWaveIndex(filename);
 }
+
 
 int16_t add_generator(core_t* core, int32_t type)
 {
@@ -86,6 +89,7 @@ void stop_output(core_t* core)
     AS_TYPE(Core*, core)->stop_output();
 }
 
+
 int16_t *get_output(core_t* core, uint64_t *size)
 {
     int16_t *dest;
@@ -93,10 +97,12 @@ int16_t *get_output(core_t* core, uint64_t *size)
     return dest;
 }
 
+
 void free_output(core_t* core, int16_t *mem)
 {
     delete [] mem;
 }
+
 
 void del_core(core_t* core)
 {
@@ -105,6 +111,4 @@ void del_core(core_t* core)
     delete AS_TYPE(Core*, core);
 }
 
-
-} // extern "C" 
-
+} // extern "C"

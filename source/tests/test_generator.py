@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 
-import os
 import pytest
 import numpy as np
 from scipy.io import wavfile
@@ -29,7 +28,7 @@ def write_test_wavefile(filename, srate=44100):
     phases = np.arange(length) * np.pi / period
     wav = np.tanh(np.sin(phases) * 10)  # square the sin
     wav = wav / wav.max() * 32000
-    wavfile.write(filename, srate, wav.astype(np.uint16))
+    wavfile.write(filename, srate, wav.astype(np.int16))
     return wav
 
 
@@ -57,7 +56,7 @@ def test_primitive(core, waveform):
     cfg.config.flags = aserver.PrimitiveFlags.WAVEFORM
     cfg.waveform = waveform
     core.configure_generator(gid, cfg)
-    sid = core.add_source()
+    core.add_source()
 
     core.render(1)
     core.stop_output()
@@ -78,19 +77,13 @@ def test_wave(core):
     cfg = core.new_config("wave")
     cfg.config.flags = aserver.WaveFlags("WAVE_INDEX PLAYBACK_COMMAND").value
     cfg.waveIndex = core.get_wave_index(filename)
-    print "cmd", cfg.command
     cfg.command = aserver.PlaybackCommand.PLAY
-    print "cmd", cfg.command
     core.configure_generator(gid, cfg)
-    sid = core.add_source()
+    core.add_source()
 
     core.render(1)
     core.stop_output()
     rendered = core.get_output().astype(float)
-    assert all(rendered[:, 0] == rendered[:, 1])
-    from matplotlib.pyplot import *
-    plot(rendered[:, 0])
-    plot(data[:rendered.shape[0]])
-    show()
-    assert all(rendered[:, 0] == data[:rendered.shape[0]])
-
+    assert all(rendered[:, 0] == rendered[:, 1])  # mono in two channels
+    # assert the rendered data is exactly equal to the original wave
+    assert all(rendered[:, 0] == data[:rendered.shape[0]].astype(np.int16))

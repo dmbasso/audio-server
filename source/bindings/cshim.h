@@ -4,8 +4,7 @@
 #ifndef FOR_FFI
     #include "../core/core.h"
     using namespace aserver;
-//#else
-//    #include <stdint.h>
+    #pragma pack(1)
 #endif // FOR_FFI
 
 #define AS_TYPE(type, obj) reinterpret_cast<type>(obj)
@@ -49,10 +48,10 @@ typedef struct test_cfg test_cfg_t;
 struct wave_cfg {
     generator_cfg_t config;
 
+    uint8_t command;
     int16_t waveIndex;
     float frequencyRatio;
     float wavePosition;
-    int32_t command;
 };
 typedef struct wave_cfg wave_cfg_t;
 
@@ -110,6 +109,10 @@ void del_core(core_t* core);
 
 #ifdef __cplusplus
 }
+#endif
+
+#ifndef FOR_FFI
+    #pragma pack()
 #endif
 
 #endif
