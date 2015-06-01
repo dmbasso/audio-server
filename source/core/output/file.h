@@ -30,9 +30,9 @@ class File :public Output {
         string outputFilePath;
         bool normalise_audio;
 
-        File();
+        File(Core *core, uint32_t periodSize);
         void config(ConfigData *cfgData) override;
-        void write(SoundBuffer &buffer) override;
+        void write(SoundBuffer *buffer) override;
         void close() override;
 };
 

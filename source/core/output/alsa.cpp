@@ -6,7 +6,7 @@ using namespace std;
 namespace aserver {
 namespace output {
 
-Alsa::Alsa()
+Alsa::Alsa(Core *core, uint32_t periodSize) : Output(core, periodSize)
 {
     AlsaOutputConfigData *cfgData = new AlsaOutputConfigData();
     cfgData->flags = alsaConfigFlags::ALSA_ALL;
@@ -34,13 +34,23 @@ void Alsa::config(ConfigData *configData)
     }
 }
 
-void Alsa::write(SoundBuffer &buffer)
+void Alsa::write(SoundBuffer *buffer)
 {
     int32_t err;
-    err = snd_pcm_writei(alsa_handle, buffer.getData(), buffer.getPeriodSize());
-    if (err != buffer.getPeriodSize()) {
-        cout << "snd_pcm_writei: " << snd_strerror (err) << endl;
-        exit(1);
+
+    if (buffer) {
+        err = snd_pcm_writei(alsa_handle, buffer->getData(), buffer->getPeriodSize());
+        if (err != buffer->getPeriodSize()) {
+            cout << "snd_pcm_writei: " << snd_strerror(err) << endl;
+            exit(1);
+        }
+    }
+    else {
+        err = snd_pcm_writei(alsa_handle, silence->getData(), silence->getPeriodSize());
+        if (err != silence->getPeriodSize()) {
+            cout << "snd_pcm_writei: " << snd_strerror(err) << endl;
+            exit(1);
+        }
     }
 }
 

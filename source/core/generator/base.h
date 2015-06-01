@@ -78,7 +78,7 @@ class Generator {
         SoundBuffer *buffer;
 
         Generator(Core *core, uint32_t periodSize);
-        virtual ~Generator() {};
+        virtual ~Generator();
         virtual void config(const ConfigData *configdata) =0;
         virtual void render() =0;
         void setPeriodSize(uint32_t periodSize);

@@ -50,6 +50,7 @@ class Core {
         void setSourceGenerator(int16_t sid, int16_t gid);
         SoundBuffer* getWave(const char *filename);
         void stop_output();
+        void reset(bool clearOutput =false);
         uint64_t get_output(int16_t **dest);
         void shutdown();
 };

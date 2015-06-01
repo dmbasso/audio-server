@@ -10,14 +10,15 @@ using namespace std;
 namespace aserver {
 namespace output {
 
-void Memory::write(SoundBuffer &buffer)
+void Memory::write(SoundBuffer *buffer)
 {
-    outputData.insert(outputData.end(), buffer.getData(), buffer.getData() + (buffer.getPeriodSize() * buffer.getFrameSize()));
-}
-
-void Memory::close()
-{
-    //outputData.clear(); // <----- this should be elsewhere (like in a shutdown method)
+    if (buffer) {
+        outputData.insert(outputData.end(), buffer->getData(),
+                          buffer->getData() + (buffer->getPeriodSize() * buffer->getFrameSize()));
+    } else {
+        outputData.insert(outputData.end(), silence->getData(),
+                          silence->getData() + (silence->getPeriodSize() * silence->getFrameSize()));
+    }
 }
 
 uint64_t Memory::get_output(int16_t **dest)

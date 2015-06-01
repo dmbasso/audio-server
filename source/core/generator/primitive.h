@@ -48,7 +48,6 @@ class Primitive :public Generator {
 
     public:
         Primitive(Core *core, uint32_t periodSize);
-        ~Primitive() {};
         void config(const ConfigData *configData) override;
         void render() override;
         void renderNFrames(uint32_t start, uint32_t end);

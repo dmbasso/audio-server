@@ -29,11 +29,11 @@ class Alsa :public Output {
         snd_pcm_t *alsa_handle = nullptr;
 
     public:
-        Alsa();
+        Alsa(Core *core, uint32_t periodSize);
         void setupWithPulseAudio(int rate, int32_t channels);
         void setupNoPulseAudio(int rate, int32_t channels, snd_pcm_uframes_t frames);
         operator bool () {return alsa_handle != nullptr;}
-        void write(SoundBuffer &buffer) override;
+        void write(SoundBuffer *buffer) override;
         void config(ConfigData *cfgData);
         void close() override;
         int32_t  avail();

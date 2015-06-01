@@ -7,6 +7,7 @@ set(OUTPUT_SOURCES
     alsa.h
     file.cpp
     file.h
+    base.cpp
     base.h
     output.h
 )

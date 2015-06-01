@@ -11,6 +11,11 @@ Generator::Generator(Core *_core, uint32_t periodSize)
     buffer = new SoundBuffer(periodSize);
 }
 
+Generator::~Generator()
+{
+    delete buffer;
+}
+
 void Generator::setPeriodSize(uint32_t periodSize)
 {
     buffer = new SoundBuffer(periodSize);

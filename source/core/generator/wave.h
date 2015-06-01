@@ -34,7 +34,6 @@ protected:
 
 public:
     Wave(Core *core, uint32_t periodSize);
-    virtual ~Wave() {};
     virtual void config(const ConfigData *configData) override;
     virtual void render() override;
     void renderNFrames(uint32_t start, uint32_t end);

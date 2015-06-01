@@ -85,13 +85,13 @@ int Core::setOutput(output::types outType, output::ConfigData *cfgData)
 {
     switch(outType) {
         case output::types::FILE:
-            out = new output::File();
+            out = new output::File(this, getPeriodSize());
             break;
         case output::types::ALSA:
-            out = new output::Alsa();
+            out = new output::Alsa(this, getPeriodSize());
             break;
         case output::types::MEMORY:
-            out = new output::Memory();
+            out = new output::Memory(this, getPeriodSize());
             break;
     }
     if (cfgData) {
@@ -130,14 +130,25 @@ void Core::setSourceGenerator(int16_t sid, int16_t gid)
 
 void Core::render()
 {
-    if (!proc || !out) {
+    if (!out) {
         return;
     }
+
     for (auto &gen : gens) {
         gen.second->render();
     }
-    proc->render();
-    out->write(*proc->buffer);
+
+    if (proc) {
+        proc->render();
+    }
+    if (out) {
+        if (proc) {
+            out->write(proc->buffer);
+        }
+        else {
+            out->write(nullptr);
+        }
+    }
 }
 
 SoundBuffer* Core::getWave(const char *filename)
@@ -171,8 +182,28 @@ uint64_t Core::get_output(int16_t **dest)
 void Core::shutdown()
 {
     stop_output();
-    // todo: shutdown the rest of the system
-    if (out) {
+    reset();
+}
+
+void Core::reset(bool clearOutput)
+{
+    for (auto it : gens) {
+        delete it.second;
+    }
+    gens.clear();
+
+    for (auto it : waves) {
+        delete it.second;
+    }
+    waves.clear();
+
+    if (proc) {
+        delete proc;
+        proc = nullptr;
+    }
+
+    if (out && clearOutput) {
+        out->close();
         delete out;
         out = nullptr;
     }
@@ -214,6 +245,10 @@ void Core::setPeriodSize(uint32_t periodSize)
 
     if (proc) {
         proc->setPeriodSize(periodSize);
+    }
+
+    if (out) {
+        out->setPeriodSize(periodSize);
     }
 }
 
