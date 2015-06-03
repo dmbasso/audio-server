@@ -173,7 +173,7 @@ int main () {
         #ifdef WITH_AAVE
         if (i == 500) {
             core.setPeriodSize(4096);
-            core.setProcessor(processor::types::ACOUSTICAVE, &aaveConfigData);
+            core.setProcessor(processor::types::ACOUSTICAVE);//, &aaveConfigData);
         }
         #endif
         core.render();

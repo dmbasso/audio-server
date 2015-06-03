@@ -40,7 +40,7 @@ void configure_generator(core_t* core, uint16_t gid, generator_cfg_t* cfg)
 }
 
 
-uint16_t add_source(core_t* core)
+int16_t add_source(core_t* core)
 {
     return AS_TYPE(Core*, core)->addSource();
 }
