@@ -159,28 +159,30 @@ def test_wave_with_small_buffer(core):
     assert rendered[1000, 0] == 12345
 
 
-@pytest.mark.skipif(True, reason="Script::render segfaults")
 def test_script_precision(core):
     buff = np.ones(1, dtype=np.int16)
     wid = core.add_wave(1, 1, buff)
-
     gid = core.add_generator(aserver.GeneratorType.SCRIPT)
     cfg, keyframes = core.new_keyframes(5)
     for i in range(5):
+        keyframes[i].wave.config.flags = aserver.WaveFlags.PLAYBACK_COMMAND
         if not i:
-            keyframes[i].wave.config.flags = aserver.WaveFlags.WAVE_INDEX
+            keyframes[i].wave.config.flags |= aserver.WaveFlags.WAVE_INDEX
             keyframes[i].wave.waveIndex = wid
-        keyframes[i].start = 10 * (1 + i)
+        keyframes[i].start = 2 * (1 + i)
+        keyframes[i].wave.command = aserver.PlaybackCommand.PLAY
     core.configure_generator(gid, cfg)
 
     cfg.command = aserver.ScriptCommand.PLAY
     core.configure_generator(gid, cfg)
     core.add_source()
-
     core.render(1)
     core.stop_output()
     rendered = core.get_output().astype(np.int16)
-    should_be = np.zeroslike(rendered)
+    should_be = np.zeros_like(rendered)
+
     for i in range(5):
-        should_be[44100 * i / 1000] = 1
-    assert all(should_be == rendered)
+        should_be[44100 * (i + 1) * 2 / 1000] = 1
+
+    assert all(should_be[:, 0] == rendered[:, 0])
+    assert all(should_be[:, 1] == rendered[:, 1])

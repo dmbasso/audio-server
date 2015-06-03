@@ -17,7 +17,7 @@ void Script::config(const ConfigData *configData)
 {
     ScriptConfigData *cfgData = (ScriptConfigData *) configData;
 
-    if (cfgData->flags & scriptConfigFlags::COMMAND == 0) {
+    if ((cfgData->flags & scriptConfigFlags::COMMAND) == 0) {
         return;
     }
 
@@ -30,40 +30,42 @@ void Script::config(const ConfigData *configData)
             resetKeyframes();
             break;
         }
-
         case scriptCommand::PLAY: {
             if (!keyframes.size()) {
                 cout << "script " << this << " has nothing to play" << endl;
                 break;
             }
+            scriptPosition = 0;
             keyframesIt = keyframes.begin();
             scriptState = playbackState::PLAYING;
-            cout << "script " << this << " started playing from the beginning"
-                 << endl;
+            cout << "script " << this << " started playing from the beginning" << endl;
             break;
         }
-
         // TODO: fix this section
-        /*case scriptCommand::STOP : {
-            if (state != playbackState::STOPPED) {
-                state = playbackState::STOPPED;
-                cout << "playback state is now stopped" << endl;
-                wavePosition = 0;
-            }
+        case scriptCommand::STOP : {
+            keyframesIt = keyframes.begin();
+            scriptState = playbackState::STOPPED;
+            cout << "script " << this << " stopped" << endl;
             break;
         }
         case scriptCommand::PAUSE : {
-            if (state != playbackState::PAUSED) {
-                state = playbackState::PAUSED;
-                cout << "playback state is now paused" << endl;
+            if (!keyframes.size()) {
+                cout << "script " << this << " has nothing to play" << endl;
+                break;
             }
+            scriptState = playbackState::PAUSED;
+            cout << "script " << this << " paused " << endl;
             break;
         }
         case scriptCommand::PLAY_LOOP : {
-            if (state != playbackState::PLAYING_LOOP) {
-                state = playbackState::PLAYING_LOOP;
-                cout << "playback state is now playing looped" << endl;
+            if (!keyframes.size()) {
+                cout << "script " << this << " has nothing to play" << endl;
+                break;
             }
+            scriptPosition = 0;
+            keyframesIt = keyframes.begin();
+            scriptState = playbackState::PLAYING;
+            cout << "script " << this << " started playing in loop from the beginning" << endl;
             break;
         }
         case scriptCommand::REVERSE : {
@@ -72,7 +74,7 @@ void Script::config(const ConfigData *configData)
                 state = playbackState::REWINDING;
             }
             break;
-        }*/
+        }
     }
 }
 
@@ -83,27 +85,43 @@ void Script::render ()
 
     uint32_t startIndex = 0;
 
-    if (keyframesIt != keyframes.end()) {
-        for (; msecsToSams(keyframesIt->first) < scriptPosition + buffer->getPeriodSize() && keyframesIt != keyframes.end(); keyframesIt++) {
-            // first we render the samples with the previous data settings
-            if (startIndex != msecsToSams(keyframesIt->first) - scriptPosition) {
-                Wave::renderNFrames(startIndex, msecsToSams(keyframesIt->first) - scriptPosition);
-                startIndex = msecsToSams(keyframesIt->first) - scriptPosition;
-            }
-            //then we load the keyframe info:
-            Script::config((ConfigData *) &(keyframesIt->second));
-            //load source(generator) location from keyframe
-            locs[msecsToSams(keyframesIt->first) - scriptPosition] = Location(keyframesIt->second.location[0],
-                                                                       keyframesIt->second.location[1],
-                                                                       keyframesIt->second.location[2]);
-        }
-    }
+    switch(scriptState) {
+        case playbackState::PLAYING_LOOP:
 
-    // render the remaining samples of this buffer
-    if (startIndex != buffer->getPeriodSize()) {
-        Wave::renderNFrames(startIndex, buffer->getPeriodSize());
+        case playbackState::PLAYING:
+            if (keyframesIt != keyframes.end()) {
+                for (; msecsToSams(keyframesIt->first) < scriptPosition + buffer->getPeriodSize() &&
+                       keyframesIt != keyframes.end(); keyframesIt++) {
+                    // first we render the samples with the previous data settings
+                    uint64_t bufferPosition = msecsToSams(keyframesIt->first) - scriptPosition;
+                    if (startIndex != bufferPosition) {
+                        Wave::renderNFrames(startIndex, bufferPosition);
+                        startIndex = bufferPosition;
+                    }
+                    //then we load the keyframe info:
+                    Wave::config(&keyframesIt->second);
+                    //load source(generator) location from keyframe
+                    locs[bufferPosition] = Location(keyframesIt->second.location[0],
+                                                    keyframesIt->second.location[1],
+                                                    keyframesIt->second.location[2]);
+                }
+                if (keyframesIt == keyframes.end()) {
+                    scriptState = playbackState::STOPPED;
+                }
+            }
+            // render the remaining samples of this buffer
+            if (startIndex != buffer->getPeriodSize()) {
+                Wave::renderNFrames(startIndex, buffer->getPeriodSize());
+            }
+            scriptPosition += buffer->getPeriodSize();
+            break;
+        case playbackState::PAUSED:
+
+            break;
+        case playbackState::STOPPED:
+            scriptPosition = 0;
+            break;
     }
-    scriptPosition += buffer->getPeriodSize();
 }
 
 void Script::addKeyframes(uint32_t count, const Keyframe* newKeyframes)
@@ -125,7 +143,7 @@ void Script::resetKeyframes()
 
 uint32_t Script::msecsToSams(uint32_t msecs)
 {
-    return msecs * core->getSamplingRate() * 0.001;
+    return msecs * core->getSamplingRate() / 1000;
 }
 
 } //end generator namespace

@@ -27,6 +27,7 @@ class SoundBuffer {
         uint32_t getPeriodSize() {return periodSize;}
         int16_t *getData() {return this->data;}
         void reset();
+        void resetRange(uint32_t start, uint32_t end);
         void writeFrame(int16_t *sams, uint32_t i);
         int16_t* readFrame(int16_t *sams, float position);
         void mixFrame(int16_t *sams, uint32_t i);

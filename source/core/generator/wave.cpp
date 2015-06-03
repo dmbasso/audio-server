@@ -30,7 +30,7 @@ void Wave::config(const ConfigData *configData)
         wavePosition = cfgData->wavePosition;
     }
     if (cfgData->flags & waveConfigFlags::PLAYBACK_COMMAND) {
-        performCommand((playbackCommand) cfgData->command);
+        performCommand(cfgData->command);
     }
 }
 
@@ -38,6 +38,9 @@ void Wave::performCommand(playbackCommand command)
 {
     switch (command) {
         case playbackCommand::PLAY: {
+            if (state != playbackState::PAUSED) {
+                wavePosition = 0;
+            }
             state = playbackState::PLAYING;
             cout << "playback state is now playing" << endl;
             break;
@@ -69,7 +72,7 @@ void Wave::performCommand(playbackCommand command)
 void Wave::renderNFrames(uint32_t start, uint32_t end)
 {
     int16_t sams[2];
-    buffer->reset();
+    buffer->resetRange(start, end);
 
     if (!wave) {
         cout << "Wave sound buffer is empty, rendering silence..." << endl;
@@ -81,6 +84,7 @@ void Wave::renderNFrames(uint32_t start, uint32_t end)
             if (wavePosition < wave->getPeriodSize()) {
                 for (uint32_t i = start; i < end; i++, wavePosition += frequencyRatio) {
                     if (wavePosition >= wave->getPeriodSize()) {
+                        state = playbackState::STOPPED;
                         break;
                     }
                     buffer->writeFrame(wave->readFrame(sams, wavePosition), i);
@@ -111,6 +115,7 @@ void Wave::renderNFrames(uint32_t start, uint32_t end)
                 for (uint32_t i = start; i < end; i++, wavePosition -= frequencyRatio) {
                     if (wavePosition <= 0) {
                         wavePosition = 0;
+                        state = playbackState::STOPPED;
                         break;
                     }
                     buffer->writeFrame(wave->readFrame(sams, wavePosition), i);

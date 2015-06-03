@@ -22,6 +22,13 @@ void SoundBuffer::reset()
     }
 }
 
+void SoundBuffer::resetRange(uint32_t start, uint32_t end)
+{
+    for (uint32_t i = start * frameSize; i < frameSize * end; i++) {
+        data[i] = 0;
+    }
+}
+
 int16_t* SoundBuffer::readFrame(int16_t *sams, float position)
 {
     int32_t p = (int32_t) position;
