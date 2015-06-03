@@ -17,6 +17,6 @@ target_link_libraries(audio-server core)
 add_subdirectory(bindings)
 
 add_custom_target(
-    tests py.test -xv --lf tests
+    tests py.test -xv tests
     DEPENDS cshim
 )

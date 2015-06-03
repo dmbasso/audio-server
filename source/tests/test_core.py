@@ -22,7 +22,6 @@ def core(request):
     return retv
 
 
-@pytest.mark.skipif(True, reason="Acousticave::render segfaults")
 @pytest.mark.parametrize("processor", (
     aserver.ProcessorType.NO_OPERATION,
     aserver.ProcessorType.ACOUSTICAVE,
@@ -80,7 +79,6 @@ def test_add_generator(core):
     assert gid == 3
 
 
-@pytest.mark.skipif(True, reason="Acousticave::render segfaults")
 def test_set_period(core):
     periods = np.random.randint(1, 4196, 50)
     core.set_output(aserver.OutputType.MEMORY)

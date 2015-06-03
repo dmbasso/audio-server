@@ -59,7 +59,7 @@ struct ProcessorInput {
 //\todo Source parent implements noOperationSource processor
 
 class Source {
-    private:
+    protected:
         generator::Generator* gen;
         Location loc;
 

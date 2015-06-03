@@ -5,10 +5,33 @@
 namespace aserver {
 namespace processor {
 
-Acousticave::Acousticave(uint32_t periodSize)  :Processor(periodSize)
+AcousticaveSource::AcousticaveSource(struct aave *aave)
 {
-    aave = (struct aave *) malloc(sizeof *aave);
+    aaveSource = (struct aave_source *) malloc(sizeof(struct aave_source));
+    aave_init_source(aave, aaveSource);
+    aave_add_source(aave, aaveSource);
+}
 
+AcousticaveSource::~AcousticaveSource()
+{
+    free(aaveSource);
+    aaveSource = nullptr;
+}
+
+void AcousticaveSource::update()
+{
+    if (!gen) {
+        return;
+    }
+    if (!gen->locs.empty()) {
+        setLocation(gen->locs.rbegin()->second);
+    }
+    aave_set_source_position(aaveSource, loc.getX(), loc.getY(), loc.getZ());
+}
+
+Acousticave::Acousticave(uint32_t periodSize) : Processor(periodSize)
+{
+    aave = (struct aave *) calloc(1, sizeof(struct aave));
     AcousticaveConfigData *cfgData = new AcousticaveConfigData();
     cfgData->flags = acousticaveConfigFlags::ACOUSTICAVE_ALL;
     config(cfgData);
@@ -86,9 +109,8 @@ void Acousticave::config(ConfigData *configData)
 
 int16_t Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcData)
 {
-    auto source = new processor::AcousticaveSource();
+    auto source = new processor::AcousticaveSource(aave);
     source->setGenerator(gen);
-    addAaveSource(source);
 
     if (srcData) {
         source->setLocation(srcData->loc);
@@ -97,15 +119,6 @@ int16_t Acousticave::addSource(generator::Generator *gen, SourceConfigData *srcD
     sources[sid] = source;
     return sid;
 }
-
-void Acousticave::addAaveSource(Source *src)
-{
-    AcousticaveSource *source = (AcousticaveSource *) src;
-    source->aaveSource = (struct aave_source *) malloc(sizeof (struct aave_source));
-    aave_init_source(aave, source->aaveSource);
-    aave_add_source(aave, source->aaveSource);
-}
-
 
 void Acousticave::updateGeometry()
 {
@@ -116,14 +129,7 @@ void Acousticave::updateGeometry()
     // update sources position
     for (auto const &it : sources) {
         AcousticaveSource *aaveSrc = (AcousticaveSource *) it.second;
-        if (aaveSrc->getGenerator()) {
-            if (!aaveSrc->getGenerator()->locs.empty()) {
-                aaveSrc->setLocation(aaveSrc->getGenerator()->locs.rbegin()->second);
-            }
-        }
-        aave_set_source_position(aaveSrc->aaveSource, aaveSrc->getLocation().getX(),
-                                                      aaveSrc->getLocation().getY(),
-                                                     aaveSrc->getLocation().getZ());
+        aaveSrc->update();
     }
 
     // update aave global geometry
@@ -155,3 +161,4 @@ void Acousticave::render()
 
 } //end namespace processor
 } //end namespace aserver
+

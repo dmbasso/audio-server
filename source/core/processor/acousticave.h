@@ -60,6 +60,11 @@ struct AcousticaveConfigData : ConfigData {
 class AcousticaveSource :public Source {
     public:
         struct aave_source *aaveSource;
+
+        AcousticaveSource(struct aave *aave);
+        ~AcousticaveSource();
+
+        void update();
 };
 
 /** \brief A processor that uses the AcousticAVE auralization engine to process all sources.
