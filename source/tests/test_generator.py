@@ -128,18 +128,59 @@ def test_wave_playback_commands(core):
     assert all(rendered[4096 + 4096:, 0] == data[:2048])
 
 
-@pytest.mark.skipif(True, reason="Script::render segfaults")
-def test_script_add_keyframes(core):
-    gid = core.add_generator(aserver.GeneratorType.SCRIPT)
-    cfg, keyframes = core.new_keyframes(5)
-    for i in range(5):
-        keyframes[i].start = i
-        keyframes[i].location[0] = i
-        keyframes[i].wave.waveIndex = i
+def test_wave_with_small_buffer(core):
+    buff = np.sin(np.linspace(0, np.pi * 4, 100)) * 32000
+    buff = buff.astype(np.int16)
+    wid = core.add_wave(100, 1, buff)
+    buff2 = np.zeros(1500, dtype=np.int16)
+    buff2[1000] = 12345
+    wid2 = core.add_wave(1500, 1, buff2)
+
+    gid = core.add_generator(aserver.GeneratorType.WAVE)
+    cfg = core.new_config("wave")
+    cfg.config.flags = aserver.WaveFlags("WAVE_INDEX PLAYBACK_COMMAND").value
+    cfg.waveIndex = wid
+    cfg.command = aserver.PlaybackCommand.PLAY
+    core.configure_generator(gid, cfg)
+    core.add_source()
+
+    gid = core.add_generator(aserver.GeneratorType.WAVE)
+    cfg.waveIndex = wid2
     core.configure_generator(gid, cfg)
     core.add_source()
 
     core.render(1)
     core.stop_output()
     rendered = core.get_output().astype(np.int16)
-    assert all(rendered[:, 0] == 0)  # all silence because of invalid waves
+    assert all(rendered[:, 0] == rendered[:, 1])  # mono in two channels
+    assert all(rendered[:100, 0] == buff)
+    assert all(rendered[100:1000, 0] == 0)
+    assert all(rendered[1001:, 0] == 0)
+    assert rendered[1000, 0] == 12345
+
+
+@pytest.mark.skipif(True, reason="Script::render segfaults")
+def test_script_precision(core):
+    buff = np.ones(1, dtype=np.int16)
+    wid = core.add_wave(1, 1, buff)
+
+    gid = core.add_generator(aserver.GeneratorType.SCRIPT)
+    cfg, keyframes = core.new_keyframes(5)
+    for i in range(5):
+        if not i:
+            keyframes[i].wave.config.flags = aserver.WaveFlags.WAVE_INDEX
+            keyframes[i].wave.waveIndex = wid
+        keyframes[i].start = 10 * (1 + i)
+    core.configure_generator(gid, cfg)
+
+    cfg.command = aserver.ScriptCommand.PLAY
+    core.configure_generator(gid, cfg)
+    core.add_source()
+
+    core.render(1)
+    core.stop_output()
+    rendered = core.get_output().astype(np.int16)
+    should_be = np.zeroslike(rendered)
+    for i in range(5):
+        should_be[44100 * i / 1000] = 1
+    assert all(should_be == rendered)

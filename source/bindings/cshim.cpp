@@ -21,6 +21,12 @@ int16_t get_wave_index(core_t* core, const char* filename)
     return AS_TYPE(Core*, core)->getWaveIndex(filename);
 }
 
+int16_t add_wave(core_t* core, uint32_t size, uint8_t channels, const int16_t *samples)
+{
+    SoundBuffer *sb = new SoundBuffer(size, channels);
+    memcpy(sb->getData(), samples, size * channels * sizeof(int16_t));
+    return AS_TYPE(Core*, core)->addWave(sb);
+}
 
 int16_t add_generator(core_t* core, int32_t type)
 {

@@ -109,6 +109,7 @@ typedef struct file_cfg file_cfg_t;
 core_t* new_core();
 void set_period(core_t* core, int32_t size);
 int16_t get_wave_index(core_t* core, const char* filename);
+int16_t add_wave(core_t* core, uint32_t size, uint8_t channels, const int16_t *samples);
 int16_t add_generator(core_t* core, int32_t type);
 void configure_generator(core_t* core, uint16_t gid, generator_cfg_t* cfg);
 uint16_t add_source(core_t* core);

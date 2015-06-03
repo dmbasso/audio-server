@@ -2,9 +2,16 @@
 
 import os
 import subprocess
-from cffi import FFI
+from cffi import FFI, __version_info__ as cffi_version
 
 from . import enums
+
+
+if cffi_version < (0, 9, 0):
+    raise RuntimeError("""
+        The installed CFFI library is too old, try upgrading with:
+        sudo pip install --upgrade cffi
+    """)
 
 
 path = os.path.abspath(os.path.dirname(__file__))
@@ -35,6 +42,10 @@ class Core:
 
     def get_wave_index(self, filename):
         return lib.get_wave_index(self.core, filename)
+
+    def add_wave(self, size, channels, data):
+        ptr = ffi.from_buffer(data)
+        return lib.add_wave(self.core, size, channels, ptr)
 
     def new_config(self, cfg_type):
         return ffi.new(cfg_type + "_cfg_t *")

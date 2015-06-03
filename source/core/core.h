@@ -54,6 +54,7 @@ class Core {
         SoundBuffer* getWave(string filename);
         SoundBuffer* getWave(int16_t waveIndex);
         int16_t getWaveIndex(string filename);
+        int16_t addWave(SoundBuffer *wave);
         void stop_output();
         void reset(bool clearOutput =false);
         uint64_t get_output(int16_t **dest);

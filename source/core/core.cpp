@@ -184,6 +184,12 @@ int16_t Core::getWaveIndex(string filename)
     return waveIndices[filename];
 }
 
+int16_t Core::addWave(SoundBuffer *wave)
+{
+    waveByIndex[++lastWaveIndex] = wave;
+    return lastWaveIndex;
+}
+
 void Core::stop_output()
 {
     if (out) {
