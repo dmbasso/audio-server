@@ -56,6 +56,15 @@ class PlaybackState:
     REWINDING = 4
 
 
+class ScriptCommand(PlaybackCommand):
+    ADD_KEYFRAMES = 100
+    RESET_KEYFRAMES = 101
+
+
+class ScriptFlags(ConfigFlags):
+    COMMAND = 0x1
+
+
 # Processors
 
 class ProcessorType:
@@ -75,4 +84,3 @@ class OutputType:
 class OutputFlags(ConfigFlags):
     FILEPATH = 0x1
     NORMALISE = 0x2
-

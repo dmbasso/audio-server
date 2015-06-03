@@ -126,3 +126,20 @@ def test_wave_playback_commands(core):
     assert all(rendered[2048:4096, 0] == data[:2048])
     assert all(rendered[4096 + 2048:4096 + 4096, 0] == data[2048:4096])
     assert all(rendered[4096 + 4096:, 0] == data[:2048])
+
+
+@pytest.mark.skipif(True, reason="Script::render segfaults")
+def test_script_add_keyframes(core):
+    gid = core.add_generator(aserver.GeneratorType.SCRIPT)
+    cfg, keyframes = core.new_keyframes(5)
+    for i in range(5):
+        keyframes[i].start = i
+        keyframes[i].location[0] = i
+        keyframes[i].wave.waveIndex = i
+    core.configure_generator(gid, cfg)
+    core.add_source()
+
+    core.render(1)
+    core.stop_output()
+    rendered = core.get_output().astype(np.int16)
+    assert all(rendered[:, 0] == 0)  # all silence because of invalid waves

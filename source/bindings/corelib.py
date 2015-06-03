@@ -47,6 +47,14 @@ class Core:
             self.core, gid, ffi.cast("generator_cfg_t *", cfg)
         )
 
+    def new_keyframes(self, count):
+        cfg = self.new_config("script")
+        cfg.config.flags = enums.ScriptFlags.COMMAND
+        cfg.command = enums.ScriptCommand.ADD_KEYFRAMES
+        cfg.keyframeCount = count
+        cfg.keyframes = keyframes = ffi.new("keyframe_t[]", count)
+        return cfg, keyframes
+
     def add_source(self):
         return lib.add_source(self.core)
 
@@ -105,20 +113,3 @@ class Core:
 
     def reset(self, reset_output):
         lib.reset(self.core, reset_output)
-
-
-if __name__ == '__main__':
-    c = Core()
-    import coretypes as ct
-    #c.set_processor(ct.ProcessorType.DISTANCE_ATTENUATION)
-    c.set_processor(ct.ProcessorType.ACOUSTICAVE)
-    c.set_output(ct.OutputType.FILE)
-    cfg = c.new_config("primitive")
-    cfg.config.flags = 2
-    cfg.frequency = 2
-    #gid = c.add_generator(ct.GeneratorType.TEST)
-    gid = c.add_generator(ct.GeneratorType.PRIMITIVE)
-    c.configure_generator(gid, cfg)
-    sid = c.add_source()  # RETURN VALUE NOT YET IMPLEMENTED
-    c.render(200)
-    c.shutdown()

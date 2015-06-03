@@ -63,6 +63,23 @@ struct noise_cfg {
 };
 typedef struct noise_cfg noise_cfg_t;
 
+struct keyframe_s {
+    wave_cfg_t wave;
+
+    uint64_t start;
+    float location[3];
+};
+typedef struct keyframe_s keyframe_t;
+
+struct script_cfg {
+    generator_cfg_t config;
+
+    uint8_t command;
+    uint32_t keyframeCount;
+    keyframe_t *keyframes;
+};
+typedef struct script_cfg script_cfg_t;
+
 
 // Processor Config Structures ************************************************
 
