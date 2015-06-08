@@ -186,3 +186,58 @@ def test_script_precision(core):
 
     assert all(should_be[:, 0] == rendered[:, 0])
     assert all(should_be[:, 1] == rendered[:, 1])
+
+
+@pytest.mark.parametrize("wavelength", (220, 441, 661))
+@pytest.mark.parametrize("offset", (-1, 0, 1))
+def test_script_boundaries(core, wavelength, offset):
+    period_size = 441
+    render_periods = 3
+    should_be = np.zeros([period_size * render_periods, 2])
+    gid = core.add_generator(aserver.GeneratorType.SCRIPT)
+
+    if (offset == -1):
+        n_keyframes = 2
+    else:
+        n_keyframes = 3
+
+    cfg, keyframes = core.new_keyframes(n_keyframes)
+
+    kf_index = 0
+    for i in range(3):
+        # calculate keyframe onset
+        start = offset + i * 10
+
+        if start < 0:
+            continue
+
+        # generate and add waves
+        wave = np.random.uniform(-32000, 32000, wavelength).astype(np.int16)
+        wid = core.add_wave(wavelength, 1, wave)
+
+        # generate and add keyframes
+        flags = aserver.WaveFlags("PLAYBACK_COMMAND WAVE_INDEX").value
+        keyframes[kf_index].wave.config.flags = flags
+        keyframes[kf_index].wave.waveIndex = wid
+        keyframes[kf_index].start = start
+        keyframes[kf_index].wave.command = aserver.PlaybackCommand.PLAY
+        kf_index += 1
+
+        # generate the expected output
+        start *= 44.1
+        view = should_be[start:start + wavelength]
+        view[:, 0] = wave[:view.shape[0]]
+        view[:, 1] = wave[:view.shape[0]]
+    core.configure_generator(gid, cfg)
+
+    cfg.command = aserver.ScriptCommand.PLAY
+    core.configure_generator(gid, cfg)
+    core.add_source()
+
+    core.set_period(period_size)
+    core.render(3)
+    core.stop_output()
+    rendered = core.get_output().astype(np.int16)
+
+    assert all(should_be[:, 0] == rendered[:, 0])
+    assert all(should_be[:, 1] == rendered[:, 1])

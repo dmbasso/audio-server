@@ -105,7 +105,7 @@ void Script::render ()
                                                     keyframesIt->second.location[1],
                                                     keyframesIt->second.location[2]);
                 }
-                if (keyframesIt == keyframes.end()) {
+                if (keyframesIt == keyframes.end() && Wave::state == playbackState::STOPPED) {
                     scriptState = playbackState::STOPPED;
                 }
             }
