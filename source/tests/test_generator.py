@@ -241,3 +241,51 @@ def test_script_boundaries(core, wavelength, offset):
 
     assert all(should_be[:, 0] == rendered[:, 0])
     assert all(should_be[:, 1] == rendered[:, 1])
+
+
+@pytest.mark.parametrize("delay", (-11, -1, 0, 1, 11))
+def test_script_delay(core, delay):
+    period_size = 441
+    render_periods = 6
+    wavelength = 220
+    should_be = np.zeros([period_size * render_periods, 2])
+    gid = core.add_generator(aserver.GeneratorType.SCRIPT)
+    n_keyframes = 5
+    cfg, keyframes = core.new_keyframes(n_keyframes)
+
+    for i in range(n_keyframes):
+        # generate and add waves
+        wave = np.random.uniform(-32000, 32000, wavelength).astype(np.int16)
+        wid = core.add_wave(wavelength, 1, wave)
+
+        # calculate keyframe onset
+        start = i * 10
+
+        # generate and add keyframes
+        flags = aserver.WaveFlags("PLAYBACK_COMMAND WAVE_INDEX").value
+        keyframes[i].wave.config.flags = flags
+        keyframes[i].wave.waveIndex = wid
+        keyframes[i].start = start
+        keyframes[i].wave.command = aserver.PlaybackCommand.PLAY
+
+        # generate the expected output
+        start += delay
+        if start >= 0:
+            start = start * 44100 // 1000
+            view = should_be[start:start + wavelength]
+            view[:, 0] = wave[:view.shape[0]]
+            view[:, 1] = wave[:view.shape[0]]
+    core.configure_generator(gid, cfg)
+
+    cfg.command = aserver.ScriptCommand.PLAY
+    cfg.delay = delay
+    core.configure_generator(gid, cfg)
+    core.add_source()
+
+    core.set_period(period_size)
+    core.render(render_periods)
+    core.stop_output()
+    rendered = core.get_output().astype(np.int16)
+
+    assert all(should_be[:, 0] == rendered[:, 0])
+    assert all(should_be[:, 1] == rendered[:, 1])

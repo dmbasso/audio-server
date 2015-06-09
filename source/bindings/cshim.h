@@ -77,6 +77,7 @@ struct script_cfg {
     uint8_t command;
     uint32_t keyframeCount;
     keyframe_t *keyframes;
+    int64_t delay;
 };
 typedef struct script_cfg script_cfg_t;
 

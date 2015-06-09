@@ -39,6 +39,7 @@ struct ScriptConfigData : ConfigData {
     scriptCommand command = scriptCommand::STOP;
     uint32_t keyframeCount = 0;
     Keyframe *keyframes = nullptr;
+    int64_t delay = 0;
 };
 
 #pragma pack()
@@ -47,7 +48,7 @@ class Script : public Wave {
     private:
         map<uint64_t, Keyframe> keyframes;
         map<uint64_t, Keyframe>::iterator keyframesIt;
-        uint64_t scriptPosition;
+        int64_t scriptPosition;
         playbackState scriptState;
 
     public:
@@ -56,7 +57,7 @@ class Script : public Wave {
         void render() override;
         void addKeyframes(uint32_t count, const Keyframe* keyframes);
         void resetKeyframes();
-        uint32_t msecsToSams(uint32_t msecs);
+        int64_t msecsToSams(int64_t msecs);
 };
 
 } //end generator namespace

@@ -35,8 +35,15 @@ void Script::config(const ConfigData *configData)
                 cout << "script " << this << " has nothing to play" << endl;
                 break;
             }
-            scriptPosition = 0;
+            scriptPosition = -msecsToSams(cfgData->delay);
             keyframesIt = keyframes.begin();
+            while (keyframesIt != keyframes.end() && msecsToSams(keyframesIt->second.start) < scriptPosition) {
+                keyframesIt++;
+            }
+            if (keyframesIt == keyframes.end()) {
+                cout << "script " << this << " start position is out of range" << endl;
+                break;
+            }
             scriptState = playbackState::PLAYING;
             cout << "script " << this << " started playing from the beginning" << endl;
             break;
@@ -93,7 +100,7 @@ void Script::render ()
                 for (; msecsToSams(keyframesIt->first) < scriptPosition + buffer->getPeriodSize() &&
                        keyframesIt != keyframes.end(); keyframesIt++) {
                     // first we render the samples with the previous data settings
-                    uint64_t bufferPosition = msecsToSams(keyframesIt->first) - scriptPosition;
+                    int64_t bufferPosition = msecsToSams(keyframesIt->first) - scriptPosition;
                     if (startIndex != bufferPosition) {
                         Wave::renderNFrames(startIndex, bufferPosition);
                         startIndex = bufferPosition;
@@ -141,9 +148,14 @@ void Script::resetKeyframes()
     cout << "script " << this << " keyframes cleared" << endl;
 }
 
-uint32_t Script::msecsToSams(uint32_t msecs)
+/** The default behavior for integer division in C++ for any integer x is floor(abs(x)).
+ *  However, for this application, we wish to obtain, for any integer x, floor(x).
+ */
+
+int64_t Script::msecsToSams(int64_t msecs)
 {
-    return msecs * core->getSamplingRate() / 1000;
+    cout << "sams = " << msecs * core->getSamplingRate() / 1000 << endl;
+    return (int64_t) floor(msecs * core->getSamplingRate() * 0.001);
 }
 
 } //end generator namespace
