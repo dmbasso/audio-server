@@ -41,6 +41,11 @@ class WaveFlags(ConfigFlags):
     PLAYBACK_COMMAND =  0x8
 
 
+class KeyframeFlags(WaveFlags):
+    LOCATION =  0x10000
+    END =       0x20000
+
+
 class PlaybackCommand:
     PLAY = 1
     STOP = 2

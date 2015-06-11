@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from scipy.io import wavfile
 from scipy.signal import hilbert
-
+from matplotlib import pyplot as plt
 import bindings as aserver
 
 
@@ -289,3 +289,39 @@ def test_script_delay(core, delay):
 
     assert all(should_be[:, 0] == rendered[:, 0])
     assert all(should_be[:, 1] == rendered[:, 1])
+
+
+def test_script_loop(core):
+    period_size = 441
+    render_periods = 3
+    wavelength = 220
+    should_be = np.zeros([period_size * render_periods, 2])
+    gid = core.add_generator(aserver.GeneratorType.SCRIPT)
+
+    wave = np.random.uniform(-32000, 32000, wavelength).astype(np.int16)
+    wid = core.add_wave(wavelength, 1, wave)
+
+    n_keyframes = 2
+    cfg, keyframes = core.new_keyframes(n_keyframes)
+
+    flags = aserver.WaveFlags("PLAYBACK_COMMAND WAVE_INDEX").value
+    keyframes[0].wave.config.flags = flags
+    keyframes[0].wave.waveIndex = wid
+    keyframes[0].start = 0
+    keyframes[0].wave.command = aserver.PlaybackCommand.PLAY
+
+    keyframes[1].start = 3
+    keyframes[1].wave.config.flags = aserver.KeyframeFlags.END
+
+    core.configure_generator(gid, cfg)
+
+    cfg.command = aserver.ScriptCommand.PLAY_LOOP
+    core.configure_generator(gid, cfg)
+    core.add_source()
+
+    core.set_period(period_size)
+    core.render(render_periods)
+    core.stop_output()
+    rendered = core.get_output().astype(np.int16)
+
+    assert rendered[rendered == 0].shape[0] == 0
