@@ -148,7 +148,7 @@ void Acousticave::render()
                 for (int32_t i = 0; i < buffer->getPeriodSize(); i++) {
                     it.second->getGenerator()->buffer->getData()[i] =
                             ((int16_t) it.second->getGenerator()->buffer->getData()[i * 2] +
-                             it.second->getGenerator()->buffer->getData()[i * 2 + 1]) >> 2;
+                             it.second->getGenerator()->buffer->getData()[i * 2 + 1]) >> 1;
                 }
             }
             aave_put_audio(((AcousticaveSource *) it.second)->aaveSource,
