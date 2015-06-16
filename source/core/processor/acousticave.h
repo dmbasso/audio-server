@@ -35,6 +35,8 @@ enum acousticaveConfigFlags : uint64_t {
 /** \brief Listener orientation is set by default facing the positive Y axis.
 */
 
+#pragma pack(1)  // force byte-alignment
+
 struct ListenerOrientation {
     float yaw = -M_PI/2.;
     float pitch = 0.;
@@ -52,6 +54,8 @@ struct AcousticaveConfigData : ConfigData {
     uint32_t volume = 4000;
     ListenerOrientation listenerOrientation;
 };
+
+#pragma pack()
 
 /** \brief Contains data needed by the Acousticave processor to manage sources.
 *

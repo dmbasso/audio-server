@@ -72,10 +72,32 @@ class ScriptFlags(ConfigFlags):
 
 # Processors
 
+
+class AcousticaveFlags(ConfigFlags):
+    AAVE_LISTENER_POSITION =          0x1
+    MODEL_FILEPATH =              0x10000
+    GAIN =                        0x20000
+    REFLECTIONS =                 0X40000
+    HRTF =                        0x80000
+    REVERB_ACTIVE =              0x100000
+    RT60 =                       0x200000
+    AREA =                       0x400000
+    VOLUME =                     0x800000
+    AAVE_LISTENER_ORIENTATION = 0x1000000
+
+
 class ProcessorType:
     NO_OPERATION = 1
     ACOUSTICAVE = 2
     DISTANCE_ATTENUATION = 3
+
+
+class AcousticaveHRTF:
+    MIT = 1
+    CIPIC = 2
+    LISTEN = 3
+    TUB = 4
+    IDENTITY = 5
 
 
 # Output

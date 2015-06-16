@@ -84,9 +84,30 @@ typedef struct script_cfg script_cfg_t;
 
 // Processor Config Structures ************************************************
 
-struct processor_cfg;
+struct processor_cfg {
+    uint64_t flags;
+    float location[3];
+};
 typedef struct processor_cfg processor_cfg_t;
+
+struct source_cfg {
+    float location[3];
+};
 typedef struct source_cfg source_cfg_t;
+
+struct acousticave_cfg {
+    processor_cfg_t config;
+    char* modelFilePath;
+    float gain;
+    uint16_t reflections;
+    uint16_t hrtf;
+    uint16_t reverbActive;
+    uint16_t rt60;
+    uint32_t area;
+    uint32_t volume;
+    float orientation[3];
+};
+typedef struct acousticave_cfg acousticave_cfg_t;
 
 
 // Output Config Structures ***************************************************

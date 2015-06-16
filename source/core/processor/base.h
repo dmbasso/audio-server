@@ -81,7 +81,7 @@ class Source {
  *  \c addSource adds a Source based on the input Generator data.
  *  \c render renders all sources and stores the result on the processors buffer.
  *
- *  Default listener wavePosition = (0,0,0)
+ *  Default listener position = (0,0,0)
  */
 
 class Processor {
