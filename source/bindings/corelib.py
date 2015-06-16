@@ -96,7 +96,7 @@ class Core:
             self.core, ffi.cast("output_cfg_t *", cfg)
         )
 
-    def get_output(self):
+    def get_output(self, clear=False):
         if self.output_type == enums.OutputType.FILE:
             from scipy.io import wavfile
             srate, signal = wavfile.read(self.output_path)
@@ -104,7 +104,7 @@ class Core:
         elif self.output_type == enums.OutputType.MEMORY:
             import numpy as np
             size = ffi.new("uint64_t *")
-            mem = lib.get_output(self.core, size)
+            mem = lib.get_output(self.core, size, clear)
             mem2 = str(ffi.buffer(mem, size[0] * 2))
             signal = np.fromstring(mem2, dtype=np.int16)
             lib.free_output(self.core, mem)

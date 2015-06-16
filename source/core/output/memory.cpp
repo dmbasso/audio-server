@@ -21,11 +21,15 @@ void Memory::write(SoundBuffer *buffer)
     }
 }
 
-uint64_t Memory::get_output(int16_t **dest)
+uint64_t Memory::get_output(int16_t **dest, bool clear)
 {
     *dest = new int16_t[outputData.size()];
     copy(outputData.begin(), outputData.end(), *dest);
-    return outputData.size();
+    uint64_t outputSize = outputData.size();
+    if (clear) {
+        outputData.clear();
+    }
+    return outputSize;
 }
 
 } //end namespace output

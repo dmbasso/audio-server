@@ -96,10 +96,10 @@ void stop_output(core_t* core)
 }
 
 
-int16_t *get_output(core_t* core, uint64_t *size)
+int16_t *get_output(core_t* core, uint64_t *size, bool clear)
 {
     int16_t *dest;
-    *size = AS_TYPE(Core*, core)->get_output(&dest);
+    *size = AS_TYPE(Core*, core)->get_output(&dest, clear);
     return dest;
 }
 

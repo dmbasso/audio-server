@@ -57,7 +57,7 @@ class Core {
         int16_t addWave(SoundBuffer *wave);
         void stop_output();
         void reset(bool clearOutput =false);
-        uint64_t get_output(int16_t **dest);
+        uint64_t get_output(int16_t **dest, bool clear);
         void shutdown();
 };
 

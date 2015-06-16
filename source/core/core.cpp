@@ -197,13 +197,13 @@ void Core::stop_output()
     }
 }
 
-uint64_t Core::get_output(int16_t **dest)
+uint64_t Core::get_output(int16_t **dest, bool clear)
 {
     if (!out) {
         return 0;
     }
     if (output::Memory *mem = dynamic_cast<output::Memory*>(out)) {
-        return mem->get_output(dest);
+        return mem->get_output(dest, clear);
     }
     return 0;
 }
