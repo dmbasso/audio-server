@@ -44,6 +44,15 @@ def core(request):
     return retv
 
 
+def test_set_geometry(core):
+    core.set_processor(aserver.ProcessorType.ACOUSTICAVE)
+    cfg = core.new_config("acousticave")
+    cfg.config.flags = aserver.AcousticaveFlags("MODEL_FILEPATH").value
+    handler = core._set_model_path(cfg, "model.obj")
+    core.configure_processor(cfg)  # TODO: error processing, file not found
+    del handler
+
+
 @pytest.mark.parametrize("hrtf", (
     aserver.AcousticaveHRTF.MIT,
     aserver.AcousticaveHRTF.CIPIC,

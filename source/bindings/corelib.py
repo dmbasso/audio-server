@@ -74,6 +74,15 @@ class Core:
             self.core, gid, ffi.cast("source_cfg_t *", cfg)
         )
 
+    def _set_model_path(self, cfg_struct, file_name):
+        """
+            Temporary method to specify the Acousticave geometry.
+            Should be replaced in the near future by a proper API.
+        """
+        handler = ffi.new("char []", file_name)
+        cfg_struct.modelFilePath = handler
+        return handler
+
     def set_source_generator(self, gid, sid):
         return lib.set_source_generator(self.core, sid, gid)
 

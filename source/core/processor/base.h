@@ -27,10 +27,14 @@ enum class types : int32_t {
  * Parent class for all process configuration classes.
  */
 
+#pragma pack(1)  // force byte-alignment
+
 struct ConfigData {
     uint64_t flags;
     float location[3] = {0., 0., 0.};
 };
+
+#pragma pack()
 
 /** \brief Parent class for source configuration relative to a specific processor.
  *
