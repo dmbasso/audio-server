@@ -4,8 +4,6 @@ add_subdirectory(core)
 
 set(MAIN_SOURCES
     main.cpp
-    temp.cpp
-    temp.h
 )
 
 set(RUNTIME_OUTPUT_DIRECTORY "../")
