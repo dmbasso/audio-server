@@ -125,6 +125,13 @@ struct file_cfg {
 };
 typedef struct file_cfg file_cfg_t;
 
+struct alsa_cfg {
+    output_cfg_t config;
+    uint32_t rate;
+    uint16_t channels;
+};
+typedef struct alsa_cfg alsa_cfg_t;
+
 
 // Shim API *******************************************************************
 

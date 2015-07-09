@@ -98,6 +98,26 @@ class Core:
         self.output_type = output_type
         lib.set_output(self.core, output_type)
 
+    def alsa_output(self, **kw):
+        """
+            Convenience method to configure ALSA output
+        """
+        cfg = self.new_config("alsa")
+        if kw.get("blocking", True):
+            cfg.config.flags = enums.AlsaFlags.BLOCKING
+        else:
+            cfg.config.flags = 0
+        if kw.get("rate"):
+            cfg.config.flags |= enums.AlsaFlags.RATE
+            cfg.rate = kw.get("rate")
+        if kw.get("channels"):
+            cfg.config.flags |= enums.AlsaFlags.CHANNELS
+            cfg.channels = kw.get("channels")
+        if kw.get("dump_config"):
+            cfg.config.flags |= enums.AlsaFlags.DUMP_CONFIG
+        self.set_output(enums.OutputType.ALSA)
+        self.configure_output(cfg)
+
     def configure_output(self, cfg):
         if self.output_type == enums.OutputType.FILE:
             self.output_path = cfg.outputFilePath

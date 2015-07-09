@@ -9,35 +9,37 @@ namespace aserver {
 namespace output {
 
 enum alsaConfigFlags : uint64_t {
-    WITH_PULSEAUDIO =   0x1,
-    SAMPLING_RATE =     0x2,
-    N_CHANNELS =        0x4,
-    ALSA_ALL =          0X7
+    RATE =          0x1,
+    CHANNELS =      0x2,
+    BLOCKING =      0x4,
+    DUMP_CONFIG =   0x8
 };
 
+#pragma pack(1)  // force byte-alignment
+
 struct AlsaOutputConfigData : ConfigData {
-    bool withPulseAudio = true;
-    uint32_t samplingRate = 44100;
-    uint16_t nChannels = 2;
+    uint32_t rate = 44100;
+    uint16_t channels = 2;
 };
+
+#pragma pack()
 
 class Alsa :public Output {
     private:
-        bool withPulseAudio;
-        uint32_t samplingRate;
-        uint16_t nChannels;
+        uint32_t rate;
+        uint16_t channels;
+        bool blocking = true;
         snd_pcm_t *alsa_handle = nullptr;
 
     public:
         Alsa(Core *core, uint32_t periodSize);
-        void setupWithPulseAudio(int rate, int32_t channels);
-        void setupNoPulseAudio(int rate, int32_t channels, snd_pcm_uframes_t frames);
+        void setup();
         operator bool () {return alsa_handle != nullptr;}
         void write(SoundBuffer *buffer) override;
         void config(ConfigData *cfgData);
         void close() override;
-        int32_t  avail();
-        int32_t  delay();
+        int32_t avail();
+        int32_t delay();
 };
 
 } //end namespace output

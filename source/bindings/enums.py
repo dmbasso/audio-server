@@ -111,3 +111,11 @@ class OutputType:
 class OutputFlags(ConfigFlags):
     FILEPATH = 0x1
     NORMALISE = 0x2
+
+
+class AlsaFlags(ConfigFlags):
+    RATE =          0x1
+    CHANNELS =      0x2
+    BLOCKING =      0x4
+    DUMP_CONFIG =   0x8
+
