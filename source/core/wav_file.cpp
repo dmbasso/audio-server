@@ -59,9 +59,9 @@ SoundBuffer* loadWave(const char *filename)
     if (ifs.is_open()) {
         wavHeader wh;
         ifs.read(reinterpret_cast<char *>(&wh), sizeof(wavHeader));
-        cout << "\nReading wavfile = " << filename << "\nDatachunkSize = " << wh.datachunkSize;
-        cout << "\nnumChannels = " << wh.numChannels << "\nWave Soundbuffer period size = " <<
-        wh.datachunkSize / (wh.numChannels * 2) << endl << endl;
+        // cout << "\nReading wavfile = " << filename << "\nDatachunkSize = " << wh.datachunkSize;
+        // cout << "\nnumChannels = " << wh.numChannels << "\nWave Soundbuffer period size = " <<
+        // wh.datachunkSize / (wh.numChannels * 2) << endl << endl;
 
         SoundBuffer *sb = new SoundBuffer(wh.datachunkSize / (wh.numChannels * 2), wh.numChannels);
         ifs.read(reinterpret_cast<char *>(sb->getData()), wh.datachunkSize);
