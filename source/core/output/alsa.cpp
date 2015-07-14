@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "alsa.h"
 
 using namespace std;
@@ -37,6 +38,11 @@ void Alsa::config(ConfigData *configData)
 void Alsa::write(SoundBuffer *buffer)
 {
     int32_t err;
+    auto period = (buffer ? buffer : silence)->getPeriodSize();
+
+    while (!blocking and avail() < period * 1.3) {
+        usleep(1);
+    }
 
     if (buffer) {
         err = snd_pcm_writei(alsa_handle, buffer->getData(), buffer->getPeriodSize());
@@ -55,7 +61,10 @@ void Alsa::write(SoundBuffer *buffer)
 
 void Alsa::close()
 {
-    snd_pcm_close (alsa_handle);
+    if (alsa_handle) {
+        snd_pcm_close(alsa_handle);
+        alsa_handle = nullptr;
+    }
 }
 
 void Alsa::setup()
@@ -122,8 +131,8 @@ void Alsa::setup()
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-    snd_pcm_uframes_t periodsize = frames * 2;
-    if ((err = snd_pcm_hw_params_set_buffer_size_near(alsa_handle, hw_params, &periodsize)) < 0) {
+    snd_pcm_uframes_t buffersize = frames * 2;
+    if ((err = snd_pcm_hw_params_set_buffer_size_near(alsa_handle, hw_params, &buffersize)) < 0) {
         fprintf (stderr, "cannot set buffer size (%s)\n",
                  snd_strerror (err));
         exit (1);
@@ -160,6 +169,13 @@ void Alsa::setup()
     err = snd_pcm_sw_params_set_start_threshold (alsa_handle, sw_params, 0);
     if (err < 0) {
         printf ("Unable to set start threshold mode: %s\n", snd_strerror (err));
+        return;
+    }
+
+    // no xruns
+    err = snd_pcm_sw_params_set_stop_threshold (alsa_handle, sw_params, buffersize * 2);
+    if (err < 0) {
+        printf ("Unable to set stop threshold mode: %s\n", snd_strerror (err));
         return;
     }
 

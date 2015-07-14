@@ -149,6 +149,8 @@ void configure_processor(core_t* core, processor_cfg_t* cfg);
 void set_output(core_t* core, int32_t type);
 void configure_output(core_t* core, output_cfg_t* cfg);
 void render(core_t* core, int32_t periods);
+void start_render_loop(core_t* core);
+void stop_render_loop(core_t* core);
 void stop_output(core_t* core);
 int16_t *get_output(core_t* core, uint64_t *size, bool clear);
 void free_output(core_t* core, int16_t *mem);

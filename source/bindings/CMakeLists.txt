@@ -6,5 +6,5 @@ set(BINDINGS_SOURCES
 )
 
 add_library(cshim SHARED ${BINDINGS_SOURCES})
-target_link_libraries(cshim asound core)
+target_link_libraries(cshim asound core pthread)
 

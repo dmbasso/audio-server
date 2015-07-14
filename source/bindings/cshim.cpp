@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include "cshim.h"
 
 extern "C" {
@@ -5,7 +6,6 @@ extern "C" {
 core_t* new_core()
 {
     auto retv = new Core;
-    //printf("new_core: %p\n", retv);
     return AS_TYPE(core_t*, retv);
 }
 
@@ -89,12 +89,33 @@ void render(core_t* core, int32_t periods)
     }
 }
 
+bool rendering_done = false;
+pthread_t render_thread;
+
+void *render_loop(void *core_ptr)
+{
+    auto core = AS_TYPE(Core*, core_ptr);
+    while (!rendering_done) {
+        core->render();
+    }
+}
+
+void start_render_loop(core_t* core)
+{
+    pthread_create(&render_thread, NULL, render_loop, core);
+}
+
+void stop_render_loop(core_t* core)
+{
+    rendering_done = true;
+    pthread_join(render_thread, NULL);
+    AS_TYPE(Core*, core)->stop_output();
+}
 
 void stop_output(core_t* core)
 {
     AS_TYPE(Core*, core)->stop_output();
 }
-
 
 int16_t *get_output(core_t* core, uint64_t *size, bool clear)
 {

@@ -144,6 +144,12 @@ class Core:
     def render(self, periods=1):
         lib.render(self.core, periods)
 
+    def start_render_loop(self):
+        lib.start_render_loop(self.core)
+
+    def stop_render_loop(self):
+        lib.stop_render_loop(self.core)
+
     def stop_output(self):
         lib.stop_output(self.core)
 
